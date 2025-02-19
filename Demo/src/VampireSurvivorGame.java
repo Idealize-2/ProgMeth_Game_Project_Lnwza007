@@ -1,145 +1,191 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferStrategy;
-import java.util.ArrayList;
-import java.util.Random;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
-public class VampireSurvivorGame extends Canvas implements Runnable, KeyListener {
-    private boolean isRunning = false;
+import java.util.*;
+
+public class VampireSurvivorGame extends Application {
+    private final int WIDTH = 800, HEIGHT = 600;
+    private boolean running = true;
+
     private Player player;
     private ArrayList<Monster> enemies;
     private ArrayList<Bullet> bullets;
+    private Set<KeyCode> keysPressed = new HashSet<>();
     private Random random = new Random();
-    private long lastSpawnTime = System.currentTimeMillis();
+    private long lastSpawnTime = 0;
 
-    public VampireSurvivorGame() {
-        JFrame frame = new JFrame("Simple Vampire Survivor");
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(this);
-        frame.setVisible(true);
-        
-        this.addKeyListener(this);
-        this.setFocusable(true);
-        
-        player = new Player(400, 300);  // Center of the screen
+    @Override
+    public void start(Stage stage) {
+        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        Scene scene = new Scene(new javafx.scene.layout.StackPane(canvas));
+        stage.setScene(scene);
+        stage.setTitle("JavaFX Vampire Survivor");
+        stage.show();
+
+        player = new Player(WIDTH / 2, HEIGHT / 2);
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
-        
-        start();
-    }
 
-    public synchronized void start() {
-        isRunning = true;
-        new Thread(this).start();
-    }
+        scene.setOnKeyPressed(e -> keysPressed.add(e.getCode()));
+        scene.setOnKeyReleased(e -> keysPressed.remove(e.getCode()));
 
-    public synchronized void stop() {
-        isRunning = false;
-    }
-
-    public void run() {
-        while (isRunning) {
-            update();
-            render();
-            try {
-                Thread.sleep(16); // Roughly 60 FPS
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        AnimationTimer gameLoop = new AnimationTimer() {
+            public void handle(long now) {
+                if (running) {
+                    update();
+                    render(gc);
+                }
             }
-        }
+        };
+        gameLoop.start();
     }
 
-    // Spawn enemies every 5 seconds
-    private void spawnEnemies() {
+    private void update() {
+        // Handle movement based on multiple key presses
+        if (keysPressed.contains(KeyCode.W)) player.moveUp();
+        if (keysPressed.contains(KeyCode.S)) player.moveDown();
+        if (keysPressed.contains(KeyCode.A)) player.moveLeft();
+        if (keysPressed.contains(KeyCode.D)) player.moveRight();
+        if (keysPressed.contains(KeyCode.SPACE) && player.canShoot()) {
+            bullets.add(new Bullet(player.x, player.y));
+            player.setShootCooldown();
+        }
+
+        // Enemy spawning every 5 sec
         if (System.currentTimeMillis() - lastSpawnTime >= 5000) {
-            enemies.add(new Monster(random.nextInt(800), random.nextInt(600), 20, 2, Color.RED));
+            enemies.add(new Monster(random.nextInt(WIDTH), random.nextInt(HEIGHT)));
             lastSpawnTime = System.currentTimeMillis();
         }
-    }
 
-    public void update() {
-        player.update();
-        
-        // Update enemies and check for collision with bullets
-        for (int i = enemies.size() - 1; i >= 0; i--) {
-            Monster enemy = enemies.get(i);
+        // Update enemies
+        Iterator<Monster> enemyIter = enemies.iterator();
+        while (enemyIter.hasNext()) {
+            Monster enemy = enemyIter.next();
             enemy.update(player);
-            player.checkCollision(enemy);
+            if (player.checkCollision(enemy)) {
+                running = false;  // Stop game if player is caught
+                System.out.println("Game Over!");
+                break;
+            }
+        }
 
-            // Check if enemy is hit by any bullets
-            for (int j = bullets.size() - 1; j >= 0; j--) {
-                Bullet bullet = bullets.get(j);
-                if (bullet.checkCollision(enemy)) {
-                    enemy.damage(10);
-                    bullets.remove(j);  // Remove the bullet upon collision
-                    if (!enemy.isAlive()) {
-                        enemies.remove(i);  // Remove enemy if health is 0
+        // Update bullets and check collisions
+        Iterator<Bullet> bulletIter = bullets.iterator();
+        while (bulletIter.hasNext()) {
+            Bullet bullet = bulletIter.next();
+            bullet.update();
+            if (bullet.isOutOfBounds()) {
+                bulletIter.remove();
+            } else {
+                // Check if bullet hits any enemy
+                Iterator<Monster> enemyCheck = enemies.iterator();
+                while (enemyCheck.hasNext()) {
+                    Monster enemy = enemyCheck.next();
+                    if (bullet.checkCollision(enemy)) {
+                        enemyCheck.remove();  // Remove enemy
+                        bulletIter.remove();  // Remove bullet
+                        break;
                     }
                 }
             }
         }
-
-        // Update bullets (move them)
-        for (int i = bullets.size() - 1; i >= 0; i--) {
-            bullets.get(i).update();
-            if (bullets.get(i).isOutOfBounds()) {
-                bullets.remove(i);  // Remove bullets that are off the screen
-            }
-        }
-
-        // Spawn enemies every 5 seconds
-        spawnEnemies();
-
-        if (player.getHealth() <= 0) {
-            stop();
-            System.out.println("Game Over!");
-        }
     }
 
-    public void render() {
-        BufferStrategy bs = this.getBufferStrategy();
-        if (bs == null) {
-            this.createBufferStrategy(3);
-            return;
-        }
-
-        Graphics g = bs.getDrawGraphics();
-        g.clearRect(0, 0, 800, 600);
-
-        // Render player, enemies, and bullets
-        player.render(g);
-        for (Monster enemy : enemies) {
-            enemy.render(g);
-        }
-        for (Bullet bullet : bullets) {
-            bullet.render(g);
-        }
-
-        g.dispose();
-        bs.show();
+    private void render(GraphicsContext gc) {
+        gc.clearRect(0, 0, WIDTH, HEIGHT);
+        player.render(gc);
+        for (Monster enemy : enemies) enemy.render(gc);
+        for (Bullet bullet : bullets) bullet.render(gc);
     }
 
     public static void main(String[] args) {
-        new VampireSurvivorGame();
+        launch(args);
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        player.keyPressed(e);
-        // Shoot bullet on SPACE key press
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            bullets.add(player.shoot());
+    // 🏃 Player Class
+    static class Player {
+        double x, y, speed = 3;
+        private long lastShotTime = 0;
+        private final long SHOOT_DELAY = 300; // 300ms delay between shots
+
+        Player(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        void moveUp() { y = Math.max(0, y - speed); }
+        void moveDown() { y = Math.min(600 - 30, y + speed); }
+        void moveLeft() { x = Math.max(0, x - speed); }
+        void moveRight() { x = Math.min(800 - 30, x + speed); }
+
+        void render(GraphicsContext gc) {
+            gc.setFill(Color.BLUE);
+            gc.fillOval(x, y, 30, 30);
+        }
+
+        boolean checkCollision(Monster enemy) {
+            return Math.hypot(x - enemy.x, y - enemy.y) < 25;
+        }
+
+        boolean canShoot() {
+            return System.currentTimeMillis() - lastShotTime >= SHOOT_DELAY;
+        }
+
+        void setShootCooldown() {
+            lastShotTime = System.currentTimeMillis();
         }
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        player.keyReleased(e);
+    // 👾 Monster Class
+    static class Monster {
+        double x, y, speed = 1.5;
+
+        Monster(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        void update(Player player) {
+            x += (player.x - x) > 0 ? speed : -speed;
+            y += (player.y - y) > 0 ? speed : -speed;
+        }
+
+        void render(GraphicsContext gc) {
+            gc.setFill(Color.RED);
+            gc.fillOval(x, y, 25, 25);
+        }
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {}
+    // 🔫 Bullet Class
+    static class Bullet {
+        double x, y, speed = 5;
+
+        Bullet(double x, double y) {
+            this.x = x + 10;  // Offset to start at player position
+            this.y = y;
+        }
+
+        void update() { y -= speed; }
+
+        void render(GraphicsContext gc) {
+            gc.setFill(Color.ORANGE);
+            gc.fillOval(x, y, 10, 10);
+        }
+
+        boolean isOutOfBounds() {
+            return y < 0;
+        }
+
+        boolean checkCollision(Monster enemy) {
+            return Math.hypot(x - enemy.x, y - enemy.y) < 15;
+        }
+    }
 }

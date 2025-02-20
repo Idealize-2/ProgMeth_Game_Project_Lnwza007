@@ -1,0 +1,30 @@
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+    private GameMenu gameMenu;
+    private GameScene gameScene;
+
+    @Override
+    public void start(Stage primaryStage) {
+        gameMenu = new GameMenu(primaryStage, this);
+        gameScene = new GameScene(primaryStage, this);
+        
+        gameMenu.show(); // แสดงเมนูแรก
+
+        primaryStage.setTitle("Vampire Survivor Game"); // ตั้งชื่อหน้าต่าง
+        primaryStage.show(); // แสดง Stage หลังเซ็ต Scene
+    }
+
+    public void startGame() {
+        gameScene.show(); // เปลี่ยนเป็นหน้าตัวเกม
+    }
+
+    public void backToMenu() {
+        gameMenu.show(); // กลับไปที่เมนู
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}

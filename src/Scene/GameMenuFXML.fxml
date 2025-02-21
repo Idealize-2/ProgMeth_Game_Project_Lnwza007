@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="startButton" alignment="CENTER" layoutX="296.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleStartButtonAction" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange;" text="START GAME">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font></Button>
+      <Text layoutX="158.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="เกมนี้ชื่ออะไร" textAlignment="CENTER" wrappingWidth="485.0">
+         <font>
+            <Font size="72.0" />
+         </font>
+      </Text>
+      <Button fx:id="exitButton" alignment="CENTER" layoutX="296.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleExitButtonAction" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange;" text="EXIT">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font></Button>
+   </children>
+</Pane>

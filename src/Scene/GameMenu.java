@@ -1,8 +1,9 @@
 package Scene;
+
 import Application.Main;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class GameMenu {
@@ -17,12 +18,18 @@ public class GameMenu {
     }
 
     private void createMenu() {
-        Button startButton = new Button("Start Game");
-        startButton.setOnAction(e -> main.startGame());
+        try {
+            // โหลด FXML และกำหนด controller ด้วยมือ
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("GameMenuFXML.fxml"));
+            GameMenuController controller = new GameMenuController();
+            controller.setMain(main);  // ส่ง Main ไปยัง controller
+            loader.setController(controller);  // กำหนด controller ด้วยมือ
 
-        VBox layout = new VBox(20, startButton);
-        layout.setStyle("-fx-alignment: center; -fx-background-color: black;");
-        menuScene = new Scene(layout, 800, 600);
+            Parent root = loader.load();
+            menuScene = new Scene(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void show() {

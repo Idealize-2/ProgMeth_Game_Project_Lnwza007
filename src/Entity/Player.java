@@ -1,3 +1,4 @@
+package Entity;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -7,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Player {
-    double x, y, speed = 3;
+    public double x, y, speed = 3;
     private long lastShotTime = 0;
     private final long SHOOT_DELAY = 300;
     private Image playerImage;
@@ -18,7 +19,7 @@ public class Player {
         this.y = y;
         try {
             // โหลดภาพ PNG
-            playerImage = new Image("lfwtb_momoi_airi_fuwa_plush_1693276349_75a84eba.jpg"); // ใส่ path ของไฟล์ PNG ที่ต้องการ
+            playerImage = new Image("Airi_plush.jpg"); // ใส่ path ของไฟล์ PNG ที่ต้องการ
 
           
         } catch (Exception e) {

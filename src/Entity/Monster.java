@@ -1,8 +1,12 @@
+package Entity;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Monster {
-    double x, y, speed = 1.5;
+    public double x, y, speed = 1.5;
+    private Image monsterImage = new Image("yowtf.png"); // ใส่ path ของไฟล์ PNG ที่ต้องการ
+
 
     public Monster(double x, double y) {
         this.x = x;
@@ -15,7 +19,9 @@ public class Monster {
     }
 
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.RED);
-        gc.fillOval(x, y, 25, 25);
+        gc.drawImage(monsterImage, x, y, 50, 50);
+
+//        gc.setFill(Color.RED);
+//        gc.fillOval(x, y, 25, 25);
     }
 }

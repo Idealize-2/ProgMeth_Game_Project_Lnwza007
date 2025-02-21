@@ -1,3 +1,4 @@
+package Scene;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -6,6 +7,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.util.*;
+
+import Application.*;
+import Component.Bullet;
+import Entity.*;
 
 public class GameScene {
     private Stage stage;

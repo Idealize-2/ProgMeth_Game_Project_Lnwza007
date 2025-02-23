@@ -19,7 +19,7 @@ public class Player {
         this.y = y;
         try {
             // โหลดภาพ PNG
-            playerImage = new Image("Airi_plush.jpg"); // ใส่ path ของไฟล์ PNG ที่ต้องการ
+            playerImage = new Image("images/Airi_plush.jpg"); // ใส่ path ของไฟล์ PNG ที่ต้องการ
 
           
         } catch (Exception e) {

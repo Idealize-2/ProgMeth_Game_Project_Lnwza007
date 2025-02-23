@@ -1,52 +1,123 @@
 package Scene;
+
 import Application.Main;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.util.Duration;
+import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 
 public class GameMenuController {
     private Main main;
 
-    @FXML
-    private Button startButton;
+    @FXML private Pane menuPane; // เมนูหลัก
+    @FXML private Pane optionPane; // เมนูปรับเสียง
+    @FXML private Button optionButton;
+    @FXML private Button backButton;
+    @FXML private Slider volumeSlider;
+    @FXML private MediaView mediaView;
+    @FXML private ImageView GameIcon;
+    
+    private MediaPlayer mediaPlayer;
+    private MediaPlayer bgmPlayer;
 
-    public GameMenuController() {
-        // คอนสตรัคเตอร์ที่ไม่มีพารามิเตอร์
-    }
-
-    // Setter method สำหรับรับค่า Main
     public void setMain(Main main) {
         this.main = main;
     }
 
     @FXML
     public void initialize() {
-        animateStartButton(); // เรียกใช้งาน Animation ตอนเริ่ม
+        playBackgroundVideo();
+        playBackgroundMusic();
+        setupVolumeControl();
+        loadGameIcon();
     }
 
-    private void animateStartButton() {
-        // ตั้งค่าให้ปุ่มเริ่มต้นอยู่นอกจอ (แกน Y)
-        startButton.setTranslateY(-100);
+    private void playBackgroundVideo() {
+        String videoPath = "res/video/demobackgroundvideo.mp4";
+        mediaPlayer = new MediaPlayer(new javafx.scene.media.Media(new java.io.File(videoPath).toURI().toString()));
+        mediaView.setMediaPlayer(mediaPlayer);
+        mediaView.setFitHeight(600);
+        mediaView.setFitWidth(800);
+        mediaView.setPreserveRatio(false);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //คลิปวนลูป
+        mediaPlayer.setMute(true); //ไม่เอาเสียงวิดีโอ
+        mediaPlayer.play();
+        
+    }
+    
+    private void playBackgroundMusic() {
+        // ถ้ามี MediaPlayer เก่าที่ยังเล่นอยู่ ให้หยุดมันก่อน
+        if (bgmPlayer != null) {
+            bgmPlayer.stop();  // หยุดการเล่นเพลงเก่า
+        }
 
-        // สร้าง Animation
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), startButton);
-        transition.setFromY(-100); // เริ่มจากตำแหน่งด้านบน
-        transition.setToY(0); // เคลื่อนที่ลงมาจบที่ตำแหน่งเดิม
-        transition.play(); // เล่น Animation
+        // สร้าง MediaPlayer ใหม่และเล่นเพลง
+        String musicPath = "res/music/bgmmusic.mp3";
+        bgmPlayer = new MediaPlayer(new Media(new java.io.File(musicPath).toURI().toString()));
+        bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  // เล่นซ้ำ
+        bgmPlayer.setVolume(0.5);  // ตั้งค่าเริ่มต้น
+        bgmPlayer.play();
+    }
+    
+    private void loadGameIcon() {
+        Image image = new Image("Images/GameIcon.png");
+        GameIcon.setImage(image);
+    }
+
+    private void setupVolumeControl() {
+        volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (bgmPlayer != null) {
+                bgmPlayer.setVolume(newVal.doubleValue());
+            }
+        });
     }
 
     @FXML
     private void handleStartButtonAction(ActionEvent event) {
         if (main != null) {
+        	stopAllMedia();
             main.startGame();
         }
+    }
+
+    @FXML
+    private void handleOptionButtonAction(ActionEvent event) {
+        menuPane.setVisible(false);
+        optionPane.setVisible(true);
+    }
+
+    @FXML
+    private void handleBackButtonAction(ActionEvent event) {
+        optionPane.setVisible(false);
+        menuPane.setVisible(true);
     }
 
     @FXML
     private void handleExitButtonAction(ActionEvent event) {
         Platform.exit();
     }
+    
+    public void resetMainMenu() { //call when go back to main menu
+        playBackgroundVideo(); // เล่นวิดีโอพื้นหลังใหม่
+        playBackgroundMusic(); // เล่นเพลงเมนูใหม่
+        menuPane.setVisible(true);
+        optionPane.setVisible(false);
+    }
+
+    private void stopAllMedia() {//call when change scene to other song
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+        if (bgmPlayer != null) {
+            bgmPlayer.stop();
+        }
+    }
+
 }

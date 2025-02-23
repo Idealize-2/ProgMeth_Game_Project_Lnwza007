@@ -15,7 +15,7 @@ public class Main extends Application {
         gameScene = new GameScene(primaryStage, this);
         
         gameMenu.show(); // แสดงเมนูแรก
-
+        primaryStage.setResizable(false); //ปรับให้ Windows เต็มจอไม่ได้
         primaryStage.setTitle("Vampire Survivor Game"); // ตั้งชื่อหน้าต่าง
         primaryStage.show(); // แสดง Stage หลังเซ็ต Scene
     }

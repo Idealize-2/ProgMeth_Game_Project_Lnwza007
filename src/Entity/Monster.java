@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 
 public class Monster {
     public double x, y, speed = 1.5;
-    private Image monsterImage = new Image("yowtf.png"); // ใส่ path ของไฟล์ PNG ที่ต้องการ
+    private Image monsterImage = new Image("images/yowtf.png"); // ใส่ path ของไฟล์ PNG ที่ต้องการ
 
 
     public Monster(double x, double y) {

@@ -59,10 +59,11 @@ public class GameMenuController {
         }
 
         // สร้าง MediaPlayer ใหม่และเล่นเพลง
-        String musicPath = "res/music/bgmmusic.mp3";
+        //String musicPath = "res/music/bgmmusic.mp3"; // demo ver
+        String musicPath = "res/music/MenuGame2.mp3";
         bgmPlayer = new MediaPlayer(new Media(new java.io.File(musicPath).toURI().toString()));
         bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  // เล่นซ้ำ
-        bgmPlayer.setVolume(0.5);  // ตั้งค่าเริ่มต้น
+        bgmPlayer.setVolume(0.1);  // ตั้งค่าเริ่มต้น
         bgmPlayer.play();
     }
     

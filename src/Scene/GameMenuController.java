@@ -18,6 +18,7 @@ public class GameMenuController {
 
     @FXML private Pane menuPane; // เมนูหลัก
     @FXML private Pane optionPane; // เมนูปรับเสียง
+    @FXML private Button startButton;
     @FXML private Button optionButton;
     @FXML private Button backButton;
     @FXML private Slider volumeSlider;
@@ -120,5 +121,7 @@ public class GameMenuController {
             bgmPlayer.stop();
         }
     }
+    
+    
 
 }

@@ -17,7 +17,7 @@
          <MediaView fx:id="mediaView" fitHeight="600.0" fitWidth="800.0" />
        
        <!-- หน้าหลัก -->
-       <Pane fx:id="menuPane" prefHeight="600.0" prefWidth="800.0" visible="false">
+       <Pane fx:id="menuPane" prefHeight="600.0" prefWidth="800.0">
            <children>
             <ImageView fx:id="GameIcon" fitHeight="178.0" fitWidth="316.0" layoutX="244.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true" />
                <Button fx:id="startButton" alignment="CENTER" layoutX="296.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleStartButtonAction" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange;" text="START GAME">
@@ -39,7 +39,7 @@
        </Pane>
    
        <!-- หน้าตั้งค่าปรับเสียง -->
-       <Pane fx:id="optionPane" prefHeight="600.0" prefWidth="800.0">
+       <Pane fx:id="optionPane" prefHeight="600.0" prefWidth="800.0" visible="false">
            <children>
             <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#ffc656" height="358.0" layoutX="133.0" layoutY="115.0" stroke="BLACK" strokeType="INSIDE" width="535.0" />
             <Rectangle arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="96.0" layoutX="186.0" layoutY="264.0" stroke="BLACK" strokeType="INSIDE" width="429.0" />
@@ -48,7 +48,7 @@
                   <Font size="29.0" />
                </font>
             </Label>
-               <Slider fx:id="volumeSlider" layoutX="372.0" layoutY="301.0" max="1" min="0" prefHeight="21.0" prefWidth="228.0" value="0.5" />
+               <Slider fx:id="volumeSlider" layoutX="372.0" layoutY="301.0" max="1" min="0" prefHeight="21.0" prefWidth="228.0" value="0.1" />
             <Button fx:id="backButton" alignment="CENTER" layoutX="313.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleBackButtonAction" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white;" text="BACK">
                <font>
                   <Font name="System Bold" size="25.0" />

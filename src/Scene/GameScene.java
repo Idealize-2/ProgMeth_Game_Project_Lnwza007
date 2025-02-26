@@ -1,12 +1,21 @@
 package Scene;
+
 import javafx.animation.AnimationTimer;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
+
 import java.util.*;
 
 import Application.*;
@@ -18,6 +27,7 @@ public class GameScene {
     private Main main;
     private Scene gameScene;
     private boolean running;
+    private boolean paused = false; 
     private Player player;
     private ArrayList<Monster> enemies;
     private ArrayList<Bullet> bullets;
@@ -25,23 +35,21 @@ public class GameScene {
     private Random random = new Random();
     private long lastSpawnTime = 0;
     private AnimationTimer gameLoop;
+    private PauseMenuController controller;
     
-//////////////////////////////////////////// scroll map    ////////////////////////////////////////////////////////
+    private Parent pauseMenuFXML;
+
+////////////////////////////////////////////scroll map    ////////////////////////////////////////////////////////
     Image mapImage = new Image("/images/demoBG.png");
-    // Map dimensions
     public static final int mapWidth = 2000;
     public static final int mapHeight = 1200;
-
-    // Viewport (Canvas) dimensions
     private final int viewportWidth = 800;
     private final int viewportHeight = 600;
-    
-    // Offset for scrolling
     public double offsetX = 0;
     public double offsetY = 0;
+////////////////////////////////////////////scroll map    ////////////////////////////////////////////////////////
+    private StackPane root;
     
-    
-//////////////////////////////////////////// scroll map    ////////////////////////////////////////////////////////
 
     public GameScene(Stage stage, Main main) {
         this.stage = stage;
@@ -50,79 +58,105 @@ public class GameScene {
     }
 
     private void createGameScene() {
-    	
-    	
-    	Canvas canvas = new Canvas(viewportWidth, viewportHeight);
-     
+        Canvas canvas = new Canvas(viewportWidth, viewportHeight);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        //gc.drawImage(mapImage, 0, 0, canvas.getWidth(), canvas.getHeight());
-    	
-        gameScene = new Scene(new StackPane(canvas));
-        
-        
+        root = new StackPane(canvas);
+        gameScene = new Scene(root);
 
+        // Pause Menu UI
+        setupPauseMenu();
 
-        gameScene.setOnKeyPressed(e -> keysPressed.add(e.getCode()));
+        gameScene.setOnKeyPressed(e -> {
+            keysPressed.add(e.getCode());
+            if (e.getCode() == KeyCode.ESCAPE) {
+            	togglePause();
+            }
+        });
+
         gameScene.setOnKeyReleased(e -> keysPressed.remove(e.getCode()));
-        gameScene.setOnMouseClicked(e -> bullets.add(new Bullet(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY )));
-//        gameScene.setOnMouseClicked(e ->{
-//        	System.out.println(e.getX() + " " + e.getY() + " Raw MOuse");
-//        	System.out.println((e.getX()- offsetX) + " " + (e.getY() - offsetY) + " Minus  Offset");
-//        });
+
+        gameScene.setOnMouseClicked(e -> {
+            if (!paused) {
+                bullets.add(new Bullet(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+            }
+        });
 
         gameLoop = new AnimationTimer() {
             public void handle(long now) {
-                if (running) {
+                if (running && !paused) {
                     update();
                     render(gc);
                 }
             }
         };
     }
+    
+    private void setupPauseMenu() {
+    	 try {
+    	        // โหลด FXML และกำหนด controller
+    	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene/PauseMenuFXML.fxml"));
+    	        
+    	        // นำเข้าฉากจาก FXML
+    	        pauseMenuFXML = loader.load();
+    	        
+    	        // เพิ่มใน root ที่เป็น StackPane ของเรา
+    	        root.getChildren().add(pauseMenuFXML);
+    	        
+    	        // กำหนดให้สามารถซ่อน/แสดงเมนู Pause ได้
+    	        pauseMenuFXML.setVisible(false);  // ซ่อนเมนูในตอนแรก
 
-    private void resetGame() {
+    	        // เรียก SetController เพื่อให้มีการใช้ Main ใน FXML (ถ้าจำเป็น)
+    	        controller = loader.getController();
+    	        controller.setMain(main);
+    	        controller.setGameScene(this);
+    	        
+
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	    }
+    }
+    
+
+
+    protected void togglePause() {
+    	
+    	paused = !paused;
+        pauseMenuFXML.setVisible(paused);
+        
+        if (paused && controller != null) {
+        	//System.out.println("work"); for debugging
+            controller.ensurePauseMenuVisible();
+        }
+    }
+
+    protected void resetGame() {
         running = true;
-
-        // Initialize player in the center of the map
         player = new Player(mapWidth / 2.0, mapHeight / 2.0);
-
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
         keysPressed.clear();
         lastSpawnTime = System.currentTimeMillis();
-
-        // Center the viewport on the player at the start
         offsetX = clamp(player.x - viewportWidth / 2.0, 0, mapWidth - viewportWidth);
         offsetY = clamp(player.y - viewportHeight / 2.0, 0, mapHeight - viewportHeight);
+        
+        pauseMenuFXML.setVisible(false);
     }
 
-
     private void update() {
-    	double dx = 0, dy = 0;
+        if (paused) return; // ถ้าหยุดเกม ไม่ต้องอัปเดต
 
-    	
-//        if (keysPressed.contains(KeyCode.W)) player.moveUp();
-//        if (keysPressed.contains(KeyCode.S)) player.moveDown();
-//        if (keysPressed.contains(KeyCode.A)) player.moveLeft();
-//        if (keysPressed.contains(KeyCode.D)) player.moveRight();
-    	
-    	if (keysPressed.contains(KeyCode.W)) dy -= player.getSpeed();
+        double dx = 0, dy = 0;
+
+        if (keysPressed.contains(KeyCode.W)) dy -= player.getSpeed();
         if (keysPressed.contains(KeyCode.S)) dy += player.getSpeed();
         if (keysPressed.contains(KeyCode.A)) dx -= player.getSpeed();
         if (keysPressed.contains(KeyCode.D)) dx += player.getSpeed();
 
-        // Update player position with clamping
-        player.setX( clamp ( player.x + dx, 0, mapWidth - 40 ) ); 
-        player.setY( clamp ( player.y + dy, 0, mapHeight - 40 ) );
-        
+        player.setX(clamp(player.x + dx, 0, mapWidth - 40));
+        player.setY(clamp(player.y + dy, 0, mapHeight - 40));
+
         offsetX = clamp(player.x - viewportWidth / 2.0, 0, mapWidth - viewportWidth);
         offsetY = clamp(player.y - viewportHeight / 2.0, 0, mapHeight - viewportHeight);
-
-
-        
-        
-        
-        
 
         if (System.currentTimeMillis() - lastSpawnTime >= 3000) {
             enemies.add(new Monster(random.nextInt(800), random.nextInt(600)));
@@ -164,33 +198,22 @@ public class GameScene {
         }
 
         for (Monster enemy : enemies) {
-//old one
-//            if (player.checkCollision(enemy)) {
-//                running = false;
-//                System.out.println("Game Over!");
-//                main.backToMenu();
-//                break;
-//            }
-        	
-	          if (player.checkCollision(enemy)) {
-	          running = false;
-	          System.out.println("Game Over!");
-	          main.backToMenu();
-	          break;
-	          }
+            if (player.checkCollision(enemy)) {
+                running = false;
+                System.out.println("Game Over!");
+                pauseMenuFXML.setVisible(true);
+                controller.showGameOver();
+                break;
+            }
         }
     }
-    
- // Clamp a value between min and max
+
     private double clamp(double value, double min, double max) {
         return Math.max(min, Math.min(max, value));
     }
-    
-    
-    
-    
+
     private void render(GraphicsContext gc) {
-        // Clear canvas
+    	// Clear canvas
         gc.clearRect(0, 0, viewportWidth, viewportHeight);
 
         // Draw the map image shifted by the offset
@@ -204,13 +227,18 @@ public class GameScene {
         for (Monster enemy : enemies) enemy.render(gc , enemy.x - offsetX,enemy.y - offsetY);
 
         // Draw bullets
-        for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY);
-    }
-
+        for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY); }
 
     public void show() {
-        resetGame();  // รีเซ็ตค่าตัวเกมก่อนเริ่มใหม่
+    	paused = true;
+    	togglePause();
+        resetGame();
         stage.setScene(gameScene);
-        gameLoop.start();  // เริ่ม Animation Timer
+        gameLoop.start();
     }
+    
+    protected void setRunning(boolean running) {
+    	this.running = running;
+    }
+    
 }

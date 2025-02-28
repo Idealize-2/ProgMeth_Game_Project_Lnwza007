@@ -14,6 +14,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -23,6 +25,7 @@ import Component.Bullet;
 import Component.Croissant;
 import Component.Sushi;
 import Entity.*;
+import Item.Item;
 
 public class GameScene {
     private Stage stage;
@@ -40,6 +43,14 @@ public class GameScene {
     private PauseMenuController controller;
     
     private Parent pauseMenuFXML;
+    
+/////////////////////////////// NPC position and interaction range //////////////////////////////////
+    private final double npcX = 1000;
+    private final double npcY = 600;
+    private final double interactionRange = 50;
+    private boolean nearNpc = false;
+    private Image npcImage = new Image("images/shopkeeper.jpg");
+    
     //////////////////////////weapon select//////////////
     static private boolean weaponSelect = true;
 
@@ -53,6 +64,11 @@ public class GameScene {
     public double offsetY = 0;
 ////////////////////////////////////////////scroll map    ////////////////////////////////////////////////////////
     private StackPane root;
+    
+    // Shop inventory
+    private final List<Item> shopItems = new ArrayList<>();
+    private final List<String> playerInventory = new ArrayList<>();
+    private int playerMoney = 100; // Player starts with $100
     
 
     public GameScene(Stage stage, Main main) {
@@ -82,6 +98,9 @@ public class GameScene {
             if (e.getCode() == KeyCode.DIGIT2) {
             	System.out.println("Croissant Selected");
             	weaponSelect = false;
+            }
+            if (e.getCode() == KeyCode.E && nearNpc) {
+            	openShop();
             }
         });
 
@@ -196,6 +215,9 @@ public class GameScene {
 			}
             lastSpawnTime = System.currentTimeMillis();
         }
+        
+        double distanceToNpc = Math.hypot(player.x - npcX, player.y - npcY);
+        nearNpc = distanceToNpc < interactionRange;
 
         for (Monster enemy : enemies) enemy.update(player);
         bullets.removeIf(Bullet::isOutOfBounds);
@@ -261,7 +283,68 @@ public class GameScene {
         for (Monster enemy : enemies) enemy.render(gc , enemy.x - offsetX,enemy.y - offsetY);
 
         // Draw bullets
-        for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY); }
+        for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY); 
+        
+        
+        // Draw the NPC
+        double npcScreenX = npcX - offsetX;
+        double npcScreenY = npcY - offsetY;
+        gc.drawImage(npcImage,npcScreenX, npcScreenY, 80, 80); // NPC size
+        
+        if (nearNpc) {
+            gc.setFill(Color.WHITE);
+            gc.fillText("Press E to open shop", npcScreenX - 30, npcScreenY - 10);
+        }
+
+    
+    }
+    
+    private void openShop() {
+        Stage shopStage = new Stage();
+        shopStage.setTitle("Shop");
+
+        VBox layout = new VBox(10);
+        Label moneyLabel = new Label("Your Money: $" + playerMoney);
+        ListView<String> shopListView = new ListView<>();
+        ListView<String> inventoryView = new ListView<>();
+        inventoryView.getItems().addAll(playerInventory);
+        Label inventoryLabel = new Label("Your Inventory:");
+
+        // Populate shop list
+        for (Item item : shopItems) {
+            shopListView.getItems().add(item.name + " - $" + item.price);
+        }
+
+        // Buy button
+        Button buyButton = new Button("Buy Selected Item");
+        buyButton.setOnAction(e -> {
+            int selectedIndex = shopListView.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                Item selectedItem = shopItems.get(selectedIndex);
+                if (playerMoney >= selectedItem.price) {
+                    playerMoney -= selectedItem.price;
+                    playerInventory.add(selectedItem.name);
+                    inventoryView.getItems().add(selectedItem.name);
+                    moneyLabel.setText("Your Money: $" + playerMoney);
+                } else {
+                    moneyLabel.setText("Not enough money!");
+                }
+            }
+        });
+
+        // Close button
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> shopStage.close());
+
+        layout.getChildren().addAll(moneyLabel, shopListView, buyButton, inventoryLabel, inventoryView, closeButton);
+        Scene shopScene = new Scene(layout, 400, 400);
+        shopStage.setScene(shopScene);
+        shopStage.show();
+    }
+    
+
+	    
+
 
     public void show() {
     	paused = true;

@@ -20,6 +20,8 @@ import java.util.*;
 
 import Application.*;
 import Component.Bullet;
+import Component.Croissant;
+import Component.Sushi;
 import Entity.*;
 
 public class GameScene {
@@ -38,6 +40,8 @@ public class GameScene {
     private PauseMenuController controller;
     
     private Parent pauseMenuFXML;
+    //////////////////////////weapon select//////////////
+    static private boolean weaponSelect = true;
 
 ////////////////////////////////////////////scroll map    ////////////////////////////////////////////////////////
     Image mapImage = new Image("/images/demoBG.png");
@@ -71,15 +75,32 @@ public class GameScene {
             if (e.getCode() == KeyCode.ESCAPE) {
             	togglePause();
             }
+            if (e.getCode() == KeyCode.DIGIT1) {
+            	System.out.println("Sushi Selected");
+            	weaponSelect = true;
+            }
+            if (e.getCode() == KeyCode.DIGIT2) {
+            	System.out.println("Croissant Selected");
+            	weaponSelect = false;
+            }
         });
 
         gameScene.setOnKeyReleased(e -> keysPressed.remove(e.getCode()));
 
         gameScene.setOnMouseClicked(e -> {
             if (!paused) {
-                bullets.add(new Bullet(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+                //bullets.add(new Bullet(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+            	if(weaponSelect)
+            	{
+            		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+            	}
+            	else
+            	{
+            		bullets.add(new Croissant(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+            	}
             }
         });
+
 
         gameLoop = new AnimationTimer() {
             public void handle(long now) {
@@ -159,7 +180,20 @@ public class GameScene {
         offsetY = clamp(player.y - viewportHeight / 2.0, 0, mapHeight - viewportHeight);
 
         if (System.currentTimeMillis() - lastSpawnTime >= 3000) {
-            enemies.add(new Monster(random.nextInt(800), random.nextInt(600)));
+        	int oEnemies = (int) (Math.random() * 3);
+        	switch (oEnemies) {
+			case 0:
+				enemies.add(new Monster(random.nextInt(800), random.nextInt(600)));
+				break;
+			case 1:
+				enemies.add(new MonsterWeakness(random.nextInt(800), random.nextInt(600)));
+				break;
+			case 2:
+				enemies.add(new MonsterBoss(random.nextInt(2000), random.nextInt(2000)));
+				break;
+			default:
+				break;
+			}
             lastSpawnTime = System.currentTimeMillis();
         }
 

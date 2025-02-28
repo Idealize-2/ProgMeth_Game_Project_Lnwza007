@@ -22,7 +22,7 @@ public class Player extends BaseEntity{
     
     public Player(double x, double y) {
     	// x,y,speed,hp,damage,imgPath
-    	super( x , y , 2 , 50 , 10 ,"images/Airi_plush.jpg");
+    	super( x , y , 2.5 , 50 , 10 ,"images/Airi_plush.jpg");
 //        this.x = x;
 //        this.y = y;
 //        try {

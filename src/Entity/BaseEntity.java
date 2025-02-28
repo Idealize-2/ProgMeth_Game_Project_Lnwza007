@@ -18,13 +18,6 @@ public abstract class BaseEntity {
 	    	setHp(hp);
 	    	setDamage(damage);
 	    	setImgPath(imagePath);
-	    	try {
-	    		
-	    		setEntityImage(new Image(imgPath));
-	    		
-	    	} catch (Exception e) {
-	            e.printStackTrace();
-	        }
 	        
 	    }
 	    
@@ -38,7 +31,16 @@ public abstract class BaseEntity {
 
 		public void setImgPath(String imgPath) {
 			this.imgPath = imgPath;
+			try {
+	    		
+	    		setEntityImage(new Image(imgPath));
+	    		
+	    	} catch (Exception e) {
+	            e.printStackTrace();
+	        }
 		}
+		
+		
 
 
 

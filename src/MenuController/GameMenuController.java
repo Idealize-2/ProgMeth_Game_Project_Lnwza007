@@ -1,4 +1,4 @@
-package Scene;
+package MenuController;
 
 import Application.Main;
 import javafx.application.Platform;

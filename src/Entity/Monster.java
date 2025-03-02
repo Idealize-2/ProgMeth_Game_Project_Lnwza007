@@ -10,7 +10,8 @@ import javafx.util.Duration;
 public class Monster extends BaseEntity{
 
     public Monster(double x, double y) {
-        super(x,y,1,20,10,"images/yowtf.png"); // x,y,speed,hp,damage,imgPath
+    	//     x, y, speed,hp,damage,    imgPath
+        super( x , y , 1 , 20 , 10 ,"images/yowtf.png");
     }
     public int monsterDMG() {
     	return this.damage;
@@ -25,17 +26,19 @@ public class Monster extends BaseEntity{
     	
         return Math.hypot(x - bullet.x, y - bullet.y) < 25;
     }
-    
-    public boolean checkCollision(Bullet bullet) 
+	
+	public boolean checkCollision(Bullet bullet) 
     {
-    	if(getHit( bullet )) // check if bullet get close(attack) Monster
+    	if(getHit( bullet ) && !bullet.isHit()) // check if bullet get close(attack) Monster
     	{
+    		bullet.setHit(true);
     		setHp( getHp() - bullet.weaponDamage ); // setHp
     		System.out.println( "Monster got hit damage = " + bullet.weaponDamage + " Hp: " + getHp() );
 
     	}
-        return getHp() == 0;
+        return getHp() <= 0;
     }
+    
     
 
     public void render(GraphicsContext gc , double x , double y) {

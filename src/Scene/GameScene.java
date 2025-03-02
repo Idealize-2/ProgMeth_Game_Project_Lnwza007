@@ -20,12 +20,17 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
+import AnimationEffect.UsePotionEffect;
 import Application.*;
 import Component.Bullet;
 import Component.Croissant;
 import Component.Sushi;
 import Entity.*;
+import Item.BuffItem;
 import Item.Item;
+import Item.buff;
+import MenuController.PauseMenuController;
+import MenuController.ShopController;
 
 public class GameScene {
     private Stage stage;
@@ -67,7 +72,7 @@ public class GameScene {
     
     // Shop inventory
     private final List<Item> shopItems = new ArrayList<>();
-    private final List<String> playerInventory = new ArrayList<>();
+    private final List<Item> playerInventory = new ArrayList<>();
     private int playerMoney = 100; // Player starts with $100
     
 
@@ -82,6 +87,9 @@ public class GameScene {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         root = new StackPane(canvas);
         gameScene = new Scene(root);
+        
+        ///test inventory
+        playerInventory.add(new BuffItem("BerserkPotion", 10, "", "images/maki.jpg", buff.BERSERK) );
 
         // Pause Menu UI
         setupPauseMenu();
@@ -101,6 +109,9 @@ public class GameScene {
             }
             if (e.getCode() == KeyCode.E && nearNpc) {
             	openShop();
+            }
+            if (e.getCode() == KeyCode.Q) {
+            	((BuffItem)playerInventory.get(0)).useEffect(this.player);
             }
         });
 
@@ -134,7 +145,7 @@ public class GameScene {
     private void setupPauseMenu() {
     	 try {
     	        // โหลด FXML และกำหนด controller
-    	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene/PauseMenuFXML.fxml"));
+    	        FXMLLoader loader = new FXMLLoader(getClass().getResource("PauseMenuFXML.fxml"));
     	        
     	        // นำเข้าฉากจาก FXML
     	        pauseMenuFXML = loader.load();
@@ -158,7 +169,7 @@ public class GameScene {
     
 
 
-    protected void togglePause() {
+    public void togglePause() {
     	
     	paused = !paused;
         pauseMenuFXML.setVisible(paused);
@@ -169,7 +180,7 @@ public class GameScene {
         }
     }
 
-    protected void resetGame() {
+    public void resetGame() {
         running = true;
         player = new Player(mapWidth / 2.0, mapHeight / 2.0);
         enemies = new ArrayList<>();
@@ -278,6 +289,18 @@ public class GameScene {
 
         // Draw player relative to the viewport
         player.render(gc , player.x - offsetX, player.y - offsetY);
+        
+        if(UsePotionEffect.isbuffAvailable) 
+        {
+        	UsePotionEffect.renderBerserkEffect(gc , player.x - offsetX, player.y - offsetY);
+        }
+     // Activate healing particles when healing
+        if (UsePotionEffect.isHealing) {
+            UsePotionEffect.renderHealingEffect(gc ,player.x - offsetX, player.y - offsetY);
+        }
+
+        // Update & render particles
+        UsePotionEffect.updateParticles(gc);
 
         // Draw enemies
         for (Monster enemy : enemies) enemy.render(gc , enemy.x - offsetX,enemy.y - offsetY);
@@ -293,55 +316,30 @@ public class GameScene {
         
         if (nearNpc) {
             gc.setFill(Color.WHITE);
-            gc.fillText("Press E to open shop", npcScreenX - 30, npcScreenY - 10);
+            gc.fillText("Press E to open shop", npcScreenX + 30, npcScreenY - 10);
         }
 
     
     }
     
+ // Open the interactive shop UI
     private void openShop() {
-        Stage shopStage = new Stage();
-        shopStage.setTitle("Shop");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ShopMenu.fxml"));
+            Parent root = loader.load();
+            
+            // Pass player data to the shop controller
+            ShopController controller = loader.getController();
+            controller.initData(playerMoney, shopItems, playerInventory);
 
-        VBox layout = new VBox(10);
-        Label moneyLabel = new Label("Your Money: $" + playerMoney);
-        ListView<String> shopListView = new ListView<>();
-        ListView<String> inventoryView = new ListView<>();
-        inventoryView.getItems().addAll(playerInventory);
-        Label inventoryLabel = new Label("Your Inventory:");
-
-        // Populate shop list
-        for (Item item : shopItems) {
-            shopListView.getItems().add(item.name + " - $" + item.price);
+            Stage shopStage = new Stage();
+            shopStage.setTitle("Shop");
+            shopStage.setScene(new Scene(root, 400, 400));
+            shopStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        // Buy button
-        Button buyButton = new Button("Buy Selected Item");
-        buyButton.setOnAction(e -> {
-            int selectedIndex = shopListView.getSelectionModel().getSelectedIndex();
-            if (selectedIndex >= 0) {
-                Item selectedItem = shopItems.get(selectedIndex);
-                if (playerMoney >= selectedItem.price) {
-                    playerMoney -= selectedItem.price;
-                    playerInventory.add(selectedItem.name);
-                    inventoryView.getItems().add(selectedItem.name);
-                    moneyLabel.setText("Your Money: $" + playerMoney);
-                } else {
-                    moneyLabel.setText("Not enough money!");
-                }
-            }
-        });
-
-        // Close button
-        Button closeButton = new Button("Close");
-        closeButton.setOnAction(e -> shopStage.close());
-
-        layout.getChildren().addAll(moneyLabel, shopListView, buyButton, inventoryLabel, inventoryView, closeButton);
-        Scene shopScene = new Scene(layout, 400, 400);
-        shopStage.setScene(shopScene);
-        shopStage.show();
     }
-    
 
 	    
 
@@ -354,7 +352,7 @@ public class GameScene {
         gameLoop.start();
     }
     
-    protected void setRunning(boolean running) {
+    public void setRunning(boolean running) {
     	this.running = running;
     }
     

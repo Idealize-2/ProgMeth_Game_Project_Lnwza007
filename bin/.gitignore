@@ -1,7 +1,9 @@
-/Component/
 /Scene/
-/images/
+/Shop/
+/Item/
+/MenuController/
 /Entity/
 /Animation/
-/Application/
-/Item/
+/AnimationEffect/
+/Effect/
+/images/

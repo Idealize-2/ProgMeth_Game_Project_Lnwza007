@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="MenuController.ShopController">
+    <Label fx:id="moneyLabel" text="Your Money: $" />
+    
+    <ListView fx:id="shopListView" prefHeight="150"/>
+    <Button text="Buy Selected Item" onAction="#handleBuy"/>
+    
+    <Label text="Your Inventory:"/>
+    <ListView fx:id="inventoryView" prefHeight="100"/>
+    
+    <Button text="Close" onAction="#handleClose"/>
+</VBox>

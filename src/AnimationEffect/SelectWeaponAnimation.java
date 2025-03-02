@@ -1,4 +1,4 @@
-package Animation;
+package AnimationEffect;
 
 public class SelectWeaponAnimation {
 	

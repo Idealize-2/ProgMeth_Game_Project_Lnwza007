@@ -1,6 +1,7 @@
-package Scene;
+package MenuController;
 
 import Application.Main;
+import Scene.GameScene;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -95,12 +96,12 @@ public class PauseMenuController {
         });
     }
     
-    protected void ensurePauseMenuVisible() {
+    public void ensurePauseMenuVisible() {
         optionPane.setVisible(false);
         pausePane.setVisible(true);
     }
     
-    protected void showGameOver() {
+    public void showGameOver() {
     	pausePane.setVisible(false);
     	optionPane.setVisible(false);
     	gameOverPane.setVisible(true);

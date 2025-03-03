@@ -63,7 +63,7 @@ public class UsePotionEffect {
 	        healingParticles.add(new Particle(x + offsetX, y + offsetY));
 
 	        // Reset cooldown
-	        healingParticleCooldown = 20; // Generates a particle every 5 frames (adjustable)
+	        healingParticleCooldown = 30; // Generates a particle every 5 frames (adjustable)
 	    } else {
 	        healingParticleCooldown--; // Decrease cooldown each frame
 	    }

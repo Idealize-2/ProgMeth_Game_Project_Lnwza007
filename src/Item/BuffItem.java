@@ -72,6 +72,7 @@ public class BuffItem extends Item implements Cooldownable{
 	    buffCooldown.play();
 	    UsePotionEffect.setHealing(true);
 	    System.out.println("appile heal effect");
+    	
 	    // Healing over time timeline
 	   Timeline healOverTime = new Timeline(
 	        new KeyFrame(Duration.millis(1000), e -> 

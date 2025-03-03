@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
+import AnimationEffect.HealthBar;
+import AnimationEffect.SelectWeapon;
 import AnimationEffect.UsePotionEffect;
 import Application.*;
 import Component.Bullet;
@@ -57,7 +59,7 @@ public class GameScene {
     private Image npcImage = new Image("images/shopkeeper.jpg");
     
     //////////////////////////weapon select//////////////
-    static private boolean weaponSelect = true;
+    static private short weaponSelect = 0;
 
 ////////////////////////////////////////////scroll map    ////////////////////////////////////////////////////////
     Image mapImage = new Image("/images/demoBG.png");
@@ -101,11 +103,15 @@ public class GameScene {
             }
             if (e.getCode() == KeyCode.DIGIT1) {
             	System.out.println("Sushi Selected");
-            	weaponSelect = true;
+            	weaponSelect = 0;
             }
             if (e.getCode() == KeyCode.DIGIT2) {
             	System.out.println("Croissant Selected");
-            	weaponSelect = false;
+            	weaponSelect = 1;
+            }
+            if (e.getCode() == KeyCode.DIGIT3) {
+            	System.out.println("Pizza Bazuka Selected");
+            	weaponSelect = 2;
             }
             if (e.getCode() == KeyCode.E && nearNpc) {
             	openShop();
@@ -120,13 +126,16 @@ public class GameScene {
         gameScene.setOnMouseClicked(e -> {
             if (!paused) {
                 //bullets.add(new Bullet(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
-            	if(weaponSelect)
+            	if(weaponSelect == 0)
             	{
             		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
             	}
-            	else
+            	else if(weaponSelect == 1)
             	{
             		bullets.add(new Croissant(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+            	}
+            	else if(weaponSelect == 2) {
+            		
             	}
             }
         });
@@ -318,7 +327,13 @@ public class GameScene {
             gc.setFill(Color.WHITE);
             gc.fillText("Press E to open shop", npcScreenX + 30, npcScreenY - 10);
         }
-
+        ///render weapon select boxes
+        SelectWeapon.renderWeaponBoxes( gc , viewportWidth ,weaponSelect);
+        
+        //render health bar
+        HealthBar.renderHealthBar(gc, 20, 20, this.player.getMaxHp() , this.player.getHp() );
+        
+        
     
     }
     

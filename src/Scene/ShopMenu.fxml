@@ -1,17 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.media.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 
-<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="MenuController.ShopController">
-    <Label fx:id="moneyLabel" text="Your Money: $" />
-    
-    <ListView fx:id="shopListView" prefHeight="150"/>
-    <Button text="Buy Selected Item" onAction="#handleBuy"/>
-    
-    <Label text="Your Inventory:"/>
-    <ListView fx:id="inventoryView" prefHeight="100"/>
-    
-    <Button text="Close" onAction="#handleClose"/>
-</VBox>
+<StackPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+       <!-- Shop Menu Pane -->
+       <Pane fx:id="shopPane" prefHeight="600.0" prefWidth="800.0">
+           <children>
+               <ImageView fx:id="shopBackground" fitHeight="600.0" fitWidth="800.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" />
+               <Label layoutX="320.0" layoutY="50.0" text="Welcome to the Shop!" font="$x1" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+               
+               <!-- Buy Potion Button -->
+               <Button fx:id="buyPotionButton" alignment="CENTER" layoutX="300.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleBuyPotionAction" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: green;" text="BUY POTION">
+                   <font>
+                       <Font name="System Bold" size="25.0" />
+                   </font>
+               </Button>
+
+               <!-- Upgrade Weapon Button -->
+               <Button fx:id="upgradeWeaponButton" alignment="CENTER" layoutX="300.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleUpgradeWeaponAction" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: blue;" text="UPGRADE WEAPON">
+                   <font>
+                       <Font name="System Bold" size="25.0" />
+                   </font>
+               </Button>
+
+               <!-- Back Button -->
+               <Button fx:id="backButton" alignment="CENTER" layoutX="300.0" layoutY="475.0" mnemonicParsing="false" onAction="#handleBackButtonAction" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: red;" text="BACK">
+                   <font>
+                       <Font name="System Bold" size="25.0" />
+                   </font>
+               </Button>
+           </children>
+       </Pane>
+   </children>
+</StackPane>

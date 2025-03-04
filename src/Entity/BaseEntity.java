@@ -1,12 +1,12 @@
 package Entity;
-import Component.Bullet;
+import Weapon.Bullet;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public abstract class BaseEntity {
 	 	public double x, y;
 	 	protected double speed;
-	    private int hp;
+	    protected int hp;
 	    private int maxHp;
 	    public int damage;
 	    private Image entityImage; // ใส่ path ของไฟล์ PNG ที่ต้องการ

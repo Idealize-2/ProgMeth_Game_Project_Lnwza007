@@ -1,4 +1,4 @@
-package Component;
+package Weapon;
 import Entity.Monster;
 import Scene.GameScene;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,6 +12,7 @@ public abstract class Bullet {
     private String imageStr;
     private Image bulletImage; // ใส่ path ของไฟล์ PNG ที่ต้องการ
     protected double angle;
+
     
     
     
@@ -64,6 +65,7 @@ public abstract class Bullet {
 
 
     public boolean isOutOfBounds() {
+    	if(x < 0 || x > GameScene.mapWidth || y < 0 || y > GameScene.mapHeight) System.out.println("bullet out of bound");
         return x < 0 || x > GameScene.mapWidth || y < 0 || y > GameScene.mapHeight;
     }
 
@@ -84,7 +86,7 @@ public abstract class Bullet {
 	}
 
 	public boolean checkCollision(Monster enemy) {
-        return Math.hypot(x - enemy.x, y - enemy.y) < 25;
+        return isOutOfBounds() || Math.hypot(x - enemy.x, y - enemy.y) < 25;
     }
     
 //    public boolean checkCollision(Monster enemy, double offsetX , double offfsetY) {

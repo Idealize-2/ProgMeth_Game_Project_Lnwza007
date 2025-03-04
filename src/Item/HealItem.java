@@ -23,7 +23,7 @@ public class HealItem extends Item implements Cooldownable{
 	}
 
 	@Override
-	public void runCooldown() {
+	public void runCooldown(long cooldown) {
 		// TODO Auto-generated method stub
 		
 	}

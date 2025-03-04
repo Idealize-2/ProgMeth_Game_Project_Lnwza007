@@ -1,6 +1,6 @@
 package Entity;
 
-import Component.Bullet;
+import Weapon.Bullet;
 import javafx.scene.canvas.GraphicsContext;
 
 public class MonsterBoss extends Monster {

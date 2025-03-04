@@ -24,15 +24,15 @@ import AnimationEffect.HealthBar;
 import AnimationEffect.SelectWeapon;
 import AnimationEffect.UsePotionEffect;
 import Application.*;
-import Component.Bullet;
-import Component.Croissant;
-import Component.Sushi;
 import Entity.*;
 import Item.BuffItem;
 import Item.Item;
 import Item.buff;
 import MenuController.PauseMenuController;
 import MenuController.ShopController;
+import Weapon.Bullet;
+import Weapon.Croissant;
+import Weapon.Sushi;
 
 public class GameScene {
     private Stage stage;
@@ -124,15 +124,18 @@ public class GameScene {
         gameScene.setOnKeyReleased(e -> keysPressed.remove(e.getCode()));
 
         gameScene.setOnMouseClicked(e -> {
-            if (!paused) {
+            if (!paused && Player.CanShoot() ) {
                 //bullets.add(new Bullet(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+            	
             	if(weaponSelect == 0)
             	{
             		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+            		player.runCooldown(player.getAtkSpeed() + Sushi.weaponCooldown);
             	}
             	else if(weaponSelect == 1)
             	{
             		bullets.add(new Croissant(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+            		player.runCooldown(player.getAtkSpeed() + Croissant.weaponCooldown);
             	}
             	else if(weaponSelect == 2) {
             		
@@ -252,7 +255,7 @@ public class GameScene {
         	{
         		if(bullets.size() == 0)break;
         		
-        		if( enemies.get(i).checkCollision( bullets.get(k) ) ) 
+        		if( enemies.get(i).checkCollision( bullets.get(k) ,this.player ) ) 
         		{
         			enemies.remove( i );
         			bullets.remove( k );
@@ -304,7 +307,8 @@ public class GameScene {
         	UsePotionEffect.renderBerserkEffect(gc , player.x - offsetX, player.y - offsetY);
         }
      // Activate healing particles when healing
-        if (UsePotionEffect.isHealing) {
+        if (UsePotionEffect.isHealing) 
+        {
             UsePotionEffect.renderHealingEffect(gc ,player.x - offsetX, player.y - offsetY);
         }
 

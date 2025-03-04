@@ -1,4 +1,4 @@
-package Component;
+package Weapon;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -6,11 +6,12 @@ public class Croissant extends Bullet {
 
 	public double bulletAngle;
 	private double rotateSpeed = 2;
+	static final public long weaponCooldown = 175;
 
 	public Croissant(double x, double y, double targetX, double targetY) {
 		super(x, y, targetX, targetY);
 		setSpeed(1);
-		setWeaponDamage(15);
+		setWeaponDamage(30);
 		setImageStr("images/cr.png");
 		bulletAngle = Math.toDegrees(this.angle);
 		// TODO Auto-generated constructor stub
@@ -34,6 +35,9 @@ public class Croissant extends Bullet {
 		
 		gc.restore();
 		
+	}
+	public long getWeaponCooldown() {
+		return weaponCooldown;
 	}
 
 }

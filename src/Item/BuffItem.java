@@ -16,7 +16,7 @@ public class BuffItem extends Item implements Cooldownable{
 	private buff buffType;
 	final public int BUFFATF = 10;
 	final public int BUFFHEAL = 10;
-	final public int BUFFATKSPEED = 250;
+	final public int BUFFATKSPEED = 100;
 	final public double BUFFMOVESPEED = 10;
 	final public long COOLDOWN = 10000; // 10 second
 	final public long BUFFTIME = 6000; // 6 second
@@ -38,10 +38,10 @@ public class BuffItem extends Item implements Cooldownable{
 
 	
 	@Override
-	public void runCooldown() {
+	public void runCooldown(long cooldown) {
 		setAvailable(false);
 		Timeline buffCooldown = new Timeline(
-			    new KeyFrame(Duration.millis(COOLDOWN), e -> setAvailable(true))
+			    new KeyFrame(Duration.millis(cooldown), e -> setAvailable(true))
 		);
 	    
 		buffCooldown.setCycleCount(1);
@@ -117,7 +117,7 @@ public class BuffItem extends Item implements Cooldownable{
 		{	
 			setItemCount( getItemCount() - 1 ); // decease item count by 1
 			
-			runCooldown(); // run cooldown
+			runCooldown(COOLDOWN); // run cooldown
 			
 			switch (getBuffType()) {
 			case BERSERK:

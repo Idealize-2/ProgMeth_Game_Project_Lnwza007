@@ -11,10 +11,12 @@ import java.io.File;
 import java.io.IOException;
 
 import AnimationEffect.Animationable;
+import AnimationEffect.Cooldownable;
 
-public class Player extends BaseEntity implements Animationable{
+public class Player extends BaseEntity implements Animationable,Cooldownable{
     private long lastShotTime = 1000;
-    private long atkSpeed = 500;
+    private long atkSpeed = 200;
+    static private boolean canShoot = true;
     private int upgradeWeapon = 0;
 
     //private Image playerImage;
@@ -81,7 +83,7 @@ public class Player extends BaseEntity implements Animationable{
 	}
 
 	public void setAtkSpeed(long atkSpeed) {
-		this.atkSpeed = atkSpeed;
+		this.atkSpeed = Math.max(atkSpeed, 0);
 	}
 
 	public int getUpgradeWeapon() {
@@ -91,6 +93,28 @@ public class Player extends BaseEntity implements Animationable{
 	public void setUpgradeWeapon(int upgradeValue) {
 		this.upgradeWeapon = upgradeValue;
 	}
+
+	@Override
+	public void runCooldown(long cooldown) {
+			setCanShoot(false);
+			Timeline buffCooldown = new Timeline(
+				    new KeyFrame(Duration.millis(cooldown), e -> setCanShoot(true))
+			);
+		    
+			buffCooldown.setCycleCount(1);
+			buffCooldown.play();
+
+		
+	}
+
+	public static boolean CanShoot() {
+		return canShoot;
+	}
+
+	public static void setCanShoot(boolean canShoot) {
+		Player.canShoot = canShoot;
+	}
+	
 
 	
 	

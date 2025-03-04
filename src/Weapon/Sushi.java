@@ -1,18 +1,19 @@
-package Component;
+package Weapon;
 
 import javafx.scene.canvas.GraphicsContext;
 
 public class Sushi extends Bullet {
 	
 	public double bulletAngle;
+	static final public long weaponCooldown = 75;
 
 	public Sushi(double x, double y, double targetX, double targetY) {
 		super(x, y, targetX, targetY);
 		setSpeed(1);
-		setWeaponDamage(15);
+		setWeaponDamage(20);
 		setImageStr("images/sushi.jpg");
 		bulletAngle = Math.toDegrees(this.angle);
-		// TODO Auto-generated constructor stub
+		
 	}
 	@Override
 	public void update() {
@@ -31,6 +32,9 @@ public class Sushi extends Bullet {
 		
 		gc.restore();
 		
+	}
+	public long getWeaponCooldown() {
+		return weaponCooldown;
 	}
 
 }

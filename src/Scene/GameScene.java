@@ -29,7 +29,7 @@ import Item.BuffItem;
 import Item.Item;
 import Item.buff;
 import MenuController.PauseMenuController;
-import MenuController.ShopController;
+import MenuController.ShopMenuController;
 import Weapon.Bullet;
 import Weapon.Croissant;
 import Weapon.Sushi;
@@ -47,9 +47,11 @@ public class GameScene {
     private Random random = new Random();
     private long lastSpawnTime = 0;
     private AnimationTimer gameLoop;
-    private PauseMenuController controller;
+    private PauseMenuController controllerPause;
+    private ShopMenuController controllerShop;
     
     private Parent pauseMenuFXML;
+    private Parent shopMenuFXML;
     
 /////////////////////////////// NPC position and interaction range //////////////////////////////////
     private final double npcX = 1000;
@@ -67,6 +69,7 @@ public class GameScene {
     public static final int mapHeight = 1200;
     private final int viewportWidth = 800;
     private final int viewportHeight = 600;
+
     public double offsetX = 0;
     public double offsetY = 0;
 ////////////////////////////////////////////scroll map    ////////////////////////////////////////////////////////
@@ -93,13 +96,15 @@ public class GameScene {
         ///test inventory
         playerInventory.add(new BuffItem("BerserkPotion", 10, "", "images/maki.jpg", buff.BERSERK) );
 
-        // Pause Menu UI
+        //Set Up พวก scene เสริม
+        setupShopMenu();
         setupPauseMenu();
+        
 
         gameScene.setOnKeyPressed(e -> {
             keysPressed.add(e.getCode());
             if (e.getCode() == KeyCode.ESCAPE) {
-            	togglePause();
+            	togglePauseForMenu();
             }
             if (e.getCode() == KeyCode.DIGIT1) {
             	System.out.println("Sushi Selected");
@@ -114,7 +119,7 @@ public class GameScene {
             	weaponSelect = 2;
             }
             if (e.getCode() == KeyCode.E && nearNpc) {
-            	openShop();
+            	togglePauseForOpenShop();
             }
             if (e.getCode() == KeyCode.Q) {
             	((BuffItem)playerInventory.get(0)).useEffect(this.player);
@@ -169,9 +174,9 @@ public class GameScene {
     	        pauseMenuFXML.setVisible(false);  // ซ่อนเมนูในตอนแรก
 
     	        // เรียก SetController เพื่อให้มีการใช้ Main ใน FXML (ถ้าจำเป็น)
-    	        controller = loader.getController();
-    	        controller.setMain(main);
-    	        controller.setGameScene(this);
+    	        controllerPause = loader.getController();
+    	        controllerPause.setMain(main);
+    	        controllerPause.setGameScene(this);
     	        
 
     	    } catch (Exception e) {
@@ -179,16 +184,54 @@ public class GameScene {
     	    }
     }
     
+    private void setupShopMenu() {
+   	 try {
+   	        // โหลด FXML และกำหนด controller
+   	        FXMLLoader loader = new FXMLLoader(getClass().getResource("ShopMenuFXML.fxml"));
+   	        
+   	        // นำเข้าฉากจาก FXML
+   	        shopMenuFXML = loader.load();
+   	        
+   	        // เพิ่มใน root ที่เป็น StackPane ของเรา
+   	        root.getChildren().add(shopMenuFXML);
+   	        
+   	        // กำหนดให้สามารถซ่อน/แสดงเมนู Pause ได้
+   	        shopMenuFXML.setVisible(false);  // ซ่อนเมนูในตอนแรก
+
+   	        // เรียก SetController เพื่อให้มีการใช้ Main ใน FXML (ถ้าจำเป็น)
+   	        controllerShop = loader.getController();
+   	        controllerShop.setMain(main);
+   	        controllerShop.setGameScene(this);
+   	        
+
+   	    } catch (Exception e) {
+   	        e.printStackTrace();
+   	    }
+   }
+    
 
 
-    public void togglePause() {
+    public void togglePauseForMenu() {
+    	
+    	if(!shopMenuFXML.isVisible())paused = !paused;
+    	
+    	if (pauseMenuFXML.isVisible() && shopMenuFXML.isVisible()) pauseMenuFXML.setVisible(false);
+    	else pauseMenuFXML.setVisible(paused);
+        
+        
+        if (paused && controllerPause != null) {
+        	//System.out.println("work"); for debugging
+            controllerPause.ensurePauseMenuVisible();
+        }
+    }
+    
+    public void togglePauseForOpenShop() {
     	
     	paused = !paused;
-        pauseMenuFXML.setVisible(paused);
-        
-        if (paused && controller != null) {
+        shopMenuFXML.setVisible(paused);
+        if (paused && controllerShop != null) {
         	//System.out.println("work"); for debugging
-            controller.ensurePauseMenuVisible();
+            controllerShop.ensureWeaponShopVisible();
         }
     }
 
@@ -203,6 +246,9 @@ public class GameScene {
         offsetY = clamp(player.y - viewportHeight / 2.0, 0, mapHeight - viewportHeight);
         
         pauseMenuFXML.setVisible(false);
+        shopMenuFXML.setVisible(false);
+        paused = false;
+        controllerPause.playGameBackgroundMusic();
     }
 
     private void update() {
@@ -281,7 +327,7 @@ public class GameScene {
                 running = false;
                 System.out.println("Game Over!");
                 pauseMenuFXML.setVisible(true);
-                controller.showGameOver();
+                controllerPause.showGameOver();
                 break;
             }
         }
@@ -340,32 +386,13 @@ public class GameScene {
         
     
     }
-    
- // Open the interactive shop UI
-    private void openShop() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ShopMenu.fxml"));
-            Parent root = loader.load();
-            
-            // Pass player data to the shop controller
-            ShopController controller = loader.getController();
-            controller.initData(playerMoney, shopItems, playerInventory);
-
-            Stage shopStage = new Stage();
-            shopStage.setTitle("Shop");
-            shopStage.setScene(new Scene(root, 400, 400));
-            shopStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+   
 	    
 
 
     public void show() {
     	paused = true;
-    	togglePause();
+    	togglePauseForMenu();
         resetGame();
         stage.setScene(gameScene);
         gameLoop.start();

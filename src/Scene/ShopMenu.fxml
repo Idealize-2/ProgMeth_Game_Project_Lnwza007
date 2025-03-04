@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.media.*?>
@@ -11,13 +12,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenuController.ShopMenuController">
    <children>
        <!-- Shop Menu Pane -->
        <Pane fx:id="shopPane" prefHeight="600.0" prefWidth="800.0">
            <children>
-               <ImageView fx:id="shopBackground" fitHeight="600.0" fitWidth="800.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" />
-               <Label layoutX="320.0" layoutY="50.0" text="Welcome to the Shop!" font="$x1" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+               <Label font="$x1" layoutX="320.0" layoutY="50.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Welcome to the Shop!" />
                
                <!-- Buy Potion Button -->
                <Button fx:id="buyPotionButton" alignment="CENTER" layoutX="300.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleBuyPotionAction" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: green;" text="BUY POTION">

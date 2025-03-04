@@ -1,5 +1,6 @@
 package Application;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import Scene.GameMenu;
 import Scene.GameScene;
 
@@ -18,6 +19,9 @@ public class Main extends Application {
         primaryStage.setResizable(false); //ปรับให้ Windows เต็มจอไม่ได้
         primaryStage.setTitle("Vampire Survivor Game"); // ตั้งชื่อหน้าต่าง
         primaryStage.show(); // แสดง Stage หลังเซ็ต Scene
+        
+        //<-----------เปลี่ยนไอคอนเกม รอ------------->>
+        //primaryStage.getIcons().add(new Image("/images/MonsterWeakness.jpg"));
     }
 
     public void startGame() {

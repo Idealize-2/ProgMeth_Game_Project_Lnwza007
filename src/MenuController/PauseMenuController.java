@@ -1,6 +1,6 @@
 package MenuController;
 
-import Application.Main;
+import Application.Main; 
 import Scene.GameScene;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 
 public class PauseMenuController {
@@ -18,7 +20,9 @@ public class PauseMenuController {
     @FXML private Pane pausePane;
     @FXML private Pane optionPane;
     @FXML private Pane gameOverPane;
-    @FXML private Slider volumeSlider;
+    @FXML
+    private Slider volumeSlider;
+    private MediaPlayer gameBgmPlayer;
     
     private Main main;
     @FXML private Button resumeButton;
@@ -32,6 +36,7 @@ public class PauseMenuController {
     }
 
     public void initialize() {
+    	setupVolumeControl();
     	
     	
     }
@@ -41,11 +46,8 @@ public class PauseMenuController {
     
     @FXML
     private void handleResumeButtonAction(ActionEvent event) {
-    	if(optionPane.isVisible()) {
-    		optionPane.setVisible(false);
-    		pausePane.setVisible(true);
-    	}
-    	gameScene.togglePause();
+    	ensurePauseMenuVisible();
+    	gameScene.togglePauseForMenu();
     	
     }
     
@@ -62,8 +64,27 @@ public class PauseMenuController {
             System.out.println("Exiting to menu...");
             main.backToMenu();
             gameScene.setRunning(false);
+            stopGameBackgroundMusic();
+            
         
         
+    }
+    public void playGameBackgroundMusic() {
+        // ระบุเส้นทางของไฟล์เพลง
+        String musicPath = "res/music/gameBGM.mp3"; // เปลี่ยนเป็นไฟล์เพลงที่คุณต้องการใช้
+        Media media = new Media(new java.io.File(musicPath).toURI().toString());
+        gameBgmPlayer = new MediaPlayer(media);
+        
+        // ตั้งค่าการเล่นเพลง
+        gameBgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  // เล่นซ้ำ
+        gameBgmPlayer.setVolume(0.1);  // ปรับระดับเสียงเริ่มต้น
+        gameBgmPlayer.play();  // เริ่มเล่นเพลง
+    }
+    
+    private void stopGameBackgroundMusic() {
+        if (gameBgmPlayer != null) {
+            gameBgmPlayer.stop();  // หยุดการเล่นเพลง
+        }
     }
     
     @FXML
@@ -73,6 +94,7 @@ public class PauseMenuController {
         gameOverPane.setVisible(false);
         main.backToMenu();
         gameScene.setRunning(false);
+        stopGameBackgroundMusic();
     
     
 }
@@ -91,7 +113,9 @@ public class PauseMenuController {
     
     private void setupVolumeControl() {
         volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            //Dummy code รอใส่เพลงในตัวเกม
+        	 if (gameBgmPlayer != null) {
+                 gameBgmPlayer.setVolume(newVal.doubleValue());  // ปรับเสียงตามค่าจาก Slider
+             }
         	
         });
     }

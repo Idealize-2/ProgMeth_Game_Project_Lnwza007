@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.media.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenuController.ShopMenuController">
+   <children>
+       <!-- Shop Menu Pane -->
+       <Pane fx:id="shopWeapon" prefHeight="600.0" prefWidth="800.0">
+           <children>
+               <Label font="$x1" layoutX="246.0" layoutY="14.0" prefHeight="47.0" prefWidth="264.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Welcome to the Shop!" />
+
+               <!-- Back Button -->
+               <Button fx:id="backButton" alignment="CENTER" layoutX="293.0" layoutY="503.0" mnemonicParsing="false" onAction="#handleBackButtonAction" prefHeight="37.0" prefWidth="122.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: red;" text="BACK">
+                   <font>
+                       <Font name="System Bold" size="25.0" />
+                   </font>
+               </Button>
+            <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#ffcb2e" height="500.0" layoutX="37.0" layoutY="61.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="209.0" />
+            <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#ffcb2e" height="500.0" layoutX="487.0" layoutY="61.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="270.0" />
+            <Button fx:id="weaponButtonWShop" alignment="CENTER" layoutX="487.0" layoutY="61.0" mnemonicParsing="false" onMouseEntered="#handleWeaponEntered" onMouseExited="#handleWeaponExited" prefHeight="47.0" prefWidth="135.0" style="-fx-border-color: white; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: #5cff87;" text="WEAPON">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Button>
+            <Button fx:id="potionButtonWShop" alignment="CENTER" layoutX="622.0" layoutY="61.0" mnemonicParsing="false" onAction="#handlePotionButtonAction" onMouseEntered="#handlePotionEntered" onMouseExited="#handlePotionExited" prefHeight="47.0" prefWidth="135.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: #fd80ff;" text="POTION">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Button>
+           </children>
+       </Pane>
+      <Pane fx:id="shopPotion" prefHeight="600.0" prefWidth="800.0" visible="false">
+         <children>
+            <Label font="$x1" layoutX="246.0" layoutY="14.0" prefHeight="47.0" prefWidth="264.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Welcome to the Shop!" />
+            <Button fx:id="backButton" alignment="CENTER" layoutX="293.0" layoutY="503.0" mnemonicParsing="false" onAction="#handleBackButtonAction" prefHeight="37.0" prefWidth="122.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: red;" text="BACK">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Button>
+            <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#5ff8f5" height="500.0" layoutX="37.0" layoutY="61.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="209.0" />
+            <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#5ff8f5" height="500.0" layoutX="487.0" layoutY="61.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="270.0" />
+            <Button fx:id="weaponButtonPShop" alignment="CENTER" layoutX="487.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleWeaponButtonAction" onMouseEntered="#handleWeaponEntered" onMouseExited="#handleWeaponExited" prefHeight="47.0" prefWidth="135.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: #5cff87;" text="WEAPON">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Button>
+            <Button fx:id="potionButtonPShop" alignment="CENTER" layoutX="622.0" layoutY="61.0" mnemonicParsing="false" onMouseEntered="#handlePotionEntered" onMouseExited="#handlePotionExited" prefHeight="47.0" prefWidth="135.0" style="-fx-border-color: white; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: #fd80ff;" text="POTION">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+</StackPane>

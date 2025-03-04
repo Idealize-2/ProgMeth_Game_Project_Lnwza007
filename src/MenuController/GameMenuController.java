@@ -21,6 +21,7 @@ public class GameMenuController {
     @FXML private Button startButton;
     @FXML private Button optionButton;
     @FXML private Button backButton;
+    @FXML private Button exitButton;
     @FXML private Slider volumeSlider;
     @FXML private MediaView mediaView;
     @FXML private ImageView GameIcon;
@@ -60,8 +61,7 @@ public class GameMenuController {
         }
 
         // สร้าง MediaPlayer ใหม่และเล่นเพลง
-        //String musicPath = "res/music/bgmmusic.mp3"; // demo ver
-        String musicPath = "res/music/MenuGame2.mp3";
+        String musicPath = "res/music/menuMusic.mp3";
         bgmPlayer = new MediaPlayer(new Media(new java.io.File(musicPath).toURI().toString()));
         bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  // เล่นซ้ำ
         bgmPlayer.setVolume(0.1);  // ตั้งค่าเริ่มต้น
@@ -121,6 +121,52 @@ public class GameMenuController {
             bgmPlayer.stop();
         }
     }
+    
+    @FXML
+    private void handleStartGameButtonEntered() {
+    	//String currentStyle = startButton.getStyle();
+    	//startButton.setStyle(currentStyle + "; -fx-background-color: blue;");
+    }
+    
+    @FXML
+    private void handleStartGameButtonExited() {
+    	//String currentStyle = startButton.getStyle();
+    	//startButton.setStyle(currentStyle + "; -fx-background-color: orange;");
+    }
+    
+    @FXML
+    private void handleOptionButtonEntered() {
+    	//String currentStyle = optionButton.getStyle();
+    	//optionButton.setStyle(currentStyle + "; -fx-background-color: #3dff61;");
+    	
+    }
+    
+    @FXML
+    private void handleOptionButtonExited() {
+    	//String currentStyle = optionButton.getStyle();
+    	//optionButton.setStyle(currentStyle + "; -fx-background-color: orange;");
+    }
+    
+    @FXML
+    private void handleExitButtonEntered() {
+    	exitButton.setScaleX(1.1);
+    	exitButton.setScaleY(1.1);
+    	exitButton.setRotate(10);
+    	String currentStyle = exitButton.getStyle();
+    	exitButton.setStyle(currentStyle + "; -fx-background-color: #fa7c5a;");
+
+
+    }
+    
+    @FXML
+    private void handleExitButtonExited() {
+    	exitButton.setScaleX(1);
+    	exitButton.setScaleY(1);
+    	exitButton.setRotate(0);
+    	String currentStyle = exitButton.getStyle();
+    	exitButton.setStyle(currentStyle + "; -fx-background-color: orange;");
+    }
+    
     
     
 

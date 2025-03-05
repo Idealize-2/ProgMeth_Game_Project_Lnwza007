@@ -9,6 +9,8 @@ import javafx.util.Duration;
 
 
 public class HealItem extends Item implements Cooldownable{
+	
+	private buff buffType;
 	private int healPoint;
 	public static boolean isMHealItemAvailable = true;
 	final public long COOLDOWN = 5000; // 5 second
@@ -77,6 +79,10 @@ public class HealItem extends Item implements Cooldownable{
 	public static void setMHealItemAvailable(boolean isMHealItemAvailable) {
 		HealItem.isMHealItemAvailable = isMHealItemAvailable;
 	}
+	public buff getBuffType() {
+		return buffType;
+	}
+
 	
 	
 	

@@ -9,14 +9,18 @@ public class Pizza extends Bullet {
 
 	public double bulletAngle;
 	private double rotateSpeed = 2;
-	static private long weaponCooldown = 300;
+	static private long weaponCooldown = 400;
 	static private double speed = 3;
     static private int weaponDamage = 50;
-    
     static private int weaponLevel = 0;
+    
+    final public static long btoweaponCooldown = 400;
+	final public static double btospeed = 3;
+    final public static int btoweaponDamage = 50;
+    final public static int btoweaponLevel = 0;
 
 	public Pizza(double x, double y, double targetX, double targetY) {
-		super(x, y, targetX, targetY, Croissant.getSpeed() );
+		super(x, y, targetX, targetY, Pizza.getSpeed() );
 		setImageStr("images/pizza.jpg");
 		bulletAngle = Math.toDegrees(this.angle);
 		// TODO Auto-generated constructor stub
@@ -40,6 +44,13 @@ public class Pizza extends Bullet {
 		
 		gc.restore();
 		
+	}
+	
+	static public void backToOriginal() {
+		Pizza.setWeaponCooldown(btoweaponCooldown);
+		Pizza.setSpeed(btospeed);
+		Pizza.setWeaponDamage(btoweaponDamage);
+		Pizza.setWeaponLevel(0);
 	}
 	
 	public boolean checkCollision(Monster enemy) {

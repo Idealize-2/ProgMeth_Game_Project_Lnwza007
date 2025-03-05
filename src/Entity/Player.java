@@ -91,7 +91,7 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
 	}
 
 	public void setUpgradeWeapon(int upgradeValue) {
-		this.upgradeWeapon = upgradeValue;
+		Player.upgradeWeapon = upgradeValue;
 	}
 
 	@Override
@@ -104,7 +104,6 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
 			buffCooldown.setCycleCount(1);
 			buffCooldown.play();
 
-		
 	}
 
 	public static boolean CanShoot() {
@@ -115,35 +114,24 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
 		Player.canShoot = canShoot;
 	}
 	
-	private Image pFrame1 = new Image("images/Airi_plush.jpg");
-	private Image pFrame2 = new Image("images/Airi2.jpg");
-	private Image pFrame3 = new Image("images/Airi3.png");
-	
-	private long frameDelay = 50 * 3;
-	private long currentframe = 0;
+	private final Image[] frames = {
+	        new Image("images/Airi_plush.jpg"),
+	        new Image("images/Airi2.jpg"),
+	        new Image("images/Airi3.png")
+	    };
 
-	@Override
+	private final int frameCount = frames.length;
+	private final long frameDelay = 300_000_000 * 3; // Convert to nanoseconds (50ms * 3)
+	private long lastUpdate = System.nanoTime();
+	private int currentFrameIndex = 0;
+
 	public void renderAnimation(GraphicsContext gc, double x, double y) {
-		if(currentframe/frameDelay == 0)
-		{
-			gc.drawImage(pFrame1, x, y,40,40);
-			currentframe++;
-		}
-		else if(currentframe/frameDelay == 1)
-		{
-			gc.drawImage(pFrame2, x, y,40,40);
-			currentframe++;
-		}
-		else if(currentframe/frameDelay == 2)
-		{
-			gc.drawImage(pFrame3, x, y,40,40);
-			currentframe++;
-		}
-		else
-		{
-			currentframe = 0;
-		}
-		
+	    long now = System.nanoTime();
+	    if (now - lastUpdate >= frameDelay) {
+	         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
+	         lastUpdate = now;
+	     }
+	     gc.drawImage(frames[currentFrameIndex], x, y, 40, 40);
 	}
 	
 

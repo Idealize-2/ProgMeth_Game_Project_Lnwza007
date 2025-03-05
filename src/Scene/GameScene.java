@@ -1,6 +1,8 @@
 package Scene;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -18,9 +20,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.*;
 
+import AnimationEffect.Cooldownable;
 import AnimationEffect.HealthBar;
 import AnimationEffect.InventoryDisplay;
 import AnimationEffect.MoneyDisplay;
@@ -39,7 +43,7 @@ import Weapon.Croissant;
 import Weapon.Pizza;
 import Weapon.Sushi;
 
-public class GameScene {
+public class GameScene implements Cooldownable{
     private Stage stage;
     private Main main;
     private Scene gameScene;
@@ -58,10 +62,83 @@ public class GameScene {
     private Parent pauseMenuFXML;
     private Parent shopMenuFXML;
     
+/////////////////////////////////////// Stage Monster spwan///////////////////////////////////////
+    private ArrayList<Short> stage1 = new ArrayList<>(); // ✅ Initialized
+
+    { // Instance initializer block
+        for (int i = 0; i < 20; i++) {
+            stage1.add((short) 0);
+        }
+    }
+    private ArrayList<Short> stage2 = new ArrayList<>(); // ✅ Initialized
+
+    { // Instance initializer block
+        for (int i = 0; i < 10; i++) {
+        	stage2.add((short) 0);
+        }
+        for (int i = 0; i < 9; i++) {
+        	stage2.add((short) 1);
+        }
+        Collections.shuffle(stage2);
+        stage2.addFirst((short)1);
+    }
+    private ArrayList<Short> stage3 = new ArrayList<>(); // ✅ Initialized
+
+    { // Instance initializer block
+        for (int i = 0; i < 10; i++) {
+        	stage3.add((short) 0);
+        }
+        for (int i = 0; i < 20; i++) {
+        	stage3.add((short) 1);
+        }
+        Collections.shuffle(stage3);
+    }
+    
+    private ArrayList<Short> stage4 = new ArrayList<>(); // ✅ Initialized
+
+    { // Instance initializer block
+        for (int i = 0; i < 10; i++) {
+        	stage4.add((short) 0);
+        }
+        for (int i = 0; i < 20; i++) {
+        	stage4.add((short) 1);
+        }
+        for (int i = 0; i < 4; i++) {
+        	stage4.add((short) 2);
+        }
+        Collections.shuffle(stage4);
+        stage4.addFirst((short) 2);
+    }
+    
+    private ArrayList<Short> stage5 = new ArrayList<>(); // ✅ Initialized
+
+    { // Instance initializer block
+        for (int i = 0; i < 20; i++) {
+        	stage5.add((short) 0);
+        }
+        for (int i = 0; i < 20; i++) {
+        	stage5.add((short) 1);
+        }
+        for (int i = 0; i < 10; i++) {
+        	stage5.add((short) 2);
+        }
+        Collections.shuffle(stage5);
+    }
+    
+    public boolean s1Clear = false;
+    public boolean s2Clear = false;
+    public boolean s3Clear = false;
+    public boolean s4Clear = false;
+    public boolean s5Clear = false;
+    
+    public boolean canSpawn = true;
+
+    
+    
 /////////////////////////////// NPC position and interaction range //////////////////////////////////
     private final double npcX = 1000;
     private final double npcY = 600;
-    private final double interactionRange = 50;
+    private final double interactionRange = 100;
     private boolean nearNpc = false;
     private Image npcImage = new Image("images/shopkeeper.jpg");
     
@@ -82,7 +159,7 @@ public class GameScene {
     
     // Shop inventory
     static public final List<Item> playerInventory = new ArrayList<>();
-    static public int playerMoney = 100;
+    static public int playerMoney = 0;
     static public short itemSelect = 0;
     
 
@@ -322,15 +399,62 @@ public class GameScene {
         offsetX = clamp(player.x - viewportWidth / 2.0, 0, mapWidth - viewportWidth);
         offsetY = clamp(player.y - viewportHeight / 2.0, 0, mapHeight - viewportHeight);
         
-        playerMoney = 100000; 
-        itemSelect = 0;
-        weaponSelect = 0;
+        
+        backToOriginal();
         
         pauseMenuFXML.setVisible(false);
         shopMenuFXML.setVisible(false);
         paused = false;
         controllerPause.playGameBackgroundMusic();
     }
+    public void backToOriginal() {
+    	player.setHp(player.getMaxHp());
+    	s1Clear = s2Clear = s3Clear = s4Clear = s5Clear = false;
+    	canSpawn = true;
+    	playerMoney = 100000; //for test
+        itemSelect = 0;
+        weaponSelect = 0;
+        
+    	Croissant.backToOriginal();
+    	Sushi.backToOriginal();
+    	Pizza.backToOriginal();
+    	for (Item item : playerInventory) {
+			item.setItemCount(0);
+		}
+    }
+    @Override
+	public void runCooldown(long cooldown) {
+		// TODO Auto-generated method stub
+    	canSpawn = false;
+		Timeline buffCooldown = new Timeline(
+			    new KeyFrame(Duration.millis(cooldown), e -> canSpawn = true )
+		);
+	    
+		buffCooldown.setCycleCount(1);
+		buffCooldown.play();
+	}
+    public void spawnMonster(int Monster)
+    {
+    	System.out.println("Enemies count: " + enemies.size());
+
+    	switch (Monster) {
+		case 0:
+			enemies.add(new Monster(random.nextInt(800), random.nextInt(600)));
+			System.out.println("Monster spwan!!");
+			break;
+		case 1:
+			enemies.add(new MonsterWeakness(random.nextInt(800), random.nextInt(600)));
+			System.out.println("MonsterWeak spwan!!");
+			break;
+		case 2:
+			enemies.add(new MonsterBoss(random.nextInt(600), random.nextInt(800)));
+			System.out.println("MonsterBoss spwan!!");
+			break;
+		default:
+			break;
+    	}	
+    }
+    
 
     private void update() {
         if (paused) return; // ถ้าหยุดเกม ไม่ต้องอัปเดต
@@ -347,24 +471,7 @@ public class GameScene {
 
         offsetX = clamp(player.x - viewportWidth / 2.0, 0, mapWidth - viewportWidth);
         offsetY = clamp(player.y - viewportHeight / 2.0, 0, mapHeight - viewportHeight);
-
-        if (System.currentTimeMillis() - lastSpawnTime >= 3000) {
-        	int oEnemies = (int) (Math.random() * 3);
-        	switch (oEnemies) {
-			case 0:
-				enemies.add(new Monster(random.nextInt(800), random.nextInt(600)));
-				break;
-			case 1:
-				enemies.add(new MonsterWeakness(random.nextInt(800), random.nextInt(600)));
-				break;
-			case 2:
-				//enemies.add(new MonsterBoss(random.nextInt(2000), random.nextInt(2000)));
-				break;
-			default:
-				break;
-			}
-            lastSpawnTime = System.currentTimeMillis();
-        }
+        
         
         double distanceToNpc = Math.hypot(player.x - npcX, player.y - npcY);
         nearNpc = distanceToNpc < interactionRange;
@@ -373,6 +480,9 @@ public class GameScene {
         bullets.removeIf(Bullet::isOutOfBounds);
         bullets.forEach(Bullet::update);
         
+        
+        RunGameStage();
+
         ///enemies.removeIf( enemy -> bullets.removeIf(bullet -> bullet.checkCollision(enemy)) );
         ///new version แก้ได้ก็ดีนะ กูไม่รู้จะเขียนไงอะ
         for ( int i = 0 ; i <  enemies.size() ; i++ ) 
@@ -459,7 +569,7 @@ public class GameScene {
 
         // Draw bullets
         //for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY); 
-        
+        //RunGameStage(); //code ลับห้ามเปิดดูเด็ดขาด
         
         // Draw the NPC
         double npcScreenX = npcX - offsetX;
@@ -488,6 +598,112 @@ public class GameScene {
         
     
     }
+    private int monsterIndex = -1;
+
+    public void RunGameStage()
+    {
+        //stage 1
+        if(!s1Clear) {
+        	if(canSpawn)monsterIndex++;
+        	if(monsterIndex == stage1.size() )monsterIndex = stage1.size();
+        	System.out.println("Can spawn: " + canSpawn);
+
+        }
+
+	    if (!s1Clear && canSpawn && monsterIndex < stage1.size() ) {
+	    	runCooldown(100);
+	    	spawnMonster(monsterIndex);
+	    	System.out.println("Stage 1 SpawnMonster!!!");
+	     }
+	    if(!s1Clear && monsterIndex == stage1.size() && enemies.isEmpty() ) {
+	    	s1Clear = true;
+	    	monsterIndex = -1;
+	    	System.out.println("Stage 1 Clear!!!");
+	    }
+	    
+	    //stage 2
+        if(s1Clear && !s2Clear) {
+        	
+        	if(canSpawn)monsterIndex++;
+        	if(monsterIndex == stage2.size() )monsterIndex = stage2.size();
+        	System.out.println("Can spawn: " + canSpawn);
+
+        }
+
+	    if (s1Clear && !s2Clear && canSpawn && monsterIndex < stage2.size() ) {
+	    	runCooldown(100);
+	    	spawnMonster(monsterIndex);
+	    	System.out.println("Stage 2 SpawnMonster!!!");
+	     }
+	    if(s1Clear && !s2Clear && monsterIndex == stage2.size() && enemies.isEmpty() ) {
+	    	s2Clear = true;
+	    	monsterIndex = -1;
+	    	System.out.println("Stage 2 Clear!!!");
+	    }
+	    //// stage 3
+	    if(s1Clear && s2Clear && !s3Clear) {
+        	
+        	if(canSpawn)monsterIndex++;
+        	if(monsterIndex == stage3.size() )monsterIndex = stage3.size();
+        	System.out.println("Can spawn: " + canSpawn);
+
+        }
+
+	    if (s1Clear && s2Clear && !s3Clear && canSpawn && monsterIndex < stage3.size() ) {
+	    	runCooldown(100);
+	    	spawnMonster(monsterIndex);
+	    	System.out.println("Stage 3 SpawnMonster!!!");
+	    }
+	    if(s1Clear && s2Clear && !s3Clear && monsterIndex == stage3.size() && enemies.isEmpty() ) {
+	    	s3Clear = true;
+	    	monsterIndex = -1;
+	    	System.out.println("Stage 3 Clear!!!");
+	    }
+	    
+	    	//// stage 4
+		    if(s1Clear && s2Clear && s3Clear && !s4Clear) {
+	        	
+	        	if(canSpawn)monsterIndex++;
+	        	if(monsterIndex == stage4.size() )monsterIndex = stage4.size();
+	        	System.out.println("Can spawn: " + canSpawn);
+
+	        }
+
+		    if (s1Clear && s2Clear && s3Clear && !s4Clear && canSpawn && monsterIndex < stage4.size() ) {
+		    	runCooldown(100);
+		    	spawnMonster(monsterIndex);
+		    	System.out.println("Stage 4 SpawnMonster!!!");
+		    }
+		    if(s1Clear && s2Clear && s3Clear && !s4Clear && monsterIndex == stage4.size() && enemies.isEmpty() ) {
+		    	s4Clear = true;
+		    	monsterIndex = -1;
+		    	System.out.println("Stage 4 Clear!!!");
+		    }
+		//// stage 5
+		    if(s1Clear && s2Clear && s3Clear && s4Clear && !s5Clear) {
+	        	
+	        	if(canSpawn)monsterIndex++;
+	        	if(monsterIndex == stage5.size() )monsterIndex = stage5.size();
+	        	System.out.println("Can spawn: " + canSpawn);
+
+	        }
+
+		    if (s1Clear && s2Clear && s3Clear && s4Clear && !s5Clear && canSpawn && monsterIndex < stage5.size() ) {
+		    	runCooldown(100);
+		    	spawnMonster(monsterIndex);
+		    	System.out.println("Stage 5 SpawnMonster!!!");
+		    }
+		    if(s1Clear && s2Clear && s3Clear && s4Clear && !s5Clear && monsterIndex == stage5.size() && enemies.isEmpty() ) {
+		    	s5Clear = true;
+		    	monsterIndex = -1;
+		    	System.out.println("Stage 5 Clear!!!");
+		    }
+		    
+		    if(s1Clear && s2Clear && s3Clear && s4Clear && s5Clear)
+		    {
+		    	System.out.println("yeah u win");
+		    }
+    }
    
 	    
 
@@ -503,5 +719,7 @@ public class GameScene {
     public void setRunning(boolean running) {
     	this.running = running;
     }
+
+	
     
 }

@@ -9,8 +9,12 @@ public class Croissant extends Bullet {
 	static private long weaponCooldown = 175;
 	static private double speed = 2.5;
     static private int weaponDamage = 20;
-    
     static private int weaponLevel = 0;
+    
+    final public static long btoweaponCooldown = 175;
+	final public static double btospeed = 2.5;
+    final public static int btoweaponDamage = 20;
+    final public static int btoweaponLevel = 0;
 
 	public Croissant(double x, double y, double targetX, double targetY) {
 		super(x, y, targetX, targetY, Croissant.getSpeed() );
@@ -38,6 +42,14 @@ public class Croissant extends Bullet {
 		gc.restore();
 		
 	}
+	static public void backToOriginal() {
+		Croissant.setWeaponCooldown(btoweaponCooldown);
+		Croissant.setSpeed(btospeed);
+		Croissant.setWeaponDamage(btoweaponDamage);
+		Croissant.setWeaponLevel(0);
+	}
+	
+	
 	static public long getWeaponCooldown() {
 		return weaponCooldown;
 	}

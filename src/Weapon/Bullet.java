@@ -88,6 +88,7 @@ public abstract class Bullet {
 
 	public boolean checkCollision(Monster enemy) {
         return isOutOfBounds() || Math.hypot(x - enemy.x, y - enemy.y) < 25;
+
     }
 
 }

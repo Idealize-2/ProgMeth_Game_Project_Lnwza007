@@ -6,7 +6,7 @@ public class SubPizza extends Bullet{
 	
 	public double bulletAngle;
 	static private double speed = 3;
-    static private int weaponDamage = 20;
+    static private int weaponDamage = 10;
 
 	public SubPizza(double x, double y, double targetX, double targetY, double speed) {
 		super(x, y, targetX, targetY, SubPizza.speed);

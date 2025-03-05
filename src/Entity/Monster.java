@@ -30,6 +30,7 @@ public class Monster extends BaseEntity implements Animationable{
     public boolean getHit(Bullet bullet) {
     	
         return Math.hypot(x - bullet.x, y - bullet.y) < 25;
+
     }
 	
 	public boolean checkCollision(Bullet bullet,Player player) 

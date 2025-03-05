@@ -18,6 +18,11 @@ public class Sushi extends Bullet {
 
     static private int weaponLevel = 0;
     
+    final public static long btoweaponCooldown = 75;
+	final public static double btospeed = 3;
+    final public static int btoweaponDamage = 20;
+    final public static int btoweaponLevel = 0;
+    
     
 	public Sushi(double x, double y, double targetX, double targetY, int maxPenetration) {
 		super(x, y, targetX, targetY, Sushi.getSpeed());
@@ -47,6 +52,12 @@ public class Sushi extends Bullet {
         super.update();
         
     }
+	static public void backToOriginal() {
+		Sushi.setWeaponCooldown(btoweaponCooldown);
+		Sushi.setSpeed(btospeed);
+		Sushi.setWeaponDamage(btoweaponDamage);
+		Sushi.setWeaponLevel(0);
+	}
 
 	@Override
 	public void render(GraphicsContext gc, double x, double y) {

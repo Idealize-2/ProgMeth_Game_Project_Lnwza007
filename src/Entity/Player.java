@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import AnimationEffect.Animationable;
 import AnimationEffect.Cooldownable;
+import Scene.GameScene;
 
 public class Player extends BaseEntity implements Cooldownable,Animationable{
     private long lastShotTime = 1000;
@@ -26,7 +27,7 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
     
     public Player(double x, double y) {
     	//     x,  y, speed, hp, damage,imgPath
-    	super( x , y , 2.5 , 100 , 0 ,"images/Airi_plush.jpg");
+    	super( x , y , 2.5 , 100 , 0 ,"images/playerChocolate1.png");
         
     }
 
@@ -114,24 +115,54 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
 		Player.canShoot = canShoot;
 	}
 	
-	private final Image[] frames = {
-	        new Image("images/Airi_plush.jpg"),
-	        new Image("images/Airi2.jpg"),
-	        new Image("images/Airi3.png")
+	private final Image[] framesChocolate = {
+	        new Image("images/playerChocolate1.png"),
+	        new Image("images/playerChocolate2.png")
 	    };
 
-	private final int frameCount = frames.length;
+	private final Image[] framesCroissant = {
+	        new Image("images/playerCroissant1.png"),
+	        new Image("images/playerCroissant2.png"),
+	    };
+	
+	private final Image[] framesPizza = {
+	        new Image("images/playerPizza1.png"),
+	        new Image("images/playerPizza2.png")
+	    };
+	
+	private final int frameCount = 2;
 	private final long frameDelay = 300_000_000 * 3; // Convert to nanoseconds (50ms * 3)
 	private long lastUpdate = System.nanoTime();
 	private int currentFrameIndex = 0;
 
 	public void renderAnimation(GraphicsContext gc, double x, double y) {
-	    long now = System.nanoTime();
-	    if (now - lastUpdate >= frameDelay) {
-	         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
-	         lastUpdate = now;
-	     }
-	     gc.drawImage(frames[currentFrameIndex], x, y, 40, 40);
+		long now = System.nanoTime();
+		if(GameScene.weaponSelect == 0) {
+			if (now - lastUpdate >= frameDelay) {
+		         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
+		         lastUpdate = now;
+		     }
+		     gc.drawImage(framesChocolate[currentFrameIndex], x-15, y-40, 80, 83);
+			
+		}
+		if(GameScene.weaponSelect == 1) {
+			if (now - lastUpdate >= frameDelay) {
+		         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
+		         lastUpdate = now;
+		     }
+		     gc.drawImage(framesCroissant[currentFrameIndex], x-15, y-40, 80, 83);
+			
+		}
+		if(GameScene.weaponSelect == 2) {
+			if (now - lastUpdate >= frameDelay) {
+		         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
+		         lastUpdate = now;
+		     }
+		     gc.drawImage(framesPizza[currentFrameIndex], x-15, y-40, 80, 83);
+			
+		}
+	    
+	    
 	}
 	
 

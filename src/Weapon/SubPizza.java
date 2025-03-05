@@ -10,7 +10,7 @@ public class SubPizza extends Bullet{
 
 	public SubPizza(double x, double y, double targetX, double targetY, double speed) {
 		super(x, y, targetX, targetY, SubPizza.speed);
-		setImageStr("images/Pizza1.jpg");
+		setImageStr("images/subpizza.png");
 		bulletAngle = Math.toDegrees(this.angle);
 	}
 
@@ -20,7 +20,7 @@ public class SubPizza extends Bullet{
 		gc.translate(x + 10 , y + 10); // Move origin to bullet center (assuming 20x20 size)
 		gc.rotate(bulletAngle); // Rotate towards target
 		
-		gc.drawImage(getBulletImage(), -10, -10 , 40, 20);
+		gc.drawImage(getBulletImage(), -10, -10 , 20, 20);
 		
 		gc.restore();
 		

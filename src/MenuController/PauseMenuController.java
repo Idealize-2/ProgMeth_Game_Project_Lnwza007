@@ -70,22 +70,22 @@ public class PauseMenuController {
         
     }
     public void playGameBackgroundMusic() {
-        // ระบุเส้นทางของไฟล์เพลง
-        String musicPath = "res/music/gameBGM.mp3"; // เปลี่ยนเป็นไฟล์เพลงที่คุณต้องการใช้
+
+        String musicPath = "res/music/gameBGM.mp3"; 
         Media media = new Media(new java.io.File(musicPath).toURI().toString());
         gameBgmPlayer = new MediaPlayer(media);
-        
-        // ตั้งค่าการเล่นเพลง
-        gameBgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  // เล่นซ้ำ
-        gameBgmPlayer.setVolume(0.1);  // ปรับระดับเสียงเริ่มต้น
-        gameBgmPlayer.play();  // เริ่มเล่นเพลง
+
+        gameBgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  
+        gameBgmPlayer.setVolume(0.1);  
+        gameBgmPlayer.play();
     }
-    
+
     private void stopGameBackgroundMusic() {
         if (gameBgmPlayer != null) {
-            gameBgmPlayer.stop();  // หยุดการเล่นเพลง
+            gameBgmPlayer.stop();
         }
     }
+
     
     @FXML
     private void handleExitButtonAfterGameOverAction(ActionEvent event) {
@@ -131,5 +131,7 @@ public class PauseMenuController {
     	gameOverPane.setVisible(true);
     	
     }
+    
+    
 
 }

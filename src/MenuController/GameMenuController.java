@@ -23,11 +23,14 @@ public class GameMenuController {
     @FXML private Button backButton;
     @FXML private Button exitButton;
     @FXML private Slider volumeSlider;
-    @FXML private MediaView mediaView;
+    //@FXML private MediaView mediaView;
+    @FXML private ImageView backgroundImage;
     @FXML private ImageView GameIcon;
     
     private MediaPlayer mediaPlayer;
     private MediaPlayer bgmPlayer;
+    
+    
 
     public void setMain(Main main) {
         this.main = main;
@@ -35,24 +38,32 @@ public class GameMenuController {
 
     @FXML
     public void initialize() {
-        playBackgroundVideo();
+    	
+        //playBackgroundVideo();
         playBackgroundMusic();
         setupVolumeControl();
         loadGameIcon();
-    }
-
-    private void playBackgroundVideo() {
-        String videoPath = "res/video/demobackgroundvideo.mp4";
-        mediaPlayer = new MediaPlayer(new javafx.scene.media.Media(new java.io.File(videoPath).toURI().toString()));
-        mediaView.setMediaPlayer(mediaPlayer);
-        mediaView.setFitHeight(600);
-        mediaView.setFitWidth(800);
-        mediaView.setPreserveRatio(false);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //คลิปวนลูป
-        mediaPlayer.setMute(true); //ไม่เอาเสียงวิดีโอ
-        mediaPlayer.play();
+        backgroundImage.setImage(new Image("/images/yowtf.png"));
+        
+        
+        
+        
+        
         
     }
+
+//    private void playBackgroundVideo() {
+//        String videoPath = "res/video/demobackgroundvideo.mp4";
+//        mediaPlayer = new MediaPlayer(new javafx.scene.media.Media(new java.io.File(videoPath).toURI().toString()));
+//        mediaView.setMediaPlayer(mediaPlayer);
+//        mediaView.setFitHeight(600);
+//        mediaView.setFitWidth(800);
+//        mediaView.setPreserveRatio(false);
+//        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //คลิปวนลูป
+//        mediaPlayer.setMute(true); //ไม่เอาเสียงวิดีโอ
+//        mediaPlayer.play();
+//        
+//    }
     
     private void playBackgroundMusic() {
         // ถ้ามี MediaPlayer เก่าที่ยังเล่นอยู่ ให้หยุดมันก่อน
@@ -107,7 +118,7 @@ public class GameMenuController {
     }
     
     public void resetMainMenu() { //call when go back to main menu
-        playBackgroundVideo(); // เล่นวิดีโอพื้นหลังใหม่
+        //playBackgroundVideo(); // เล่นวิดีโอพื้นหลังใหม่
         playBackgroundMusic(); // เล่นเพลงเมนูใหม่
         menuPane.setVisible(true);
         optionPane.setVisible(false);
@@ -124,34 +135,30 @@ public class GameMenuController {
     
     @FXML
     private void handleStartGameButtonEntered() {
-    	//String currentStyle = startButton.getStyle();
-    	//startButton.setStyle(currentStyle + "; -fx-background-color: blue;");
+    	String currentStyle = startButton.getStyle();
+    	startButton.setStyle(currentStyle + "; -fx-background-color: #ffd375;");
     }
     
     @FXML
     private void handleStartGameButtonExited() {
-    	//String currentStyle = startButton.getStyle();
-    	//startButton.setStyle(currentStyle + "; -fx-background-color: orange;");
+    	String currentStyle = startButton.getStyle();
+    	startButton.setStyle(currentStyle + "; -fx-background-color: orange;");
     }
     
     @FXML
     private void handleOptionButtonEntered() {
-    	//String currentStyle = optionButton.getStyle();
-    	//optionButton.setStyle(currentStyle + "; -fx-background-color: #3dff61;");
-    	
+    	String currentStyle = optionButton.getStyle();
+    	optionButton.setStyle(currentStyle + "; -fx-background-color: #ffd375;");	
     }
     
     @FXML
     private void handleOptionButtonExited() {
-    	//String currentStyle = optionButton.getStyle();
-    	//optionButton.setStyle(currentStyle + "; -fx-background-color: orange;");
+    	String currentStyle = optionButton.getStyle();
+    	optionButton.setStyle(currentStyle + "; -fx-background-color: orange;");
     }
     
     @FXML
-    private void handleExitButtonEntered() {
-    	exitButton.setScaleX(1.1);
-    	exitButton.setScaleY(1.1);
-    	exitButton.setRotate(10);
+    private void handleExitButtonEntered() { //not good รอแก้ บักตรงมุม
     	String currentStyle = exitButton.getStyle();
     	exitButton.setStyle(currentStyle + "; -fx-background-color: #fa7c5a;");
 
@@ -160,9 +167,6 @@ public class GameMenuController {
     
     @FXML
     private void handleExitButtonExited() {
-    	exitButton.setScaleX(1);
-    	exitButton.setScaleY(1);
-    	exitButton.setRotate(0);
     	String currentStyle = exitButton.getStyle();
     	exitButton.setStyle(currentStyle + "; -fx-background-color: orange;");
     }

@@ -15,7 +15,7 @@ public class MonsterBoss extends Monster{
 		setSpeed(0.75);
 		setHp(200);
 		setDamage(40);
-		setImgPath("/images/Boss.jpg");
+		setImgPath("/images/Boss.png");
 	}
 	
 	public int monsterDMG() {
@@ -42,6 +42,7 @@ public class MonsterBoss extends Monster{
     @Override
 	public void renderAnimation(GraphicsContext gc, double x, double y) {
 		// TODO Auto-generated method stub
+    	gc.drawImage(getEntityImage() , x , y , 174 , 140);
 		
 	}
 }

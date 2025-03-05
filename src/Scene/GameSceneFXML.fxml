@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+
+<Pane fx:id="stagePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenuController.GameSceneController">
+   <children>
+      <ImageView fx:id="stage1" fitHeight="125.0" fitWidth="320.0" layoutX="250.0" layoutY="69.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="stage2" fitHeight="125.0" fitWidth="320.0" layoutX="250.0" layoutY="69.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="stage3" fitHeight="125.0" fitWidth="320.0" layoutX="250.0" layoutY="69.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="stage4" fitHeight="125.0" fitWidth="320.0" layoutX="250.0" layoutY="69.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="stage5" fitHeight="125.0" fitWidth="320.0" layoutX="250.0" layoutY="69.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
+      <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#c4ee4e" height="37.0" layoutX="23.0" layoutY="95.0" stroke="BLACK" strokeType="INSIDE" width="142.0" />
+      <Text fx:id="stageNo" layoutX="61.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STAGE 1">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="monsterLeft" layoutX="32.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Monster Left : ">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>

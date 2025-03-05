@@ -21,7 +21,7 @@ public class Pizza extends Bullet {
 
 	public Pizza(double x, double y, double targetX, double targetY) {
 		super(x, y, targetX, targetY, Pizza.getSpeed() );
-		setImageStr("images/pizza.jpg");
+		setImageStr("images/pizza.png");
 		bulletAngle = Math.toDegrees(this.angle);
 		// TODO Auto-generated constructor stub
 	}

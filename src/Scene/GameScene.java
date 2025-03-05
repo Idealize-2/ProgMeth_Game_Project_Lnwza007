@@ -3,6 +3,7 @@ package Scene;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -36,6 +37,7 @@ import Item.BuffItem;
 import Item.HealItem;
 import Item.Item;
 import Item.buff;
+import MenuController.GameSceneController;
 import MenuController.PauseMenuController;
 import MenuController.ShopMenuController;
 import Weapon.Bullet;
@@ -47,6 +49,7 @@ public class GameScene implements Cooldownable{
     private Stage stage;
     private Main main;
     private Scene gameScene;
+    private Canvas canvas;
     private boolean running;
     private boolean paused = false; 
     private Player player;
@@ -58,11 +61,30 @@ public class GameScene implements Cooldownable{
     private AnimationTimer gameLoop;
     private PauseMenuController controllerPause;
     private ShopMenuController controllerShop;
+    private GameSceneController controllerGame;
     
     private Parent pauseMenuFXML;
     private Parent shopMenuFXML;
+    private Parent gameSceneFXML;
     
-/////////////////////////////////////// Stage Monster spwan///////////////////////////////////////
+    private boolean isShowLabelStage1;
+    private boolean isShowLabelStage2;
+    private boolean isShowLabelStage3;
+    private boolean isShowLabelStage4;
+    private boolean isShowLabelStage5;
+    
+
+    private long lastUpdate = System.nanoTime();
+    private int currentFrameIndex = 0;
+    private final long frameDelay = 500_000_000;  
+    private final int frameCount = 2;
+    
+    private Timeline buffCooldown;
+
+    
+    
+    
+/////////////////////////////////////// Stage Monster spawn///////////////////////////////////////
     private ArrayList<Short> stage1 = new ArrayList<>(); // ✅ Initialized
 
     { // Instance initializer block
@@ -140,14 +162,17 @@ public class GameScene implements Cooldownable{
     private final double npcY = 600;
     private final double interactionRange = 100;
     private boolean nearNpc = false;
-    private Image npcImage = new Image("images/shopkeeper.jpg");
-    
+    //private Image npcImage = new Image("images/shopkeeper.jpg");
+    private final Image[] npcframes = {
+	        new Image("images/shopkeeper1.png"),
+	        new Image("images/shopkeeper2.png")
+	    };
     //////////////////////////weapon select//////////////
-    static private short weaponSelect = 0;
+    public static short weaponSelect = 0;
 
 ////////////////////////////////////////////scroll map    ////////////////////////////////////////////////////////
-    Image mapImage = new Image("/images/demoBG.png");
-    public static final int mapWidth = 2000;
+    Image mapImage = new Image("/images/gameBackground.png");
+    public static final int mapWidth = 1900;
     public static final int mapHeight = 1200;
     private final int viewportWidth = 800;
     private final int viewportHeight = 600;
@@ -170,20 +195,24 @@ public class GameScene implements Cooldownable{
     }
 
     private void createGameScene() {
-        Canvas canvas = new Canvas(viewportWidth, viewportHeight);
+    	canvas = new Canvas(viewportWidth, viewportHeight);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         root = new StackPane(canvas);
         gameScene = new Scene(root);
         
         ///test inventory
-        playerInventory.add(new HealItem("MeduimPotion", 30, "", "images/maki.jpg", 50 ) );
+        playerInventory.add(new HealItem("MediumPotion", 30, "", "images/maki.jpg", 50 ) );
         playerInventory.add(new HealItem("BigPotion", 50, "", "images/maki.jpg", 100 ) );
         playerInventory.add(new BuffItem("BerserkPotion", 100, "", "images/maki.jpg", buff.BERSERK) );
         playerInventory.add(new BuffItem("SpecialPotion", 150, "", "images/maki.jpg", buff.SPECIAL) );
 
         //Set Up พวก scene เสริม
+        setupGameController();
         setupShopMenu();
         setupPauseMenu();
+        
+        
+        
         
 
         gameScene.setOnKeyPressed(e -> {
@@ -192,7 +221,7 @@ public class GameScene implements Cooldownable{
             	togglePauseForMenu();
             }
             if (e.getCode() == KeyCode.DIGIT1) {
-            	System.out.println("Meduim Potion Selected");
+            	System.out.println("Medium Potion Selected");
             	itemSelect = 0;
             }
             if (e.getCode() == KeyCode.DIGIT2) {
@@ -355,12 +384,41 @@ public class GameScene implements Cooldownable{
    	        controllerShop = loader.getController();
    	        controllerShop.setMain(main);
    	        controllerShop.setGameScene(this);
+   	        controllerShop.setCanvas(canvas);
    	        
 
    	    } catch (Exception e) {
    	        e.printStackTrace();
    	    }
    }
+    
+    private void setupGameController() {
+    	try {
+   	        // โหลด FXML และกำหนด controller
+   	        FXMLLoader loader = new FXMLLoader(getClass().getResource("GameSceneFXML.fxml"));
+   	        
+   	        // นำเข้าฉากจาก FXML
+   	        gameSceneFXML = loader.load();
+   	        gameSceneFXML.setMouseTransparent(true);
+   	        
+   	        // เพิ่มใน root ที่เป็น StackPane ของเรา
+   	        root.getChildren().add(gameSceneFXML);
+   	        
+   	        // กำหนดให้สามารถซ่อน/แสดงเมนู Pause ได้
+   	        gameSceneFXML.setVisible(true);  
+
+   	        // เรียก SetController เพื่อให้มีการใช้ Main ใน FXML (ถ้าจำเป็น)
+   	        controllerGame = loader.getController();
+   	        controllerGame.setMain(main);
+   	        controllerGame.setGameScene(this);
+   	        controllerGame.setCanvas(canvas);
+   	        
+
+   	    } catch (Exception e) {
+   	        e.printStackTrace();
+   	    }
+    	
+    }
     
 
 
@@ -382,9 +440,11 @@ public class GameScene implements Cooldownable{
     	
     	paused = !paused;
         shopMenuFXML.setVisible(paused);
+        controllerShop.renderMoney();
         if (paused && controllerShop != null) {
         	//System.out.println("work"); for debugging
         	ShopMenuController.shopWeaponSelect = 0;
+        	controllerShop.selectedButtonCorrecting();
             controllerShop.ensureWeaponShopVisible();
         }
     }
@@ -399,21 +459,23 @@ public class GameScene implements Cooldownable{
         offsetX = clamp(player.x - viewportWidth / 2.0, 0, mapWidth - viewportWidth);
         offsetY = clamp(player.y - viewportHeight / 2.0, 0, mapHeight - viewportHeight);
         
-        
+        if(buffCooldown!=null)buffCooldown.stop();
         backToOriginal();
         
         pauseMenuFXML.setVisible(false);
         shopMenuFXML.setVisible(false);
         paused = false;
         controllerPause.playGameBackgroundMusic();
+        
     }
     public void backToOriginal() {
     	player.setHp(player.getMaxHp());
     	s1Clear = s2Clear = s3Clear = s4Clear = s5Clear = false;
     	canSpawn = true;
-    	playerMoney = 100000; //for test
+    	playerMoney = 10000; //for test
         itemSelect = 0;
         weaponSelect = 0;
+        monsterIndex = -1;
         
     	Croissant.backToOriginal();
     	Sushi.backToOriginal();
@@ -421,12 +483,15 @@ public class GameScene implements Cooldownable{
     	for (Item item : playerInventory) {
 			item.setItemCount(0);
 		}
+    	
+    	resetStageIcon();
+        controllerGame.setStageNo(1);
     }
     @Override
 	public void runCooldown(long cooldown) {
 		// TODO Auto-generated method stub
     	canSpawn = false;
-		Timeline buffCooldown = new Timeline(
+		buffCooldown = new Timeline(
 			    new KeyFrame(Duration.millis(cooldown), e -> canSpawn = true )
 		);
 	    
@@ -440,15 +505,15 @@ public class GameScene implements Cooldownable{
     	switch (Monster) {
 		case 0:
 			enemies.add(new Monster(random.nextInt(800), random.nextInt(600)));
-			System.out.println("Monster spwan!!");
+			System.out.println("Monster spawn!!");
 			break;
 		case 1:
 			enemies.add(new MonsterWeakness(random.nextInt(800), random.nextInt(600)));
-			System.out.println("MonsterWeak spwan!!");
+			System.out.println("MonsterWeak spawn!!");
 			break;
 		case 2:
 			enemies.add(new MonsterBoss(random.nextInt(600), random.nextInt(800)));
-			System.out.println("MonsterBoss spwan!!");
+			System.out.println("MonsterBoss spawn!!");
 			break;
 		default:
 			break;
@@ -548,6 +613,7 @@ public class GameScene implements Cooldownable{
         // Draw player relative to the viewport
         player.renderAnimation(gc , player.x - offsetX, player.y - offsetY);
         
+        
         if(UsePotionEffect.isbuffAvailable) 
         {
         	UsePotionEffect.renderBerserkEffect(gc , player.x - offsetX, player.y - offsetY);
@@ -565,7 +631,7 @@ public class GameScene implements Cooldownable{
         for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY); 
         
         // Draw enemies
-        for (Monster enemy : enemies) enemy.render(gc , enemy.x - offsetX,enemy.y - offsetY);
+        for (Monster enemy : enemies) enemy.renderAnimation(gc , enemy.x - offsetX,enemy.y - offsetY);
 
         // Draw bullets
         //for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY); 
@@ -574,7 +640,15 @@ public class GameScene implements Cooldownable{
         // Draw the NPC
         double npcScreenX = npcX - offsetX;
         double npcScreenY = npcY - offsetY;
-        gc.drawImage(npcImage,npcScreenX, npcScreenY, 80, 80); // NPC size
+        
+        //<-------npc animation---------->
+        
+        long now = System.nanoTime();
+	    if (now - lastUpdate >= frameDelay) {
+	         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
+	         lastUpdate = now;
+	     }
+	    gc.drawImage(npcframes[currentFrameIndex], npcScreenX, npcScreenY, 80, 80);
         
         if (nearNpc) {
             gc.setFill(Color.WHITE);
@@ -588,13 +662,12 @@ public class GameScene implements Cooldownable{
         //render Current MOney
         MoneyDisplay.renderMoneyBox(gc, 20, 50, playerMoney);
         
-        //render Player Invetory
+        //render Player Inventory
         InventoryDisplay.renderInventory(gc, 800, 600, itemSelect,
         		playerInventory.get(0).getItemCount(),
         		playerInventory.get(1).getItemCount(),
         		playerInventory.get(2).getItemCount(),
         		playerInventory.get(3).getItemCount());
-        
         
     
     }
@@ -605,92 +678,102 @@ public class GameScene implements Cooldownable{
         //stage 1
         if(!s1Clear) {
         	if(canSpawn)monsterIndex++;
-        	if(monsterIndex == stage1.size() )monsterIndex = stage1.size();
+        	if(monsterIndex >= stage1.size())monsterIndex = stage1.size();
         	System.out.println("Can spawn: " + canSpawn);
+        	System.out.println("enemies left"+ enemies.size());
+        	//System.out.println("debugging");
+        	//System.out.println(!s1Clear);
+        	//System.out.println(monsterIndex == stage1.size());
+        	//System.out.println(enemies.isEmpty());
+        	//System.out.println("Monster index"+monsterIndex+"size is"+stage1.size());
 
         }
 
 	    if (!s1Clear && canSpawn && monsterIndex < stage1.size() ) {
-	    	runCooldown(100);
-	    	spawnMonster(monsterIndex);
+	    	runCooldown(500);
+	    	spawnMonster(stage1.get(monsterIndex));
 	    	System.out.println("Stage 1 SpawnMonster!!!");
 	     }
 	    if(!s1Clear && monsterIndex == stage1.size() && enemies.isEmpty() ) {
 	    	s1Clear = true;
 	    	monsterIndex = -1;
 	    	System.out.println("Stage 1 Clear!!!");
+	    	controllerGame.setStageNo(2);
 	    }
 	    
 	    //stage 2
         if(s1Clear && !s2Clear) {
         	
         	if(canSpawn)monsterIndex++;
-        	if(monsterIndex == stage2.size() )monsterIndex = stage2.size();
+        	if(monsterIndex >= stage2.size() )monsterIndex = stage2.size();
         	System.out.println("Can spawn: " + canSpawn);
 
         }
 
 	    if (s1Clear && !s2Clear && canSpawn && monsterIndex < stage2.size() ) {
-	    	runCooldown(100);
-	    	spawnMonster(monsterIndex);
+	    	runCooldown(500);
+	    	spawnMonster(stage2.get(monsterIndex));
 	    	System.out.println("Stage 2 SpawnMonster!!!");
 	     }
 	    if(s1Clear && !s2Clear && monsterIndex == stage2.size() && enemies.isEmpty() ) {
 	    	s2Clear = true;
 	    	monsterIndex = -1;
 	    	System.out.println("Stage 2 Clear!!!");
+	    	controllerGame.setStageNo(3);
 	    }
 	    //// stage 3
 	    if(s1Clear && s2Clear && !s3Clear) {
         	
         	if(canSpawn)monsterIndex++;
-        	if(monsterIndex == stage3.size() )monsterIndex = stage3.size();
+        	if(monsterIndex >= stage3.size() )monsterIndex = stage3.size();
         	System.out.println("Can spawn: " + canSpawn);
 
         }
 
 	    if (s1Clear && s2Clear && !s3Clear && canSpawn && monsterIndex < stage3.size() ) {
-	    	runCooldown(100);
-	    	spawnMonster(monsterIndex);
+	    	runCooldown(500);
+	    	spawnMonster(stage3.get(monsterIndex));
 	    	System.out.println("Stage 3 SpawnMonster!!!");
 	    }
 	    if(s1Clear && s2Clear && !s3Clear && monsterIndex == stage3.size() && enemies.isEmpty() ) {
 	    	s3Clear = true;
 	    	monsterIndex = -1;
 	    	System.out.println("Stage 3 Clear!!!");
+	    	controllerGame.setStageNo(4);
 	    }
 	    
 	    	//// stage 4
 		    if(s1Clear && s2Clear && s3Clear && !s4Clear) {
 	        	
 	        	if(canSpawn)monsterIndex++;
-	        	if(monsterIndex == stage4.size() )monsterIndex = stage4.size();
+	        	if(monsterIndex >= stage4.size() )monsterIndex = stage4.size();
 	        	System.out.println("Can spawn: " + canSpawn);
 
 	        }
 
 		    if (s1Clear && s2Clear && s3Clear && !s4Clear && canSpawn && monsterIndex < stage4.size() ) {
 		    	runCooldown(100);
-		    	spawnMonster(monsterIndex);
+		    	spawnMonster(stage4.get(monsterIndex));
 		    	System.out.println("Stage 4 SpawnMonster!!!");
 		    }
 		    if(s1Clear && s2Clear && s3Clear && !s4Clear && monsterIndex == stage4.size() && enemies.isEmpty() ) {
 		    	s4Clear = true;
 		    	monsterIndex = -1;
 		    	System.out.println("Stage 4 Clear!!!");
+		    	controllerGame.setStageNo(5);
 		    }
 		//// stage 5
 		    if(s1Clear && s2Clear && s3Clear && s4Clear && !s5Clear) {
 	        	
 	        	if(canSpawn)monsterIndex++;
-	        	if(monsterIndex == stage5.size() )monsterIndex = stage5.size();
+	        	if(monsterIndex >= stage5.size() )monsterIndex = stage5.size();
 	        	System.out.println("Can spawn: " + canSpawn);
 
 	        }
 
 		    if (s1Clear && s2Clear && s3Clear && s4Clear && !s5Clear && canSpawn && monsterIndex < stage5.size() ) {
 		    	runCooldown(100);
-		    	spawnMonster(monsterIndex);
+		    	spawnMonster(stage5.get(monsterIndex));
 		    	System.out.println("Stage 5 SpawnMonster!!!");
 		    }
 		    if(s1Clear && s2Clear && s3Clear && s4Clear && !s5Clear && monsterIndex == stage5.size() && enemies.isEmpty() ) {
@@ -703,6 +786,34 @@ public class GameScene implements Cooldownable{
 		    {
 		    	System.out.println("yeah u win");
 		    }
+		    
+		    if(!isShowLabelStage1) {
+	        	isShowLabelStage1 = true;
+	        	Thread thread = new Thread(()->{
+	        		try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	        		controllerGame.showStage1();
+	        	});
+	        	thread.start();
+	        }
+		    else if (!isShowLabelStage2 && s1Clear){
+		    	isShowLabelStage2 = true;
+		    	controllerGame.showStage2();
+		    }
+		    
+		    controllerGame.setMonsterLeft(enemies.size());
+    }
+    private void resetStageIcon() {
+    	isShowLabelStage1 = false;
+    	isShowLabelStage2 = false;
+    	isShowLabelStage3 = false;
+    	isShowLabelStage4 = false;
+    	isShowLabelStage5 = false;
+    	
     }
    
 	    
@@ -712,8 +823,9 @@ public class GameScene implements Cooldownable{
     	paused = true;
     	togglePauseForMenu();
         resetGame();
-        stage.setScene(gameScene);
         gameLoop.start();
+        stage.setScene(gameScene);
+        
     }
     
     public void setRunning(boolean running) {

@@ -6,9 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class SelectWeapon {
-	private static Image img1 = new Image("/images/sushi.jpg");
-	private static Image img2 = new Image("/images/cr.png");
-	private static Image img3 = new Image("/images/Pizza.jpg");
+	private static Image img1 = new Image("/images/chocolate.png");
+	private static Image img2 = new Image("/images/croissant.png");
+	private static Image img3 = new Image("/images/pizza.png");
 	
 	static public void renderWeaponBoxes(GraphicsContext gc, double viewportWidth, int weapon) {
         double startX = viewportWidth - 260; // Start positioning from the right
@@ -36,10 +36,10 @@ public class SelectWeapon {
 
         switch (box) {
 		case 1:
-			gc.drawImage( img1 , x + 30 + offset, y + 30 + offset, 40, 40);
+			gc.drawImage( img1 , x + 30 + offset, y + 30 + offset, 28, 12);
 			break;
 		case 2:
-			gc.drawImage( img2 , x + 30 + offset, y + 30 + offset, 40, 40);
+			gc.drawImage( img2 , x + 30 + offset, y + 30 + offset, 50, 27);
 			break;
 		case 3:
 			gc.drawImage( img3 , x + 30 + offset, y + 30 + offset, 40, 40);

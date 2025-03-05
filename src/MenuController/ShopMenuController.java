@@ -2,14 +2,20 @@
 package MenuController;
 
  import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.util.List;
 
+import AnimationEffect.MoneyDisplay;
 import Application.Main;
 import Item.*;
 import Scene.GameScene;
@@ -48,8 +54,16 @@ public class ShopMenuController {
     @FXML private Button BerserkPotion;
     @FXML private Button SpecialPotion;
     
+    @FXML private ImageView WeaponMenuBackground;
+    @FXML private ImageView PotionMenuBackground;
+    @FXML private ImageView chocolatePic;
+    @FXML private ImageView croissantPic;
+    @FXML private ImageView pizzaPic;
+    
 	private Main main;
 	private GameScene gameScene;
+	private Canvas canvas;
+	private GraphicsContext gc;
 	
 	static public int shopWeaponSelect;
     
@@ -57,10 +71,25 @@ public class ShopMenuController {
     public void setMain(Main main) {
         this.main = main;
     }
+    public void setCanvas(Canvas canvas) {
+    	this.canvas = canvas;
+    	gc = canvas.getGraphicsContext2D();
+    	
+    }
 
     public void initialize() {
+    	selectedButtonCorrecting();
+    	WeaponMenuBackground.setImage(new Image("/images/weaponMenu.png"));
+    	PotionMenuBackground.setImage(new Image("/images/potionMenu.png"));
+    	chocolatePic.setImage(new Image("/images/chocolate.png"));
+    	croissantPic.setImage(new Image("/images/croissant.png"));
+    	pizzaPic.setImage(new Image("/images/pizza.png"));
+    	chocolatePic.setMouseTransparent(true);
+    	croissantPic.setMouseTransparent(true);
+    	pizzaPic.setMouseTransparent(true);
+
     	
-    	
+
     }
     public void setGameScene(GameScene gameScene) {
     	this.gameScene = gameScene;
@@ -130,22 +159,22 @@ public class ShopMenuController {
 	@FXML
 	private void handleWeapon1Click() {
 	    System.out.println("Weapon 0 selected");
-	    // Add logic to purchase or equip Weapon 1
 	    ShopMenuController.shopWeaponSelect = 0;
+	    selectedButtonCorrecting();
 	}
 
 	@FXML
 	private void handleWeapon2Click() {
 	    System.out.println("Weapon 1 selected");
 	    ShopMenuController.shopWeaponSelect = 1;
-	    // Add logic to purchase or equip Weapon 2
+	    selectedButtonCorrecting();
 	}
 
 	@FXML
 	private void handleWeapon3Click() {
 	    System.out.println("Weapon 2 selected");
 	    ShopMenuController.shopWeaponSelect = 2;
-	    // Add logic to purchase or equip Weapon 3
+	    selectedButtonCorrecting();
 	}
 
 	@FXML
@@ -179,7 +208,7 @@ public class ShopMenuController {
 		{
 			System.out.println("Not enought money to buy");
 		}
-	    // Add logic to upgrade weapon damage
+	    renderMoney();
 	}
 
 	@FXML
@@ -212,6 +241,7 @@ public class ShopMenuController {
 		{
 			System.out.println("Not enought money to buy");
 		}
+		renderMoney();
 	}
 
 	@FXML
@@ -259,6 +289,7 @@ public class ShopMenuController {
 		{
 			System.out.println("Not enought money to buy");
 		}
+		renderMoney();
 	}
 	
 	@FXML
@@ -266,6 +297,7 @@ public class ShopMenuController {
 		if(GameScene.playerMoney > 500 ) 
 		{
 			GameScene.playerMoney -= 500;
+			renderMoney();
 			switch (ShopMenuController.shopWeaponSelect) {
 			case 0: {
 				if(Sushi.getWeaponLevel() == 1) {
@@ -274,7 +306,7 @@ public class ShopMenuController {
 					break;
 				}
 				Sushi.setWeaponLevel(1);
-				System.out.println("Sushi Level up");
+				System.out.println("Chocolate Level up");
 				break;
 			}
 			case 1: {
@@ -306,6 +338,7 @@ public class ShopMenuController {
 		{
 			System.out.println("Not enought money to buy");
 		}
+		renderMoney();
 	}
 	@FXML 
 	private void handleMPotion() {
@@ -318,6 +351,7 @@ public class ShopMenuController {
 		{
 			System.out.println("Not enought money to buy");
 		}
+		renderMoney();
 	}
     @FXML private void handleBPotion() {
     	if(GameScene.playerMoney >= GameScene.playerInventory.get(1).getPrice() ) 
@@ -329,6 +363,7 @@ public class ShopMenuController {
 		{
 			System.out.println("Not enought money to buy");
 		}
+    	renderMoney();
     }
     @FXML private void handleBerserkPotion() {
     	if(GameScene.playerMoney >= GameScene.playerInventory.get(2).getPrice() ) 
@@ -340,19 +375,58 @@ public class ShopMenuController {
 		{
 			System.out.println("Not enought money to buy");
 		}
+    	renderMoney();
     }
     @FXML private void handleSpecialPotion() {
     	if(GameScene.playerMoney >= GameScene.playerInventory.get(3).getPrice() ) 
 		{
 			GameScene.playerMoney -= GameScene.playerInventory.get(3).getPrice();
+			renderMoney();
 			GameScene.playerInventory.get(3).setItemCount( GameScene.playerInventory.get(3).getItemCount() + 1 );
 		}
 		else
 		{
 			System.out.println("Not enought money to buy");
 		}
+    	renderMoney();
     }
-
+    
+    public void renderMoney() {
+    	MoneyDisplay.renderMoneyBox(gc,300 , 50,GameScene.playerMoney);
+    }
+    
+   
+    public void selectedButtonCorrecting() {
+    	String currentStyle;
+    	switch(ShopMenuController.shopWeaponSelect) {
+    	
+    	case 0:
+    		currentStyle = Weapon1.getStyle();
+        	Weapon1.setStyle(currentStyle + "; -fx-background-color: #32d611;");
+        	currentStyle = Weapon2.getStyle();
+        	Weapon2.setStyle(currentStyle + "; -fx-background-color: #5cff87;");
+        	currentStyle = Weapon3.getStyle();
+        	Weapon3.setStyle(currentStyle + "; -fx-background-color: #5cff87;");
+    		break;
+    	case 1:
+    		currentStyle = Weapon1.getStyle();
+        	Weapon1.setStyle(currentStyle + "; -fx-background-color: #5cff87;");
+        	currentStyle = Weapon2.getStyle();
+        	Weapon2.setStyle(currentStyle + "; -fx-background-color: #32d611;");
+        	currentStyle = Weapon3.getStyle();
+        	Weapon3.setStyle(currentStyle + "; -fx-background-color: #5cff87;");
+        	break;
+    	case 2:
+    		currentStyle = Weapon1.getStyle();
+        	Weapon1.setStyle(currentStyle + "; -fx-background-color: #5cff87;");
+        	currentStyle = Weapon2.getStyle();
+        	Weapon2.setStyle(currentStyle + "; -fx-background-color: #5cff87;");
+        	currentStyle = Weapon3.getStyle();
+        	Weapon3.setStyle(currentStyle + "; -fx-background-color: #32d611;");
+        	break;
+        default:
+    	}
+    }
 
 	
 }

@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 public class Croissant extends Bullet {
 
 	public double bulletAngle;
-	private double rotateSpeed = 4;
+	private double rotateSpeed = 15;
 	static private long weaponCooldown = 175;
 	static private double speed = 2.5;
     static private int weaponDamage = 20;
@@ -18,7 +18,7 @@ public class Croissant extends Bullet {
 
 	public Croissant(double x, double y, double targetX, double targetY) {
 		super(x, y, targetX, targetY, Croissant.getSpeed() );
-		setImageStr("images/cr.png");
+		setImageStr("images/croissant.png");
 		bulletAngle = Math.toDegrees(this.angle);
 		// TODO Auto-generated constructor stub
 	}
@@ -32,16 +32,19 @@ public class Croissant extends Bullet {
 
 	@Override
 	public void render(GraphicsContext gc, double x, double y) {
+	    gc.save(); // Save the current state
 
-		gc.save(); // Save the current state
-		gc.translate(x + 15 , y + 15); // Move origin to bullet center (assuming 20x20 size)
-		gc.rotate(bulletAngle); // Rotate towards target
-		
-		gc.drawImage(getBulletImage(), -10, -10 , 30, 30);
-		
-		gc.restore();
-		
+	    double centerX = x + 25;  // กึ่งกลางภาพ (กว้าง 50 / 2)
+	    double centerY = y + 13.5; // กึ่งกลางภาพ (สูง 27 / 2)
+
+	    gc.translate(centerX, centerY); // ย้ายจุดหมุนไปกึ่งกลาง
+	    gc.rotate(bulletAngle); // หมุน
+
+	    gc.drawImage(getBulletImage(), -25, -13.5, 50, 27); // วาดโดยให้ (0,0) เป็นศูนย์กลาง
+
+	    gc.restore(); // Restore state
 	}
+
 	static public void backToOriginal() {
 		Croissant.setWeaponCooldown(btoweaponCooldown);
 		Croissant.setSpeed(btospeed);

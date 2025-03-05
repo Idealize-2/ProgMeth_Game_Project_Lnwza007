@@ -7,10 +7,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class InventoryDisplay {
-    private static Image img1 = new Image("/images/Potion1.jpg");
-    private static Image img2 = new Image("/images/Potion2.jpg");
-    private static Image img3 = new Image("/images/Potion3.jpg");
-    private static Image img4 = new Image("/images/Potion4.jpg");
+    private static Image img1 = new Image("/images/potion1.png");
+    private static Image img2 = new Image("/images/potion2.png");
+    private static Image img3 = new Image("/images/potion3.png");
+    private static Image img4 = new Image("/images/potion4.png");
 
     public static void renderInventory(GraphicsContext gc, double viewportWidth, double viewportHeight, int selectedItem, int cnt1, int cnt2, int cnt3, int cnt4) {
         double startX = (viewportWidth - 360) / 2; // Center the inventory bar
@@ -40,16 +40,16 @@ public class InventoryDisplay {
         // Draw item image
         switch (box) {
             case 1:
-                gc.drawImage(img1, x + 10 + offset, y + 10 + offset, 40, 40);
+                gc.drawImage(img1, x + 10 + offset, y + 10 + offset, 60, 60);
                 break;
             case 2:
-                gc.drawImage(img2, x + 10 + offset, y + 10 + offset, 40, 40);
+                gc.drawImage(img2, x + 10 + offset, y + 10 + offset, 60, 60);
                 break;
             case 3:
-                gc.drawImage(img3, x + 10 + offset, y + 10 + offset, 40, 40);
+                gc.drawImage(img3, x + 10 + offset, y + 10 + offset, 60, 60);
                 break;
             case 4:
-                gc.drawImage(img4, x + 10 + offset, y + 10 + offset, 40, 40);
+                gc.drawImage(img4, x + 10 + offset, y + 10 + offset, 60, 60);
                 break;
         }
 

@@ -27,7 +27,7 @@ public class Sushi extends Bullet {
 	public Sushi(double x, double y, double targetX, double targetY, int maxPenetration) {
 		super(x, y, targetX, targetY, Sushi.getSpeed());
 		this.maxPenetration = maxPenetration;
-		setImageStr("images/sushi.jpg");
+		setImageStr("images/chocolate.png");
 		bulletAngle = Math.toDegrees(this.angle);
 		
 	}

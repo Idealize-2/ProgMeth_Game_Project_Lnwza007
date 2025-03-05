@@ -14,27 +14,27 @@
 
 <StackPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-         <MediaView fx:id="mediaView" fitHeight="600.0" fitWidth="800.0" />
+      <ImageView fx:id="backgroundImage" fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" />
        
        <!-- หน้าหลัก -->
        <Pane fx:id="menuPane" prefHeight="600.0" prefWidth="800.0">
            <children>
             <ImageView fx:id="GameIcon" fitHeight="178.0" fitWidth="316.0" layoutX="244.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true" />
-               <Button fx:id="startButton" alignment="CENTER" layoutX="296.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleStartButtonAction" onMouseEntered="#handleStartGameButtonEntered" onMouseExited="#handleStartGameButtonExited" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange;" text="START GAME">
+         <Button fx:id="exitButton" alignment="CENTER" layoutX="297.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleExitButtonAction" onMouseEntered="#handleExitButtonEntered" onMouseExited="#handleExitButtonExited" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange; -fx-text-fill: black;" text="EXIT">
             <font>
                <Font name="System Bold" size="25.0" />
             </font>
             </Button>
-         <Button fx:id="exitButton" alignment="CENTER" layoutX="297.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleExitButtonAction" onMouseEntered="#handleExitButtonEntered" onMouseExited="#handleExitButtonExited" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange;" text="EXIT">
-            <font>
-               <Font name="System Bold" size="25.0" />
-            </font>
-            </Button>
-         <Button fx:id="optionButton" alignment="CENTER" layoutX="297.0" layoutY="316.0" mnemonicParsing="false" onAction="#handleOptionButtonAction" onMouseEntered="#handleOptionButtonEntered" onMouseExited="#handleOptionButtonExited" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange;" text="OPTIONS">
+         <Button fx:id="optionButton" alignment="CENTER" layoutX="297.0" layoutY="316.0" mnemonicParsing="false" onAction="#handleOptionButtonAction" onMouseEntered="#handleOptionButtonEntered" onMouseExited="#handleOptionButtonExited" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange; -fx-text-fill: black;" text="OPTIONS">
             <font>
                <Font name="System Bold" size="25.0" />
             </font>
          </Button>
+            <Button fx:id="startButton" alignment="CENTER" layoutX="296.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleStartButtonAction" onMouseEntered="#handleStartGameButtonEntered" onMouseExited="#handleStartGameButtonExited" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange; -fx-text-fill: black;" text="START GAME">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Button>
            </children>
        </Pane>
    

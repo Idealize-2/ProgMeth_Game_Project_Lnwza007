@@ -65,17 +65,24 @@ public class Monster extends BaseEntity implements Animationable{
 	public void render(GraphicsContext gc , double x , double y) {
         gc.drawImage(getEntityImage() , x , y , 60 , 60);
     }
+	private final Image[] frames = {
+	        new Image("images/Enemy1.png"),
+	        new Image("images/Enemy2.png")
+	    };
 	
-	private Image pFrame1 = new Image("images/Airi_plush.jpg");
-	private Image pFrame2 = new Image("images/Airi2.jpg");
-	private Image pFrame3 = new Image("images/Airi3.png");
+	private final long frameDelay = 500_000_000;
+	private int currentFrameIndex = 0;
+	private long lastUpdate = System.nanoTime();
+	private final int frameCount = frames.length;
 	
-	private long frameDelay = 100 * 3;
-	private long currentframe = 0;
-	
-	@Override
 	public void renderAnimation(GraphicsContext gc, double x, double y) {
-		// TODO Auto-generated method stub
-		
+	    long now = System.nanoTime();
+	    if (now - lastUpdate >= frameDelay) {
+	         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
+	         lastUpdate = now;
+	     }
+	     gc.drawImage(frames[currentFrameIndex], x, y, 40, 40);
 	}
+	
+	
 }

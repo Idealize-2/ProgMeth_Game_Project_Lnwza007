@@ -17,7 +17,7 @@ public class MonsterWeakness extends Monster {
 		setSpeed(1.5);
 		setHp(100);
 		setDamage(20);
-		setImgPath("/images/MonsterWeakness.jpg");
+		setImgPath("/images/witchcroissant1.png");
 	}
 	
 	public int monsterDMG() {
@@ -46,19 +46,25 @@ public class MonsterWeakness extends Monster {
         return getHp() <= 0;
     }
     public void render(GraphicsContext gc , double x , double y) {
-        gc.drawImage(getEntityImage() , x , y , 40 , 40);
+        gc.drawImage(getEntityImage() , x , y , 58 , 53);
     }
     
-    private Image pFrame1 = new Image("images/Airi_plush.jpg");
-	private Image pFrame2 = new Image("images/Airi2.jpg");
-	private Image pFrame3 = new Image("images/Airi3.png");
+    private final Image[] frames = {
+	        new Image("images/witchcroissant1.png"),
+	        new Image("images/witchcroissant2.png")
+	    };
 	
-	private long frameDelay = 100 * 3;
-	private long currentframe = 0;
-    
-    @Override
+	private final long frameDelay = 500_000_000;
+	private int currentFrameIndex = 0;
+	private long lastUpdate = System.nanoTime();
+	private final int frameCount = frames.length;
+	@Override
 	public void renderAnimation(GraphicsContext gc, double x, double y) {
-		// TODO Auto-generated method stub
-		
+	    long now = System.nanoTime();
+	    if (now - lastUpdate >= frameDelay) {
+	         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
+	         lastUpdate = now;
+	     }
+	     gc.drawImage(frames[currentFrameIndex], x, y, 58, 53);
 	}
 }

@@ -5,6 +5,7 @@ import Weapon.Croissant;
 import Weapon.Pizza;
 import Weapon.Sushi;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 public class MonsterWeakness extends Monster {
 	
@@ -47,4 +48,17 @@ public class MonsterWeakness extends Monster {
     public void render(GraphicsContext gc , double x , double y) {
         gc.drawImage(getEntityImage() , x , y , 40 , 40);
     }
+    
+    private Image pFrame1 = new Image("images/Airi_plush.jpg");
+	private Image pFrame2 = new Image("images/Airi2.jpg");
+	private Image pFrame3 = new Image("images/Airi3.png");
+	
+	private long frameDelay = 100 * 3;
+	private long currentframe = 0;
+    
+    @Override
+	public void renderAnimation(GraphicsContext gc, double x, double y) {
+		// TODO Auto-generated method stub
+		
+	}
 }

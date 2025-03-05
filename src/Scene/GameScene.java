@@ -436,7 +436,7 @@ public class GameScene {
                 0, 0, viewportWidth, viewportHeight);
 
         // Draw player relative to the viewport
-        player.render(gc , player.x - offsetX, player.y - offsetY);
+        player.renderAnimation(gc , player.x - offsetX, player.y - offsetY);
         
         if(UsePotionEffect.isbuffAvailable) 
         {

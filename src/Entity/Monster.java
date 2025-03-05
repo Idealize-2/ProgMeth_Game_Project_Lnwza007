@@ -1,4 +1,5 @@
 package Entity;
+import AnimationEffect.Animationable;
 import Weapon.Bullet;
 import Weapon.Croissant;
 import Weapon.Pizza;
@@ -10,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-public class Monster extends BaseEntity{
+public class Monster extends BaseEntity implements Animationable{
 	public int reward = 10;
 	
     public Monster(double x, double y) {
@@ -50,7 +51,7 @@ public class Monster extends BaseEntity{
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
-    
+
     
 
     public int getReward() {
@@ -63,4 +64,17 @@ public class Monster extends BaseEntity{
 	public void render(GraphicsContext gc , double x , double y) {
         gc.drawImage(getEntityImage() , x , y , 60 , 60);
     }
+	
+	private Image pFrame1 = new Image("images/Airi_plush.jpg");
+	private Image pFrame2 = new Image("images/Airi2.jpg");
+	private Image pFrame3 = new Image("images/Airi3.png");
+	
+	private long frameDelay = 100 * 3;
+	private long currentframe = 0;
+	
+	@Override
+	public void renderAnimation(GraphicsContext gc, double x, double y) {
+		// TODO Auto-generated method stub
+		
+	}
 }

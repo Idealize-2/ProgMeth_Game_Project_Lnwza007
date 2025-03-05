@@ -10,9 +10,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import AnimationEffect.Animationable;
 import AnimationEffect.Cooldownable;
 
-public class Player extends BaseEntity implements Cooldownable{
+public class Player extends BaseEntity implements Cooldownable,Animationable{
     private long lastShotTime = 1000;
     private long atkSpeed = 200;
     static private boolean canShoot = true;
@@ -112,6 +113,37 @@ public class Player extends BaseEntity implements Cooldownable{
 
 	public static void setCanShoot(boolean canShoot) {
 		Player.canShoot = canShoot;
+	}
+	
+	private Image pFrame1 = new Image("images/Airi_plush.jpg");
+	private Image pFrame2 = new Image("images/Airi2.jpg");
+	private Image pFrame3 = new Image("images/Airi3.png");
+	
+	private long frameDelay = 50 * 3;
+	private long currentframe = 0;
+
+	@Override
+	public void renderAnimation(GraphicsContext gc, double x, double y) {
+		if(currentframe/frameDelay == 0)
+		{
+			gc.drawImage(pFrame1, x, y,40,40);
+			currentframe++;
+		}
+		else if(currentframe/frameDelay == 1)
+		{
+			gc.drawImage(pFrame2, x, y,40,40);
+			currentframe++;
+		}
+		else if(currentframe/frameDelay == 2)
+		{
+			gc.drawImage(pFrame3, x, y,40,40);
+			currentframe++;
+		}
+		else
+		{
+			currentframe = 0;
+		}
+		
 	}
 	
 

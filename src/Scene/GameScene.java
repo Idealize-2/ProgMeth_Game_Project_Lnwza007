@@ -43,7 +43,7 @@ import MenuController.ShopMenuController;
 import Weapon.Bullet;
 import Weapon.Croissant;
 import Weapon.Pizza;
-import Weapon.Sushi;
+import Weapon.Chocolate;
 
 public class GameScene implements Cooldownable{
     private Stage stage;
@@ -272,19 +272,19 @@ public class GameScene implements Cooldownable{
             	if (e.getButton() == MouseButton.PRIMARY) { // Left Click
                     if (weaponSelect == 0) 
                     {
-                    	if(Sushi.getWeaponLevel() + player.getUpgradeWeapon() == 0) 
+                    	if(Chocolate.getWeaponLevel() + player.getUpgradeWeapon() == 0) 
                     	{
-                    		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY, 1));
+                    		bullets.add(new Chocolate(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY, 1));
                     	}
-                    	else if(Sushi.getWeaponLevel() + player.getUpgradeWeapon() == 1) 
+                    	else if(Chocolate.getWeaponLevel() + player.getUpgradeWeapon() == 1) 
                     	{
-                    		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY, 2));
+                    		bullets.add(new Chocolate(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY, 2));
                     	}
                     	else
                     	{
-                    		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY, 4));
+                    		bullets.add(new Chocolate(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY, 4));
                     	}
-                        player.runCooldown(player.getAtkSpeed() + Sushi.getWeaponCooldown() );
+                        player.runCooldown(player.getAtkSpeed() + Chocolate.getWeaponCooldown() );
                     } 
                     else if (weaponSelect == 1) 
                     {
@@ -478,7 +478,7 @@ public class GameScene implements Cooldownable{
         monsterIndex = -1;
         
     	Croissant.backToOriginal();
-    	Sushi.backToOriginal();
+    	Chocolate.backToOriginal();
     	Pizza.backToOriginal();
     	for (Item item : playerInventory) {
 			item.setItemCount(0);

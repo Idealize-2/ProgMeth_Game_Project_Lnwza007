@@ -3,7 +3,7 @@ package Entity;
 import Weapon.Bullet;
 import Weapon.Croissant;
 import Weapon.Pizza;
-import Weapon.Sushi;
+import Weapon.Chocolate;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -34,7 +34,7 @@ public class MonsterWeakness extends Monster {
     	if(getHit( bullet ) && !bullet.isHit()) // check if bullet get close(attack) Monster
     	{
     		int bulletDamage;
-    		if(bullet instanceof Sushi)bulletDamage = Sushi.getWeaponDamage();
+    		if(bullet instanceof Chocolate)bulletDamage = Chocolate.getWeaponDamage();
     		else if(bullet instanceof Croissant)bulletDamage = Croissant.getWeaponDamage()*2;
     		else bulletDamage = Pizza.getWeaponDamage();
     		bullet.setHit(true);

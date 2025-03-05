@@ -21,7 +21,7 @@ import Item.*;
 import Scene.GameScene;
 import Weapon.Croissant;
 import Weapon.Pizza;
-import Weapon.Sushi;
+import Weapon.Chocolate;
 
 public class ShopMenuController {
 	@FXML private StackPane rootPane;
@@ -185,8 +185,8 @@ public class ShopMenuController {
 			GameScene.playerMoney -= 40;
 			switch (ShopMenuController.shopWeaponSelect) {
 			case 0: {
-				Sushi.setWeaponDamage( Sushi.getWeaponDamage() + 10);
-				System.out.println("Sushi damage upgrade : " + Sushi.getWeaponDamage());
+				Chocolate.setWeaponDamage( Chocolate.getWeaponDamage() + 10);
+				System.out.println("Sushi damage upgrade : " + Chocolate.getWeaponDamage());
 				break;
 			}
 			case 1: {
@@ -218,8 +218,8 @@ public class ShopMenuController {
 			GameScene.playerMoney -= 40;
 			switch (ShopMenuController.shopWeaponSelect) {
 			case 0: {
-				Sushi.setSpeed( Sushi.getSpeed() + 0.5 );
-				System.out.println("Sushi speed upgrade : " + Sushi.getSpeed());
+				Chocolate.setSpeed( Chocolate.getSpeed() + 0.5 );
+				System.out.println("Sushi speed upgrade : " + Chocolate.getSpeed());
 				break;
 			}
 			case 1: {
@@ -251,13 +251,13 @@ public class ShopMenuController {
 			GameScene.playerMoney -= 100;
 			switch (ShopMenuController.shopWeaponSelect) {
 			case 0: {
-				if(Sushi.getWeaponCooldown() == 0) {
+				if(Chocolate.getWeaponCooldown() == 0) {
 					System.out.println("Weapon cooldown already reach 0");
 					GameScene.playerMoney += 100;
 					break;
 				}
-				Sushi.setWeaponCooldown( Sushi.getWeaponCooldown() - 50 );
-				System.out.println("Sushi cooldown decease : " + Sushi.getWeaponCooldown() );
+				Chocolate.setWeaponCooldown( Chocolate.getWeaponCooldown() - 50 );
+				System.out.println("Sushi cooldown decease : " + Chocolate.getWeaponCooldown() );
 				break;
 			}
 			case 1: {
@@ -300,12 +300,12 @@ public class ShopMenuController {
 			renderMoney();
 			switch (ShopMenuController.shopWeaponSelect) {
 			case 0: {
-				if(Sushi.getWeaponLevel() == 1) {
+				if(Chocolate.getWeaponLevel() == 1) {
 					System.out.println("already Level up Sushi");
 					GameScene.playerMoney += 500;
 					break;
 				}
-				Sushi.setWeaponLevel(1);
+				Chocolate.setWeaponLevel(1);
 				System.out.println("Chocolate Level up");
 				break;
 			}

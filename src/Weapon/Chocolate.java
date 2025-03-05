@@ -6,7 +6,7 @@ import java.util.Set;
 import Entity.Monster;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Sushi extends Bullet {
+public class Chocolate extends Bullet {
 	
 	public double bulletAngle;
 	static private long weaponCooldown = 75;
@@ -24,8 +24,8 @@ public class Sushi extends Bullet {
     final public static int btoweaponLevel = 0;
     
     
-	public Sushi(double x, double y, double targetX, double targetY, int maxPenetration) {
-		super(x, y, targetX, targetY, Sushi.getSpeed());
+	public Chocolate(double x, double y, double targetX, double targetY, int maxPenetration) {
+		super(x, y, targetX, targetY, Chocolate.getSpeed());
 		this.maxPenetration = maxPenetration;
 		setImageStr("images/chocolate.png");
 		bulletAngle = Math.toDegrees(this.angle);
@@ -53,10 +53,10 @@ public class Sushi extends Bullet {
         
     }
 	static public void backToOriginal() {
-		Sushi.setWeaponCooldown(btoweaponCooldown);
-		Sushi.setSpeed(btospeed);
-		Sushi.setWeaponDamage(btoweaponDamage);
-		Sushi.setWeaponLevel(0);
+		Chocolate.setWeaponCooldown(btoweaponCooldown);
+		Chocolate.setSpeed(btospeed);
+		Chocolate.setWeaponDamage(btoweaponDamage);
+		Chocolate.setWeaponLevel(0);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class Sushi extends Bullet {
 	}
 
 	static public void setSpeed(double speed) {
-		Sushi.speed = speed;
+		Chocolate.speed = speed;
 	}
 
 	static public int getWeaponDamage() {
@@ -88,16 +88,16 @@ public class Sushi extends Bullet {
 	}
 
 	static public void setWeaponDamage(int weaponDamage) {
-		Sushi.weaponDamage = weaponDamage;
+		Chocolate.weaponDamage = weaponDamage;
 	}
 	public static void setWeaponCooldown(long weaponCooldown) {
-		Sushi.weaponCooldown = Math.max(weaponCooldown, 0);
+		Chocolate.weaponCooldown = Math.max(weaponCooldown, 0);
 	}
 	public static int getWeaponLevel() {
 		return weaponLevel;
 	}
 	public static void setWeaponLevel(int weaponLevel) {
-		Sushi.weaponLevel = weaponLevel;
+		Chocolate.weaponLevel = weaponLevel;
 	}
 
 	

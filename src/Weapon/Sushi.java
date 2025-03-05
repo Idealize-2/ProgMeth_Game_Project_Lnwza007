@@ -1,20 +1,47 @@
 package Weapon;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import Entity.Monster;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Sushi extends Bullet {
 	
 	public double bulletAngle;
-	static final public long weaponCooldown = 75;
+	static private long weaponCooldown = 75;
+	static private double speed = 3;
+    static private int weaponDamage = 20;
+    
+    private int maxPenetration; 
+    private Set<Monster> hitEnemies = new HashSet<>(); // Track enemies hit
 
-	public Sushi(double x, double y, double targetX, double targetY) {
-		super(x, y, targetX, targetY);
-		setSpeed(1);
-		setWeaponDamage(20);
+    static private int weaponLevel = 0;
+    
+    
+	public Sushi(double x, double y, double targetX, double targetY, int maxPenetration) {
+		super(x, y, targetX, targetY, Sushi.getSpeed());
+		this.maxPenetration = maxPenetration;
 		setImageStr("images/sushi.jpg");
 		bulletAngle = Math.toDegrees(this.angle);
 		
 	}
+	 public boolean canHit(Monster enemy) {
+	        return hitEnemies.size() < maxPenetration && !hitEnemies.contains(enemy) && Math.hypot(x - enemy.x, y - enemy.y) < 25;
+	 }
+	 public void hitEnemy(Monster enemy) {
+	        hitEnemies.add(enemy); // Register hit
+	 }
+	 public boolean shouldRemove() {
+	        return hitEnemies.size() >= maxPenetration; // Remove when max hits reached
+	    }
+	 public boolean checkCollision(Monster enemy) {
+		if( canHit(enemy) ) {
+			hitEnemy(enemy);
+			System.out.println(hitEnemies.size());
+		}
+	    return isOutOfBounds() || shouldRemove();
+	 }
 	@Override
 	public void update() {
         super.update();
@@ -33,8 +60,40 @@ public class Sushi extends Bullet {
 		gc.restore();
 		
 	}
-	public long getWeaponCooldown() {
+	static public long getWeaponCooldown() {
 		return weaponCooldown;
 	}
+	
+	static public double getSpeed() {
+		return speed;
+	}
+
+	static public void setSpeed(double speed) {
+		Sushi.speed = speed;
+	}
+
+	static public int getWeaponDamage() {
+		return weaponDamage;
+	}
+
+	static public void setWeaponDamage(int weaponDamage) {
+		Sushi.weaponDamage = weaponDamage;
+	}
+	public static void setWeaponCooldown(long weaponCooldown) {
+		Sushi.weaponCooldown = Math.max(weaponCooldown, 0);
+	}
+	public static int getWeaponLevel() {
+		return weaponLevel;
+	}
+	public static void setWeaponLevel(int weaponLevel) {
+		Sushi.weaponLevel = weaponLevel;
+	}
+
+	
+	
+	
+	
+	
+	
 
 }

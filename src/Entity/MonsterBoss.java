@@ -9,6 +9,7 @@ public class MonsterBoss extends Monster {
 	{
 		 // x,y,speed,hp,damage,imgPath
 		super(x , y);
+		setReward(100);
 		setSpeed(0.75);
 		setHp(200);
 		setDamage(40);

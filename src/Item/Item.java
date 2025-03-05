@@ -8,6 +8,7 @@ public class Item {
         private String iconStr;
         private int price;
         private Image itemIcon;
+        private int itemCount = 0;
         
 
         public Item(String name, int price, String des,String itemIconStr) {
@@ -64,5 +65,24 @@ public class Item {
 		private void setPrice(int price) {
 			this.price = price;
 		}
+
+
+
+
+		public int getItemCount() {
+			return itemCount;
+		}
+
+
+
+
+		public void setItemCount(int itemCount) {
+			this.itemCount = Math.max(itemCount, 0);
+		}
+		
+
+
+
+
         
 }

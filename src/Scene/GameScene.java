@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -21,17 +22,21 @@ import javafx.stage.Stage;
 import java.util.*;
 
 import AnimationEffect.HealthBar;
+import AnimationEffect.InventoryDisplay;
+import AnimationEffect.MoneyDisplay;
 import AnimationEffect.SelectWeapon;
 import AnimationEffect.UsePotionEffect;
 import Application.*;
 import Entity.*;
 import Item.BuffItem;
+import Item.HealItem;
 import Item.Item;
 import Item.buff;
 import MenuController.PauseMenuController;
 import MenuController.ShopMenuController;
 import Weapon.Bullet;
 import Weapon.Croissant;
+import Weapon.Pizza;
 import Weapon.Sushi;
 
 public class GameScene {
@@ -42,7 +47,7 @@ public class GameScene {
     private boolean paused = false; 
     private Player player;
     private ArrayList<Monster> enemies;
-    private ArrayList<Bullet> bullets;
+    static public ArrayList<Bullet> bullets;
     private Set<KeyCode> keysPressed = new HashSet<>();
     private Random random = new Random();
     private long lastSpawnTime = 0;
@@ -70,15 +75,15 @@ public class GameScene {
     private final int viewportWidth = 800;
     private final int viewportHeight = 600;
 
-    public double offsetX = 0;
-    public double offsetY = 0;
+    static public double offsetX = 0;
+    static public double offsetY = 0;
 ////////////////////////////////////////////scroll map    ////////////////////////////////////////////////////////
     private StackPane root;
     
     // Shop inventory
-    private final List<Item> shopItems = new ArrayList<>();
-    private final List<Item> playerInventory = new ArrayList<>();
-    private int playerMoney = 100; // Player starts with $100
+    static public final List<Item> playerInventory = new ArrayList<>();
+    static public int playerMoney = 100;
+    static public short itemSelect = 0;
     
 
     public GameScene(Stage stage, Main main) {
@@ -94,7 +99,10 @@ public class GameScene {
         gameScene = new Scene(root);
         
         ///test inventory
-        playerInventory.add(new BuffItem("BerserkPotion", 10, "", "images/maki.jpg", buff.BERSERK) );
+        playerInventory.add(new HealItem("MeduimPotion", 30, "", "images/maki.jpg", 50 ) );
+        playerInventory.add(new HealItem("BigPotion", 50, "", "images/maki.jpg", 100 ) );
+        playerInventory.add(new BuffItem("BerserkPotion", 100, "", "images/maki.jpg", buff.BERSERK) );
+        playerInventory.add(new BuffItem("SpecialPotion", 150, "", "images/maki.jpg", buff.SPECIAL) );
 
         //Set Up พวก scene เสริม
         setupShopMenu();
@@ -107,22 +115,45 @@ public class GameScene {
             	togglePauseForMenu();
             }
             if (e.getCode() == KeyCode.DIGIT1) {
-            	System.out.println("Sushi Selected");
-            	weaponSelect = 0;
+            	System.out.println("Meduim Potion Selected");
+            	itemSelect = 0;
             }
             if (e.getCode() == KeyCode.DIGIT2) {
-            	System.out.println("Croissant Selected");
-            	weaponSelect = 1;
+            	System.out.println("Big Potion Selected");
+            	itemSelect = 1;
             }
             if (e.getCode() == KeyCode.DIGIT3) {
-            	System.out.println("Pizza Bazuka Selected");
-            	weaponSelect = 2;
+            	System.out.println("Berserk Potion Selected");
+            	itemSelect = 2;
+            }
+            if (e.getCode() == KeyCode.DIGIT4) {
+            	System.out.println("Special Potion Selected");
+            	itemSelect = 3;
             }
             if (e.getCode() == KeyCode.E && nearNpc) {
             	togglePauseForOpenShop();
             }
             if (e.getCode() == KeyCode.Q) {
-            	((BuffItem)playerInventory.get(0)).useEffect(this.player);
+            	switch (itemSelect) {
+				case 0: {
+					((HealItem)playerInventory.get(0)).useEffect(this.player);
+					break;
+				}
+				case 1: {
+					((HealItem)playerInventory.get(1)).useEffect(this.player);
+					break;
+				}
+				case 2: {
+					((BuffItem)playerInventory.get(2)).useEffect(this.player);
+					break;
+				}
+				case 3: {
+					((BuffItem)playerInventory.get(3)).useEffect(this.player);
+					break;
+				}
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + itemSelect);
+				}
             }
         });
 
@@ -132,19 +163,64 @@ public class GameScene {
             if (!paused && Player.CanShoot() ) {
                 //bullets.add(new Bullet(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
             	
-            	if(weaponSelect == 0)
-            	{
-            		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
-            		player.runCooldown(player.getAtkSpeed() + Sushi.weaponCooldown);
-            	}
-            	else if(weaponSelect == 1)
-            	{
-            		bullets.add(new Croissant(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
-            		player.runCooldown(player.getAtkSpeed() + Croissant.weaponCooldown);
-            	}
-            	else if(weaponSelect == 2) {
-            		
-            	}
+            	if (e.getButton() == MouseButton.PRIMARY) { // Left Click
+                    if (weaponSelect == 0) 
+                    {
+                    	if(Sushi.getWeaponLevel() + player.getUpgradeWeapon() == 0) 
+                    	{
+                    		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY, 1));
+                    	}
+                    	else if(Sushi.getWeaponLevel() + player.getUpgradeWeapon() == 1) 
+                    	{
+                    		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY, 2));
+                    	}
+                    	else
+                    	{
+                    		bullets.add(new Sushi(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY, 4));
+                    	}
+                        player.runCooldown(player.getAtkSpeed() + Sushi.getWeaponCooldown() );
+                    } 
+                    else if (weaponSelect == 1) 
+                    {
+                    	if(Croissant.getWeaponLevel() + player.getUpgradeWeapon() == 0) 
+                    	{
+                    		bullets.add(new Croissant(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+                    	}
+                    	else if(Croissant.getWeaponLevel() + player.getUpgradeWeapon() == 1) 
+                    	{
+                    		 double angle = Math.atan2(e.getY() - player.y, e.getX() - player.x);
+                    		 bullets.add(new Croissant(player.x, player.y, 
+                                     e.getX() + offsetX + Math.cos(angle + Math.PI / 2) * 30, 
+                                     e.getY() + offsetY + Math.sin(angle + Math.PI / 2) * 30));
+           
+                    		 bullets.add(new Croissant(player.x, player.y, 
+                                     e.getX() + offsetX - Math.cos(angle + Math.PI / 2) * 30, 
+                                     e.getY() + offsetY - Math.sin(angle + Math.PI / 2) * 30));
+                    	}
+                    	else
+                    	{
+                    		double angle = Math.atan2(e.getY() - player.y, e.getX() - player.x);
+                    		bullets.add(new Croissant(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+                    		
+                   		 bullets.add(new Croissant(player.x, player.y, 
+                                    e.getX() + offsetX + Math.cos(angle + Math.PI / 2) * 30, 
+                                    e.getY() + offsetY + Math.sin(angle + Math.PI / 2) * 30));
+          
+                   		 bullets.add(new Croissant(player.x, player.y, 
+                                    e.getX() + offsetX - Math.cos(angle + Math.PI / 2) * 30, 
+                                    e.getY() + offsetY - Math.sin(angle + Math.PI / 2) * 30));
+                    	}
+                        player.runCooldown(player.getAtkSpeed() + Croissant.getWeaponCooldown() );
+                        
+                    } else if (weaponSelect == 2) 
+                    {
+                    	 bullets.add(new Pizza(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
+                         player.runCooldown(player.getAtkSpeed() + Pizza.getWeaponCooldown() );
+                    }
+                } else if (e.getButton() == MouseButton.SECONDARY) { // Right Click
+                	weaponSelect++;
+                	if(weaponSelect == 3) weaponSelect = 0;
+                }
             }
         });
 
@@ -231,6 +307,7 @@ public class GameScene {
         shopMenuFXML.setVisible(paused);
         if (paused && controllerShop != null) {
         	//System.out.println("work"); for debugging
+        	ShopMenuController.shopWeaponSelect = 0;
             controllerShop.ensureWeaponShopVisible();
         }
     }
@@ -244,6 +321,10 @@ public class GameScene {
         lastSpawnTime = System.currentTimeMillis();
         offsetX = clamp(player.x - viewportWidth / 2.0, 0, mapWidth - viewportWidth);
         offsetY = clamp(player.y - viewportHeight / 2.0, 0, mapHeight - viewportHeight);
+        
+        playerMoney = 100000; 
+        itemSelect = 0;
+        weaponSelect = 0;
         
         pauseMenuFXML.setVisible(false);
         shopMenuFXML.setVisible(false);
@@ -277,7 +358,7 @@ public class GameScene {
 				enemies.add(new MonsterWeakness(random.nextInt(800), random.nextInt(600)));
 				break;
 			case 2:
-				enemies.add(new MonsterBoss(random.nextInt(2000), random.nextInt(2000)));
+				//enemies.add(new MonsterBoss(random.nextInt(2000), random.nextInt(2000)));
 				break;
 			default:
 				break;
@@ -301,16 +382,24 @@ public class GameScene {
         	{
         		if(bullets.size() == 0)break;
         		
+        		
         		if( enemies.get(i).checkCollision( bullets.get(k) ,this.player ) ) 
         		{
+        			if( bullets.get(k).checkCollision( enemies.get(i) ) ) 
+            		{
+            			bullets.remove( k );
+            			k--;
+            			k = Math.max(k, 0);
+            		}
+        			playerMoney += enemies.get(i).getReward();
         			enemies.remove( i );
-        			bullets.remove( k );
+        			//bullets.remove( k );
         			i--;
-        			k--;
+        			//k--;
         			if(enemies.size() == 0)break;
         			
         			i = Math.max(i, 0);
-        			k = Math.max(k, 0);
+        			//k = Math.max(k, 0);
         			continue;
         		}
         		if( bullets.get(k).checkCollision( enemies.get(i) ) ) 
@@ -319,6 +408,7 @@ public class GameScene {
         			k--;
         			k = Math.max(k, 0);
         		}
+        		
         	}
         }
 
@@ -360,12 +450,15 @@ public class GameScene {
 
         // Update & render particles
         UsePotionEffect.updateParticles(gc);
-
+        
+        // Draw bullets
+        for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY); 
+        
         // Draw enemies
         for (Monster enemy : enemies) enemy.render(gc , enemy.x - offsetX,enemy.y - offsetY);
 
         // Draw bullets
-        for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY); 
+        //for (Bullet bullet : bullets) bullet.render(gc, bullet.x - offsetX, bullet.y - offsetY); 
         
         
         // Draw the NPC
@@ -382,6 +475,15 @@ public class GameScene {
         
         //render health bar
         HealthBar.renderHealthBar(gc, 20, 20, this.player.getMaxHp() , this.player.getHp() );
+        //render Current MOney
+        MoneyDisplay.renderMoneyBox(gc, 20, 50, playerMoney);
+        
+        //render Player Invetory
+        InventoryDisplay.renderInventory(gc, 800, 600, itemSelect,
+        		playerInventory.get(0).getItemCount(),
+        		playerInventory.get(1).getItemCount(),
+        		playerInventory.get(2).getItemCount(),
+        		playerInventory.get(3).getItemCount());
         
         
     

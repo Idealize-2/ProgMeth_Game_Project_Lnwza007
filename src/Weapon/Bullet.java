@@ -6,8 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public abstract class Bullet {
-    public double x, y, speed = 5, dx, dy;
-    public int weaponDamage = 10;
+    public double x, y, dx, dy;
+//    static private double speed = 5;
+//    private int weaponDamage = 10;
     private boolean isHit = false;
     private String imageStr;
     private Image bulletImage; // ใส่ path ของไฟล์ PNG ที่ต้องการ
@@ -25,8 +26,8 @@ public abstract class Bullet {
 		this.isHit = isHit;
 	}
 
-	public Bullet(double x, double y, double targetX, double targetY) {
-        this.x = x + 10;
+	public Bullet(double x, double y, double targetX, double targetY,double speed) {
+        this.x = x;
         this.y = y;
 
         angle = Math.atan2(targetY - y, targetX - x);
@@ -69,32 +70,24 @@ public abstract class Bullet {
         return x < 0 || x > GameScene.mapWidth || y < 0 || y > GameScene.mapHeight;
     }
 
-    public double getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(double speed) {
-		this.speed = speed;
-	}
-
-	public int getWeaponDamage() {
-		return weaponDamage;
-	}
-
-	public void setWeaponDamage(int weaponDamage) {
-		this.weaponDamage = weaponDamage;
-	}
+//    public double getSpeed() {
+//		return speed;
+//	}
+//
+//	public void setSpeed(double speed) {
+//		this.speed = speed;
+//	}
+//
+//	public int getWeaponDamage() {
+//		return weaponDamage;
+//	}
+//
+//	public void setWeaponDamage(int weaponDamage) {
+//		this.weaponDamage = weaponDamage;
+//	}
 
 	public boolean checkCollision(Monster enemy) {
         return isOutOfBounds() || Math.hypot(x - enemy.x, y - enemy.y) < 25;
     }
-    
-//    public boolean checkCollision(Monster enemy, double offsetX , double offfsetY) {
-//        // Adjust for the offset when checking the collision
-//        double adjustedX = this.x - offsetX;
-//        double adjustedY = this.y - offfsetY;
-//        
-//        return Math.hypot(adjustedX - enemy.x, adjustedY - enemy.y) < 15;  // Collision detection adjusted for offset
-//    }
 
 }

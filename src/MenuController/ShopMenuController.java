@@ -13,6 +13,9 @@ import java.util.List;
 import Application.Main;
 import Item.*;
 import Scene.GameScene;
+import Weapon.Croissant;
+import Weapon.Pizza;
+import Weapon.Sushi;
 
 public class ShopMenuController {
 	@FXML private StackPane rootPane;
@@ -30,8 +33,25 @@ public class ShopMenuController {
     @FXML private Button weaponButtonPShop; //PShop = Weapon Shop
     @FXML private Button potionButtonPShop;
     
+    
+    @FXML private Button Weapon1;
+    @FXML private Button Weapon2;
+    @FXML private Button Weapon3;
+    @FXML private Button UpWeaponDamage;
+    @FXML private Button UpGradeWeaponSpeed;
+    @FXML private Button UpGradeWeaponAtkSpeed;
+    @FXML private Button UpGradeWeapon;
+    @FXML private Button UpLevelWeapon;
+    
+    @FXML private Button MPotion;
+    @FXML private Button BPotion;
+    @FXML private Button BerserkPotion;
+    @FXML private Button SpecialPotion;
+    
 	private Main main;
 	private GameScene gameScene;
+	
+	static public int shopWeaponSelect;
     
 
     public void setMain(Main main) {
@@ -103,6 +123,236 @@ public class ShopMenuController {
 		potionButtonPShop.setScaleX(1.0); 
 		potionButtonPShop.setScaleY(1.0); 
 	}
+	
+	
+	
+	//////////////////////add on
+	@FXML
+	private void handleWeapon1Click() {
+	    System.out.println("Weapon 0 selected");
+	    // Add logic to purchase or equip Weapon 1
+	    ShopMenuController.shopWeaponSelect = 0;
+	}
+
+	@FXML
+	private void handleWeapon2Click() {
+	    System.out.println("Weapon 1 selected");
+	    ShopMenuController.shopWeaponSelect = 1;
+	    // Add logic to purchase or equip Weapon 2
+	}
+
+	@FXML
+	private void handleWeapon3Click() {
+	    System.out.println("Weapon 2 selected");
+	    ShopMenuController.shopWeaponSelect = 2;
+	    // Add logic to purchase or equip Weapon 3
+	}
+
+	@FXML
+	private void handleUpgradeWeaponDamage() {
+	    
+	    if(GameScene.playerMoney >= 40 ) 
+		{
+			GameScene.playerMoney -= 40;
+			switch (ShopMenuController.shopWeaponSelect) {
+			case 0: {
+				Sushi.setWeaponDamage( Sushi.getWeaponDamage() + 10);
+				System.out.println("Sushi damage upgrade : " + Sushi.getWeaponDamage());
+				break;
+			}
+			case 1: {
+				Croissant.setWeaponDamage( Croissant.getWeaponDamage() + 10);
+				System.out.println("Croissant damage upgrade : " + Croissant.getWeaponDamage());
+				break;
+			}
+			case 2: {
+				Pizza.setWeaponDamage( Pizza.getWeaponDamage() + 10);
+				System.out.println("Pizza damage upgrade : " + Pizza.getWeaponDamage());
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + ShopMenuController.shopWeaponSelect);
+			}
+			
+		}
+		else
+		{
+			System.out.println("Not enought money to buy");
+		}
+	    // Add logic to upgrade weapon damage
+	}
+
+	@FXML
+	private void handleUpgradeWeaponSpeed() {
+		if(GameScene.playerMoney >= 40 ) 
+		{
+			GameScene.playerMoney -= 40;
+			switch (ShopMenuController.shopWeaponSelect) {
+			case 0: {
+				Sushi.setSpeed( Sushi.getSpeed() + 0.5 );
+				System.out.println("Sushi speed upgrade : " + Sushi.getSpeed());
+				break;
+			}
+			case 1: {
+				Croissant.setSpeed( Croissant.getSpeed() + 0.5 );
+				System.out.println("Croissant speed upgrade : " + Croissant.getSpeed());
+				break;
+			}
+			case 2: {
+				Pizza.setSpeed( Pizza.getSpeed() + 0.5 );
+				System.out.println("Pizza speed upgrade : " + Pizza.getSpeed());
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + ShopMenuController.shopWeaponSelect);
+			}
+			
+		}
+		else
+		{
+			System.out.println("Not enought money to buy");
+		}
+	}
+
+	@FXML
+	private void handleUpgradeWeaponAtkSpeed() {
+		if(GameScene.playerMoney >= 100 ) 
+		{
+			GameScene.playerMoney -= 100;
+			switch (ShopMenuController.shopWeaponSelect) {
+			case 0: {
+				if(Sushi.getWeaponCooldown() == 0) {
+					System.out.println("Weapon cooldown already reach 0");
+					GameScene.playerMoney += 100;
+					break;
+				}
+				Sushi.setWeaponCooldown( Sushi.getWeaponCooldown() - 50 );
+				System.out.println("Sushi cooldown decease : " + Sushi.getWeaponCooldown() );
+				break;
+			}
+			case 1: {
+				if(Croissant.getWeaponCooldown() == 0) {
+					System.out.println("Weapon cooldown already reach 0");
+					GameScene.playerMoney += 100;
+					break;
+				}
+				Croissant.setWeaponCooldown( Croissant.getWeaponCooldown() - 50 );
+				System.out.println("Croissant cooldown decease : " + Croissant.getWeaponCooldown() );
+				break;
+			}
+			case 2: {
+				if(Pizza.getWeaponCooldown() == 0) {
+					System.out.println("Weapon cooldown already reach 0");
+					GameScene.playerMoney += 100;
+					break;
+				}
+				Pizza.setWeaponCooldown( Pizza.getWeaponCooldown() - 50 );
+				System.out.println("Pizza cooldown decease : " + Pizza.getWeaponCooldown() );
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + ShopMenuController.shopWeaponSelect);
+			}
+			
+		}
+		else
+		{
+			System.out.println("Not enought money to buy");
+		}
+	}
+	
+	@FXML
+	private void handleUpLevelWeapon() {
+		if(GameScene.playerMoney > 500 ) 
+		{
+			GameScene.playerMoney -= 500;
+			switch (ShopMenuController.shopWeaponSelect) {
+			case 0: {
+				if(Sushi.getWeaponLevel() == 1) {
+					System.out.println("already Level up Sushi");
+					GameScene.playerMoney += 500;
+					break;
+				}
+				Sushi.setWeaponLevel(1);
+				System.out.println("Sushi Level up");
+				break;
+			}
+			case 1: {
+				if(Croissant.getWeaponLevel() == 1) {
+					System.out.println("already Level up Croissant");
+					GameScene.playerMoney += 500;
+					break;
+				}
+				Croissant.setWeaponLevel(1);
+				System.out.println("Croissant Level up");
+				break;
+			}
+			case 2: {
+				if(Pizza.getWeaponLevel() == 1) {
+					System.out.println("already Level up Pizza");
+					GameScene.playerMoney += 500;
+					break;
+				}
+				Pizza.setWeaponLevel(1);
+				System.out.println("Pizza Level up");
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + ShopMenuController.shopWeaponSelect);
+			}
+			
+		}
+		else
+		{
+			System.out.println("Not enought money to buy");
+		}
+	}
+	@FXML 
+	private void handleMPotion() {
+		if(GameScene.playerMoney >= GameScene.playerInventory.get(0).getPrice() ) 
+		{
+			GameScene.playerMoney -= GameScene.playerInventory.get(0).getPrice();
+			GameScene.playerInventory.get(0).setItemCount( GameScene.playerInventory.get(0).getItemCount() + 1 );
+		}
+		else
+		{
+			System.out.println("Not enought money to buy");
+		}
+	}
+    @FXML private void handleBPotion() {
+    	if(GameScene.playerMoney >= GameScene.playerInventory.get(1).getPrice() ) 
+		{
+			GameScene.playerMoney -= GameScene.playerInventory.get(1).getPrice();
+			GameScene.playerInventory.get(1).setItemCount( GameScene.playerInventory.get(1).getItemCount() + 1 );
+		}
+		else
+		{
+			System.out.println("Not enought money to buy");
+		}
+    }
+    @FXML private void handleBerserkPotion() {
+    	if(GameScene.playerMoney >= GameScene.playerInventory.get(2).getPrice() ) 
+		{
+			GameScene.playerMoney -= GameScene.playerInventory.get(2).getPrice();
+			GameScene.playerInventory.get(2).setItemCount( GameScene.playerInventory.get(2).getItemCount() + 1 );
+		}
+		else
+		{
+			System.out.println("Not enought money to buy");
+		}
+    }
+    @FXML private void handleSpecialPotion() {
+    	if(GameScene.playerMoney >= GameScene.playerInventory.get(3).getPrice() ) 
+		{
+			GameScene.playerMoney -= GameScene.playerInventory.get(3).getPrice();
+			GameScene.playerInventory.get(3).setItemCount( GameScene.playerInventory.get(3).getItemCount() + 1 );
+		}
+		else
+		{
+			System.out.println("Not enought money to buy");
+		}
+    }
+
 
 	
 }

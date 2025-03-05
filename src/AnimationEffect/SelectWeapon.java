@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 public class SelectWeapon {
 	private static Image img1 = new Image("/images/sushi.jpg");
 	private static Image img2 = new Image("/images/cr.png");
-	private static Image img3 = new Image("/images/maki2.jpg");
+	private static Image img3 = new Image("/images/Pizza.jpg");
 	
 	static public void renderWeaponBoxes(GraphicsContext gc, double viewportWidth, int weapon) {
         double startX = viewportWidth - 260; // Start positioning from the right

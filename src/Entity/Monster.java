@@ -1,5 +1,8 @@
 package Entity;
 import Weapon.Bullet;
+import Weapon.Croissant;
+import Weapon.Pizza;
+import Weapon.Sushi;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,7 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class Monster extends BaseEntity{
-
+	public int reward = 10;
+	
     public Monster(double x, double y) {
     	//     x, y, speed,hp,damage,    imgPath
         super( x , y , 1 , 40 , 10 ,"images/Enemy1.png");
@@ -31,9 +35,13 @@ public class Monster extends BaseEntity{
     {
     	if(getHit( bullet ) && !bullet.isHit()) // check if bullet get close(attack) Monster
     	{
+    		int bulletDamage;
+    		if(bullet instanceof Sushi)bulletDamage = Sushi.getWeaponDamage();
+    		else if(bullet instanceof Croissant)bulletDamage = Croissant.getWeaponDamage();
+    		else bulletDamage = Pizza.getWeaponDamage();
     		bullet.setHit(true);
-    		setHp( getHp() - ( bullet.weaponDamage + player.getDamage() ) ); // setHp
-    		System.out.println( "Monster got hit damage = " + bullet.weaponDamage + " Hp: " + getHp() );
+    		setHp( getHp() - ( bulletDamage + player.getDamage() ) ); // setHp
+    		System.out.println( "Monster got hit damage = " + bulletDamage + " Hp: " + getHp() );
 
     	}
         return getHp() <= 0;
@@ -45,7 +53,14 @@ public class Monster extends BaseEntity{
     
     
 
-    public void render(GraphicsContext gc , double x , double y) {
+    public int getReward() {
+    	System.out.println("Gain Reward: " + reward);
+		return reward;
+	}
+	public void setReward(int reward) {
+		this.reward = reward;
+	}
+	public void render(GraphicsContext gc , double x , double y) {
         gc.drawImage(getEntityImage() , x , y , 60 , 60);
     }
 }

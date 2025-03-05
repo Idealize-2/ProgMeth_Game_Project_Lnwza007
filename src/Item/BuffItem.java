@@ -1,7 +1,6 @@
 package Item;
 
 import AnimationEffect.Cooldownable;
-import AnimationEffect.Effectable;
 import AnimationEffect.UsePotionEffect;
 import Entity.Player;
 import javafx.animation.KeyFrame;
@@ -20,8 +19,7 @@ public class BuffItem extends Item implements Cooldownable{
 	final public double BUFFMOVESPEED = 10;
 	final public long COOLDOWN = 10000; // 10 second
 	final public long BUFFTIME = 6000; // 6 second
-	public static boolean isAvailable = true;
-	private int itemCount = 100;
+	public static boolean isBuffItemAvailable = true;
 
 	public BuffItem(String name, int price, String des, String itemIconStr,buff buff) {
 		super(name, price, des, itemIconStr);
@@ -70,7 +68,7 @@ public class BuffItem extends Item implements Cooldownable{
 	    
 	    buffCooldown.setCycleCount(1);
 	    buffCooldown.play();
-	    UsePotionEffect.setHealing(true);
+	    
 	    System.out.println("appile heal effect");
     	
 	    // Healing over time timeline
@@ -82,6 +80,8 @@ public class BuffItem extends Item implements Cooldownable{
 	        }));
 	    healOverTime.setCycleCount(6); // Heal every second for 6 seconds
 	    healOverTime.play();
+	    
+	    UsePotionEffect.setHealing(true);
 	    Timeline healOverTimeeffect = new Timeline(
 		        new KeyFrame(Duration.millis(BUFFTIME), e -> 
 		        {
@@ -94,6 +94,7 @@ public class BuffItem extends Item implements Cooldownable{
 	
 	private void userSpecialPotion(Player player) 
 	{
+		System.out.println("USE SPECIAL POTION!!!!");
 	    player.setDamage( ( player.getDamage() + BUFFATF ) * 3 );
 	    player.setAtkSpeed(player.getAtkSpeed() + BUFFATKSPEED);
 	    player.setUpgradeWeapon(1);
@@ -113,7 +114,7 @@ public class BuffItem extends Item implements Cooldownable{
 	
 	public void useEffect(Player player)
 	{
-		if(BuffItem.isAvailable  && getItemCount() > 0) 
+		if(BuffItem.isBuffItemAvailable  && getItemCount() > 0) 
 		{	
 			setItemCount( getItemCount() - 1 ); // decease item count by 1
 			
@@ -138,21 +139,11 @@ public class BuffItem extends Item implements Cooldownable{
 	}
 
 	public boolean isAvailable() {
-		return isAvailable;
+		return isBuffItemAvailable;
 	}
 
 	public void setAvailable(boolean isAvilable) {
-		BuffItem.isAvailable = isAvilable;
-	}
-	
-	
-
-	public int getItemCount() {
-		return itemCount;
-	}
-
-	public void setItemCount(int itemCount) {
-		this.itemCount = itemCount;
+		BuffItem.isBuffItemAvailable = isAvilable;
 	}
 	
 	

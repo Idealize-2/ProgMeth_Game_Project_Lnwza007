@@ -10,14 +10,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import AnimationEffect.Animationable;
 import AnimationEffect.Cooldownable;
 
-public class Player extends BaseEntity implements Animationable,Cooldownable{
+public class Player extends BaseEntity implements Cooldownable{
     private long lastShotTime = 1000;
     private long atkSpeed = 200;
     static private boolean canShoot = true;
-    private int upgradeWeapon = 0;
+    static public int upgradeWeapon = 0;
 
     //private Image playerImage;
     
@@ -26,7 +25,7 @@ public class Player extends BaseEntity implements Animationable,Cooldownable{
     
     public Player(double x, double y) {
     	//     x,  y, speed, hp, damage,imgPath
-    	super( x , y , 2.5 , 50 , 0 ,"images/Airi_plush.jpg");
+    	super( x , y , 2.5 , 100 , 0 ,"images/Airi_plush.jpg");
         
     }
 
@@ -72,11 +71,11 @@ public class Player extends BaseEntity implements Animationable,Cooldownable{
 //        lastShotTime = System.currentTimeMillis();
 //    }
 
-	@Override
-	public void runAnimation() {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void runAnimation() {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	public long getAtkSpeed() {
 		return atkSpeed;

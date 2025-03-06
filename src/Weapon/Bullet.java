@@ -1,5 +1,6 @@
 package Weapon;
 import Entity.Monster;
+import Entity.MonsterBoss;
 import Scene.GameScene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -87,8 +88,13 @@ public abstract class Bullet {
 //	}
 
 	public boolean checkCollision(Monster enemy) {
-        return isOutOfBounds() || Math.hypot(x - enemy.x, y - enemy.y) < 25;
-
+		double enemyCenterX = enemy.x + enemy.getWidth() / 2.0;
+		double enemyCenterY = enemy.y + enemy.getHeight() / 2.0;
+		if(enemy instanceof MonsterBoss) {
+			return isOutOfBounds() || Math.hypot(x - enemyCenterX, y - enemyCenterY) < 80;
+        }
+        return isOutOfBounds() || Math.hypot(x - enemyCenterX, y - enemyCenterY) < 25;
+        
     }
 
 }

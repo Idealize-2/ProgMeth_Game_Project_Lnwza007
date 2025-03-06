@@ -2,15 +2,20 @@ package MenuController;
 
 import Application.Main; 
 import Scene.GameScene;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class PauseMenuController {
     
@@ -29,6 +34,11 @@ public class PauseMenuController {
     @FXML private Button optionButton;
     @FXML private Button exitButton;
     
+    @FXML private Rectangle fadeBackground;
+    @FXML private Button restartButton;
+    @FXML private Button backToMenuButton;
+    @FXML private ImageView gameOverIcon;
+    
     private GameScene gameScene;
     
     public void setMain(Main main) {
@@ -36,7 +46,9 @@ public class PauseMenuController {
     }
 
     public void initialize() {
+    	
     	setupVolumeControl();
+    	gameOverIcon.setImage(new Image("/images/gameOverIcon.png"));
     	
     	
     }
@@ -53,8 +65,10 @@ public class PauseMenuController {
     
     @FXML
     private void handleOptionButtonAction(ActionEvent event) {
+    	volumeSlider.setValue(main.getCurrentVolume());
     	optionPane.setVisible(true);
     	pausePane.setVisible(false);
+    	
         
     }
     
@@ -76,7 +90,7 @@ public class PauseMenuController {
         gameBgmPlayer = new MediaPlayer(media);
 
         gameBgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  
-        gameBgmPlayer.setVolume(0.1);  
+        gameBgmPlayer.setVolume(main.getCurrentVolume());  
         gameBgmPlayer.play();
     }
 
@@ -87,7 +101,7 @@ public class PauseMenuController {
     }
 
     
-    @FXML
+    @FXML //ปุ่ม backtomenu
     private void handleExitButtonAfterGameOverAction(ActionEvent event) {
     	
         System.out.println("Exiting to menu...");
@@ -107,8 +121,13 @@ public class PauseMenuController {
     
     @FXML
     private void handleRestartButtonAction(ActionEvent event) {
-    	gameScene.resetGame();
-    	gameOverPane.setVisible(false);
+    	stopGameBackgroundMusic();
+
+        // รีสตาร์ทเกม
+        gameScene.resetGame();
+        gameOverPane.setVisible(false);
+
+        
     }
     
     private void setupVolumeControl() {
@@ -116,6 +135,7 @@ public class PauseMenuController {
         	 if (gameBgmPlayer != null) {
                  gameBgmPlayer.setVolume(newVal.doubleValue());  // ปรับเสียงตามค่าจาก Slider
              }
+        	 main.setCurrentVolume(newVal.doubleValue());
         	
         });
     }
@@ -131,6 +151,40 @@ public class PauseMenuController {
     	gameOverPane.setVisible(true);
     	
     }
+    
+    public void fadeToBlackAndShowGameOver() {
+    	showGameOver();
+        // เริ่มจากซ่อนปุ่มและข้อความก่อน
+        restartButton.setOpacity(0);
+        backToMenuButton.setOpacity(0);
+        gameOverIcon.setOpacity(0);
+        
+        fadeBackground.setOpacity(0); // เริ่มต้นให้โปร่งใส
+        fadeBackground.setVisible(true); // แสดง Rectangle
+
+        // เอฟเฟกต์จอมืดลง
+        FadeTransition fadeToBlack = new FadeTransition(Duration.seconds(2), fadeBackground);
+        fadeToBlack.setToValue(1); // ค่อยๆ มืดลง
+
+        // หลังจากมืดสนิทแล้ว ค่อยทำให้ปุ่มกับข้อความแสดงขึ้น
+        fadeToBlack.setOnFinished(event -> {
+            FadeTransition fadeButtons = new FadeTransition(Duration.seconds(1), restartButton);
+            fadeButtons.setToValue(1);
+            
+            FadeTransition fadeMenuButton = new FadeTransition(Duration.seconds(1), backToMenuButton);
+            fadeMenuButton.setToValue(1);
+            
+            FadeTransition fadeText = new FadeTransition(Duration.seconds(1), gameOverIcon);
+            fadeText.setToValue(1);
+            
+            fadeButtons.play();
+            fadeMenuButton.play();
+            fadeText.play();
+        });
+
+        fadeToBlack.play(); // เริ่มเอฟเฟกต์จอมืด
+    }
+
     
     
 

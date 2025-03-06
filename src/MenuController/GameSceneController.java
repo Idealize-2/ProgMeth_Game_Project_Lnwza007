@@ -82,6 +82,46 @@ public class GameSceneController {
         fadeIn.play();
     }
     
+    public void showStage3() {
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(5), stage3);
+        fadeIn.setToValue(1); 
+
+        fadeIn.setOnFinished(event -> {
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(5), stage3);
+            fadeOut.setToValue(0); 
+            fadeOut.play();
+        });
+
+        fadeIn.play();
+    }
+
+    public void showStage4() {
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(5), stage4);
+        fadeIn.setToValue(1); 
+
+        fadeIn.setOnFinished(event -> {
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(5), stage4);
+            fadeOut.setToValue(0); 
+            fadeOut.play();
+        });
+
+        fadeIn.play();
+    }
+
+    public void showStage5() {
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(5), stage5);
+        fadeIn.setToValue(1); 
+
+        fadeIn.setOnFinished(event -> {
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(5), stage5);
+            fadeOut.setToValue(0); 
+            fadeOut.play();
+        });
+
+        fadeIn.play();
+    }
+
+    
     public void setStageNo(int stageNum) {
     	stageNo.setText("STAGE "+stageNum);
     }

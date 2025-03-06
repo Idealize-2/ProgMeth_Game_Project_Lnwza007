@@ -52,6 +52,7 @@ public class GameScene implements Cooldownable{
     private Canvas canvas;
     private boolean running;
     private boolean paused = false; 
+    private static boolean cheatMode;
     private Player player;
     private ArrayList<Monster> enemies;
     static public ArrayList<Bullet> bullets;
@@ -62,6 +63,7 @@ public class GameScene implements Cooldownable{
     private PauseMenuController controllerPause;
     private ShopMenuController controllerShop;
     private GameSceneController controllerGame;
+    
     
     private Parent pauseMenuFXML;
     private Parent shopMenuFXML;
@@ -466,13 +468,18 @@ public class GameScene implements Cooldownable{
         shopMenuFXML.setVisible(false);
         paused = false;
         controllerPause.playGameBackgroundMusic();
+        runCooldown(5000);
         
+    }
+    public static void setCheat(boolean cheat) {
+    	cheatMode = cheat;
     }
     public void backToOriginal() {
     	player.setHp(player.getMaxHp());
     	s1Clear = s2Clear = s3Clear = s4Clear = s5Clear = false;
     	canSpawn = true;
-    	playerMoney = 10000; //for test
+    	if(cheatMode)playerMoney = 10000; //for test
+    	else playerMoney = 0;
         itemSelect = 0;
         weaponSelect = 0;
         monsterIndex = -1;
@@ -592,7 +599,7 @@ public class GameScene implements Cooldownable{
                 running = false;
                 System.out.println("Game Over!");
                 pauseMenuFXML.setVisible(true);
-                controllerPause.showGameOver();
+                controllerPause.fadeToBlackAndShowGameOver();
                 break;
             }
         }
@@ -651,7 +658,7 @@ public class GameScene implements Cooldownable{
 	    gc.drawImage(npcframes[currentFrameIndex], npcScreenX, npcScreenY, 80, 80);
         
         if (nearNpc) {
-            gc.setFill(Color.WHITE);
+            gc.setFill(Color.BLACK);
             gc.fillText("Press E to open shop", npcScreenX + 30, npcScreenY - 10);
         }
         ///render weapon select boxes
@@ -787,6 +794,7 @@ public class GameScene implements Cooldownable{
 		    	System.out.println("yeah u win");
 		    }
 		    
+		    //Show Stage Logo zone
 		    if(!isShowLabelStage1) {
 	        	isShowLabelStage1 = true;
 	        	Thread thread = new Thread(()->{
@@ -803,6 +811,18 @@ public class GameScene implements Cooldownable{
 		    else if (!isShowLabelStage2 && s1Clear){
 		    	isShowLabelStage2 = true;
 		    	controllerGame.showStage2();
+		    }
+		    else if (!isShowLabelStage3 && s2Clear) {
+		        isShowLabelStage3 = true;
+		        controllerGame.showStage3();
+		    }
+		    else if (!isShowLabelStage4 && s3Clear) {
+		        isShowLabelStage4 = true;
+		        controllerGame.showStage4();
+		    }
+		    else if (!isShowLabelStage5 && s4Clear) {
+		        isShowLabelStage5 = true;
+		        controllerGame.showStage5();
 		    }
 		    
 		    controllerGame.setMonsterLeft(enemies.size());

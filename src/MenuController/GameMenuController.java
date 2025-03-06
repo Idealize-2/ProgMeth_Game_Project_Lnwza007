@@ -1,10 +1,12 @@
 package MenuController;
 
 import Application.Main;
+import Scene.GameScene;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,9 +25,8 @@ public class GameMenuController {
     @FXML private Button backButton;
     @FXML private Button exitButton;
     @FXML private Slider volumeSlider;
-    //@FXML private MediaView mediaView;
     @FXML private ImageView backgroundImage;
-    @FXML private ImageView GameIcon;
+    @FXML private CheckBox cheatActivated;
     
     private MediaPlayer mediaPlayer;
     private MediaPlayer bgmPlayer;
@@ -39,18 +40,19 @@ public class GameMenuController {
     @FXML
     public void initialize() {
     	
-        //playBackgroundVideo();
         playBackgroundMusic();
         setupVolumeControl();
-        loadGameIcon();
-        backgroundImage.setImage(new Image("/images/yowtf.png"));
-        
-        
-        
-        
+        setCheckBoxCheat();
+        setBackgroundImage();
+       
         
         
     }
+
+    private void setBackgroundImage() {
+    	backgroundImage.setImage(new Image("/images/backgroundMain.png"));
+		
+	}
 
 //    private void playBackgroundVideo() {
 //        String videoPath = "res/video/demobackgroundvideo.mp4";
@@ -72,23 +74,20 @@ public class GameMenuController {
         }
 
         // สร้าง MediaPlayer ใหม่และเล่นเพลง
-        String musicPath = "res/music/menuMusic.mp3";
+        String musicPath = "res/music/menugame3.mp3";
         bgmPlayer = new MediaPlayer(new Media(new java.io.File(musicPath).toURI().toString()));
         bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  // เล่นซ้ำ
-        bgmPlayer.setVolume(0.1);  // ตั้งค่าเริ่มต้น
+        bgmPlayer.setVolume(main.getCurrentVolume());  // ตั้งค่าเริ่มต้น
         bgmPlayer.play();
     }
     
-    private void loadGameIcon() {
-        Image image = new Image("Images/GameIcon.png");
-        GameIcon.setImage(image);
-    }
 
     private void setupVolumeControl() {
         volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (bgmPlayer != null) {
                 bgmPlayer.setVolume(newVal.doubleValue());
             }
+            main.setCurrentVolume(newVal.doubleValue());
         });
     }
 
@@ -102,6 +101,7 @@ public class GameMenuController {
 
     @FXML
     private void handleOptionButtonAction(ActionEvent event) {
+    	volumeSlider.setValue(main.getCurrentVolume());
         menuPane.setVisible(false);
         optionPane.setVisible(true);
     }
@@ -171,6 +171,15 @@ public class GameMenuController {
     	exitButton.setStyle(currentStyle + "; -fx-background-color: orange;");
     }
     
+    private void setCheckBoxCheat() {
+    	cheatActivated.setOnAction(e -> {
+    	    if (cheatActivated.isSelected()) {
+    	        GameScene.setCheat(true);
+    	    } else {
+    	    	GameScene.setCheat(false);
+    	    }
+    	});
+    }
     
     
 

@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private GameMenu gameMenu;
     private GameScene gameScene;
+    private double currentVolume = 0.1;
+
+    
 
     @Override
     public void start(Stage primaryStage) {
@@ -18,7 +21,7 @@ public class Main extends Application {
         
         gameMenu.show(); // แสดงเมนูแรก
         primaryStage.setResizable(false); //ปรับให้ Windows เต็มจอไม่ได้
-        primaryStage.setTitle("เกมชื่อไรนะ"); // ตั้งชื่อหน้าต่าง
+        primaryStage.setTitle("Cooking Survival"); // ตั้งชื่อหน้าต่าง
         primaryStage.show(); // แสดง Stage หลังเซ็ต Scene
         
         
@@ -41,4 +44,13 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
+    public double getCurrentVolume() {
+        return currentVolume;
+    }
+
+    public void setCurrentVolume(double volume) {
+        currentVolume = volume;
+    }
+
 }

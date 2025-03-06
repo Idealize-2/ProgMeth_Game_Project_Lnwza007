@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.List;
 
@@ -56,9 +57,24 @@ public class ShopMenuController {
     
     @FXML private ImageView WeaponMenuBackground;
     @FXML private ImageView PotionMenuBackground;
+    @FXML private ImageView PotionBackground;
     @FXML private ImageView chocolatePic;
     @FXML private ImageView croissantPic;
     @FXML private ImageView pizzaPic;
+    
+    @FXML private ImageView MPotionIcon;
+    @FXML private ImageView BPotionIcon;
+    @FXML private ImageView BerserkPotionIcon;
+    @FXML private ImageView SpecialPotionIcon;
+    
+    
+    @FXML private Text MPotionLeft;
+    @FXML private Text BPotionLeft;
+    @FXML private Text BerserkPotionLeft;
+    @FXML private Text SpecialPotionLeft;
+    @FXML private Text moneyLeft1;
+    @FXML private Text moneyLeft2;
+    
     
 	private Main main;
 	private GameScene gameScene;
@@ -79,11 +95,18 @@ public class ShopMenuController {
 
     public void initialize() {
     	selectedButtonCorrecting();
+    	potionLeftCorrecting();
     	WeaponMenuBackground.setImage(new Image("/images/weaponMenu.png"));
     	PotionMenuBackground.setImage(new Image("/images/potionMenu.png"));
     	chocolatePic.setImage(new Image("/images/chocolate.png"));
     	croissantPic.setImage(new Image("/images/croissant.png"));
     	pizzaPic.setImage(new Image("/images/pizza.png"));
+    	PotionBackground.setImage(new Image("/images/potion3.png"));
+    	MPotionIcon.setImage(new Image("/images/potion1.png"));
+    	BPotionIcon.setImage(new Image("/images/potion2.png"));
+    	BerserkPotionIcon.setImage(new Image("/images/potion3.png"));
+    	SpecialPotionIcon.setImage(new Image("/images/potion4.png"));
+    	
     	chocolatePic.setMouseTransparent(true);
     	croissantPic.setMouseTransparent(true);
     	pizzaPic.setMouseTransparent(true);
@@ -352,6 +375,7 @@ public class ShopMenuController {
 			System.out.println("Not enought money to buy");
 		}
 		renderMoney();
+		potionLeftCorrecting();
 	}
     @FXML private void handleBPotion() {
     	if(GameScene.playerMoney >= GameScene.playerInventory.get(1).getPrice() ) 
@@ -364,6 +388,7 @@ public class ShopMenuController {
 			System.out.println("Not enought money to buy");
 		}
     	renderMoney();
+    	potionLeftCorrecting();
     }
     @FXML private void handleBerserkPotion() {
     	if(GameScene.playerMoney >= GameScene.playerInventory.get(2).getPrice() ) 
@@ -376,6 +401,7 @@ public class ShopMenuController {
 			System.out.println("Not enought money to buy");
 		}
     	renderMoney();
+    	potionLeftCorrecting();
     }
     @FXML private void handleSpecialPotion() {
     	if(GameScene.playerMoney >= GameScene.playerInventory.get(3).getPrice() ) 
@@ -389,10 +415,12 @@ public class ShopMenuController {
 			System.out.println("Not enought money to buy");
 		}
     	renderMoney();
+    	potionLeftCorrecting();
     }
     
     public void renderMoney() {
-    	MoneyDisplay.renderMoneyBox(gc,300 , 50,GameScene.playerMoney);
+    	moneyLeft1.setText("MONEY : $"+GameScene.playerMoney);
+    	moneyLeft2.setText("MONEY : $"+GameScene.playerMoney);
     }
     
    
@@ -426,6 +454,15 @@ public class ShopMenuController {
         	break;
         default:
     	}
+    }
+    
+    public void potionLeftCorrecting() {
+    	MPotionLeft.setText("MPotion : "+GameScene.playerInventory.get(0).getItemCount());
+    	BPotionLeft.setText("BPotion : "+GameScene.playerInventory.get(1).getItemCount());
+    	BerserkPotionLeft.setText("BerserkPotion : "+GameScene.playerInventory.get(2).getItemCount());
+    	SpecialPotionLeft.setText("SpecialPotion : "+GameScene.playerInventory.get(3).getItemCount());
+    	
+    	
     }
 
 	

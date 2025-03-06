@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 public class Croissant extends Bullet {
 
 	public double bulletAngle;
-	private double rotateSpeed = 15;
+	private double rotateSpeed = 10;
 	static private long weaponCooldown = 175;
 	static private double speed = 2.5;
     static private int weaponDamage = 20;
@@ -20,7 +20,6 @@ public class Croissant extends Bullet {
 		super(x, y, targetX, targetY, Croissant.getSpeed() );
 		setImageStr("images/croissant.png");
 		bulletAngle = Math.toDegrees(this.angle);
-		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public void update() {
@@ -61,12 +60,15 @@ public class Croissant extends Bullet {
 		return speed;
 	}
 
-	static public void setSpeed(double speed) {
-		Croissant.speed = speed;
+	static public int getWeaponLevel() {
+		return weaponLevel;
 	}
-
 	static public int getWeaponDamage() {
 		return weaponDamage;
+	}
+	
+	static public void setSpeed(double speed) {
+		Croissant.speed = speed;
 	}
 
 	static public void setWeaponDamage(int weaponDamage) {
@@ -74,9 +76,6 @@ public class Croissant extends Bullet {
 	}
 	public static void setWeaponCooldown(long weaponCooldown) {
 		Croissant.weaponCooldown = Math.max(weaponCooldown, 0) ;
-	}
-	public static int getWeaponLevel() {
-		return weaponLevel;
 	}
 	public static void setWeaponLevel(int weaponLevel) {
 		Croissant.weaponLevel = weaponLevel;

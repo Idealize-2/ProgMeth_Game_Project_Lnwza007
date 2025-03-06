@@ -15,10 +15,11 @@ public class HealItem extends Item implements Cooldownable{
 	public static boolean isMHealItemAvailable = true;
 	final public long COOLDOWN = 5000; // 5 second
 	
-	public HealItem(String name, int price, String des, String itemIconStr , int healPoint) {
-		super(name, price, des, itemIconStr);
+	public HealItem(String name, int price, String itemIconStr , int healPoint) {
+		super(name, price,itemIconStr);
 		setHealPoint(healPoint);
 	}
+	
 	public void useHealPotion(Player player) {
 		
 		player.setHp(player.getHp() + healPoint);
@@ -44,7 +45,12 @@ public class HealItem extends Item implements Cooldownable{
 		}
 		else
 		{
-			System.out.println("On Cooldowns");
+			if(getItemCount() == 0) {
+				System.out.println("You don't have this item pls buy");
+			}
+			else {
+				System.out.println("On Cooldowns");
+			}
 		}
 	}
 
@@ -61,12 +67,12 @@ public class HealItem extends Item implements Cooldownable{
 	@Override
 	public void runCooldown(long cooldown) {
 		setMHealItemAvailable(false);
-		Timeline buffCooldown = new Timeline(
+		Timeline HealCooldown = new Timeline(
 			    new KeyFrame(Duration.millis(cooldown), e -> setMHealItemAvailable(true))
 		);
 	    
-		buffCooldown.setCycleCount(1);
-		buffCooldown.play();
+		HealCooldown.setCycleCount(1);
+		HealCooldown.play();
 		
 	}
 

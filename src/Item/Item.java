@@ -4,17 +4,15 @@ import javafx.scene.image.Image;
 
 public class Item {
         private String name;
-        private String description;
         private String iconStr;
         private int price;
         private Image itemIcon;
         private int itemCount = 0;
         
 
-        public Item(String name, int price, String des,String itemIconStr) {
+        public Item(String name, int price, String itemIconStr) {
         	setName(name);
         	setPrice(price);
-        	setDescription(des);
         	setIconStr(itemIconStr);
         }
         
@@ -50,14 +48,6 @@ public class Item {
 			this.name = name;
 		}
 
-		public String getDescription() {
-			return description;
-		}
-
-		private void setDescription(String description) {
-			this.description = description;
-		}
-
 		public int getPrice() {
 			return price;
 		}
@@ -66,15 +56,9 @@ public class Item {
 			this.price = price;
 		}
 
-
-
-
 		public int getItemCount() {
 			return itemCount;
 		}
-
-
-
 
 		public void setItemCount(int itemCount) {
 			this.itemCount = Math.max(itemCount, 0);

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import Entity.Monster;
+import Entity.MonsterBoss;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Chocolate extends Bullet {
@@ -32,7 +33,11 @@ public class Chocolate extends Bullet {
 		
 	}
 	 public boolean canHit(Monster enemy) {
-	        return hitEnemies.size() < maxPenetration && !hitEnemies.contains(enemy) && Math.hypot(x - enemy.x, y - enemy.y) < 25;
+			if(enemy instanceof MonsterBoss) {
+				return hitEnemies.size() < maxPenetration && !hitEnemies.contains(enemy) && Math.hypot(x - enemy.x, y - enemy.y) < 80;
+	        }
+	
+			return hitEnemies.size() < maxPenetration && !hitEnemies.contains(enemy) && Math.hypot(x - enemy.x, y - enemy.y) < 25;
 	 }
 	 public void hitEnemy(Monster enemy) {
 	        hitEnemies.add(enemy); // Register hit
@@ -79,22 +84,21 @@ public class Chocolate extends Bullet {
 		return speed;
 	}
 
-	static public void setSpeed(double speed) {
-		Chocolate.speed = speed;
+	public static int getWeaponLevel() {
+		return weaponLevel;
 	}
 
 	static public int getWeaponDamage() {
 		return weaponDamage;
 	}
-
+	static public void setSpeed(double speed) {
+		Chocolate.speed = speed;
+	}
 	static public void setWeaponDamage(int weaponDamage) {
 		Chocolate.weaponDamage = weaponDamage;
 	}
 	public static void setWeaponCooldown(long weaponCooldown) {
 		Chocolate.weaponCooldown = Math.max(weaponCooldown, 0);
-	}
-	public static int getWeaponLevel() {
-		return weaponLevel;
 	}
 	public static void setWeaponLevel(int weaponLevel) {
 		Chocolate.weaponLevel = weaponLevel;

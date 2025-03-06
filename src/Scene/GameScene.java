@@ -81,7 +81,7 @@ public class GameScene implements Cooldownable{
     private final long frameDelay = 500_000_000;  
     private final int frameCount = 2;
     
-    private Timeline buffCooldown;
+    private Timeline spawnCooldown;
 
     
     
@@ -100,11 +100,10 @@ public class GameScene implements Cooldownable{
         for (int i = 0; i < 10; i++) {
         	stage2.add((short) 0);
         }
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
         	stage2.add((short) 1);
         }
         Collections.shuffle(stage2);
-        stage2.addFirst((short)1);
     }
     private ArrayList<Short> stage3 = new ArrayList<>(); // ✅ Initialized
 
@@ -127,11 +126,10 @@ public class GameScene implements Cooldownable{
         for (int i = 0; i < 20; i++) {
         	stage4.add((short) 1);
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
         	stage4.add((short) 2);
         }
         Collections.shuffle(stage4);
-        stage4.addFirst((short) 2);
     }
     
     private ArrayList<Short> stage5 = new ArrayList<>(); // ✅ Initialized
@@ -203,10 +201,10 @@ public class GameScene implements Cooldownable{
         gameScene = new Scene(root);
         
         ///test inventory
-        playerInventory.add(new HealItem("MediumPotion", 30, "", "images/maki.jpg", 50 ) );
-        playerInventory.add(new HealItem("BigPotion", 50, "", "images/maki.jpg", 100 ) );
-        playerInventory.add(new BuffItem("BerserkPotion", 100, "", "images/maki.jpg", buff.BERSERK) );
-        playerInventory.add(new BuffItem("SpecialPotion", 150, "", "images/maki.jpg", buff.SPECIAL) );
+        playerInventory.add(new HealItem("MediumPotion", 30, "/images/potion1.png", 50 ) );
+        playerInventory.add(new HealItem("BigPotion", 50, "/images/potion2.png", 100 ) );
+        playerInventory.add(new BuffItem("BerserkPotion", 100, "/images/potion3.png", buff.BERSERK) );
+        playerInventory.add(new BuffItem("SpecialPotion", 150,"/images/potion4.png", buff.SPECIAL) );
 
         //Set Up พวก scene เสริม
         setupGameController();
@@ -310,11 +308,11 @@ public class GameScene implements Cooldownable{
                     		double angle = Math.atan2(e.getY() - player.y, e.getX() - player.x);
                     		bullets.add(new Croissant(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
                     		
-                   		 bullets.add(new Croissant(player.x, player.y, 
+                    		bullets.add(new Croissant(player.x, player.y, 
                                     e.getX() + offsetX + Math.cos(angle + Math.PI / 2) * 30, 
                                     e.getY() + offsetY + Math.sin(angle + Math.PI / 2) * 30));
           
-                   		 bullets.add(new Croissant(player.x, player.y, 
+                    		bullets.add(new Croissant(player.x, player.y, 
                                     e.getX() + offsetX - Math.cos(angle + Math.PI / 2) * 30, 
                                     e.getY() + offsetY - Math.sin(angle + Math.PI / 2) * 30));
                     	}
@@ -461,7 +459,7 @@ public class GameScene implements Cooldownable{
         offsetX = clamp(player.x - viewportWidth / 2.0, 0, mapWidth - viewportWidth);
         offsetY = clamp(player.y - viewportHeight / 2.0, 0, mapHeight - viewportHeight);
         
-        if(buffCooldown!=null)buffCooldown.stop();
+        if(spawnCooldown!=null)spawnCooldown.stop();
         backToOriginal();
         
         pauseMenuFXML.setVisible(false);
@@ -496,14 +494,13 @@ public class GameScene implements Cooldownable{
     }
     @Override
 	public void runCooldown(long cooldown) {
-		// TODO Auto-generated method stub
     	canSpawn = false;
-		buffCooldown = new Timeline(
+    	spawnCooldown = new Timeline(
 			    new KeyFrame(Duration.millis(cooldown), e -> canSpawn = true )
 		);
 	    
-		buffCooldown.setCycleCount(1);
-		buffCooldown.play();
+    	spawnCooldown.setCycleCount(1);
+    	spawnCooldown.play();
 	}
     public void spawnMonster(int Monster)
     {
@@ -511,15 +508,15 @@ public class GameScene implements Cooldownable{
 
     	switch (Monster) {
 		case 0:
-			enemies.add(new Monster(random.nextInt(800), random.nextInt(600)));
+			enemies.add(new Monster(random.nextInt(1900), random.nextInt(1100)));
 			System.out.println("Monster spawn!!");
 			break;
 		case 1:
-			enemies.add(new MonsterWeakness(random.nextInt(800), random.nextInt(600)));
+			enemies.add(new MonsterWeakness(random.nextInt(1900), random.nextInt(1100)));
 			System.out.println("MonsterWeak spawn!!");
 			break;
 		case 2:
-			enemies.add(new MonsterBoss(random.nextInt(600), random.nextInt(800)));
+			enemies.add(new MonsterBoss(random.nextInt(1900), random.nextInt(1100)));
 			System.out.println("MonsterBoss spawn!!");
 			break;
 		default:
@@ -555,7 +552,6 @@ public class GameScene implements Cooldownable{
         
         RunGameStage();
 
-        ///enemies.removeIf( enemy -> bullets.removeIf(bullet -> bullet.checkCollision(enemy)) );
         ///new version แก้ได้ก็ดีนะ กูไม่รู้จะเขียนไงอะ
         for ( int i = 0 ; i <  enemies.size() ; i++ ) 
         {
@@ -578,9 +574,10 @@ public class GameScene implements Cooldownable{
         			//bullets.remove( k );
         			i--;
         			//k--;
+        			i = Math.max(i, 0);
         			if(enemies.size() == 0)break;
         			
-        			i = Math.max(i, 0);
+        			//i = Math.max(i, 0);
         			//k = Math.max(k, 0);
         			continue;
         		}
@@ -623,7 +620,14 @@ public class GameScene implements Cooldownable{
         
         if(UsePotionEffect.isbuffAvailable) 
         {
-        	UsePotionEffect.renderBerserkEffect(gc , player.x - offsetX, player.y - offsetY);
+        	if(UsePotionEffect.isbuffBerserkAvailable)
+        	{
+        		UsePotionEffect.renderBerserkEffect(gc , player.x - offsetX, player.y - offsetY);
+        	}
+        	else if(UsePotionEffect.isbuffSpecialAvailable)
+        	{
+        		UsePotionEffect.renderSpecialEffect(gc, player.x - offsetX, player.y - offsetY);
+        	}
         }
      // Activate healing particles when healing
         if (UsePotionEffect.isHealing) 

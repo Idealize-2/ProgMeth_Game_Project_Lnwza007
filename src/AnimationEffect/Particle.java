@@ -1,10 +1,8 @@
 package AnimationEffect;
-import java.util.ArrayList;
-import java.util.Iterator;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
-public class Particle {
+
+public abstract class Particle {
     double x, y;
     double velocityX, velocityY;
     double lifespan = 1.0; // Opacity (1.0 = fully visible, 0.0 = invisible)
@@ -26,15 +24,14 @@ public class Particle {
         return lifespan <= 0;
     }
 
-    public void render(GraphicsContext gc) {
-        gc.setFill(Color.rgb(50, 255, 50, lifespan)); // Green with fade-out
+    abstract public void render(GraphicsContext gc);
+    
+    
+    
 
-        double size = 15; // Size of the plus sign
 
-        // Draw horizontal bar (centered properly)
-        gc.fillRect(x - size / 2, y - size / 6, size, size / 3);
 
-        // Draw vertical bar (centered properly)
-        gc.fillRect(x - size / 6, y - size / 2, size / 3, size);
-    }
+
+    
+    
 }

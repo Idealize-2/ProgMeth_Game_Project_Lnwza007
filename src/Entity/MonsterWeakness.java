@@ -20,15 +20,6 @@ public class MonsterWeakness extends Monster {
 		setImgPath("/images/witchcroissant1.png");
 	}
 	
-	public int monsterDMG() {
-    	return this.damage;
-    }
-
-    public void update(Player player) {
-        x += (player.x - x) > 0 ? speed : -speed;
-        y += (player.y - y) > 0 ? speed : -speed;
-    }
-    
     public boolean checkCollision(Bullet bullet,Player player) 
     {
     	if(getHit( bullet ) && !bullet.isHit()) // check if bullet get close(attack) Monster

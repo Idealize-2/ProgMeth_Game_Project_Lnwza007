@@ -25,10 +25,13 @@ public class InventoryDisplay {
     private static void renderItemBox(GraphicsContext gc, double x, double y, boolean isSelected, int box, int count) {
         double size = isSelected ? 80 : 65;
         double offset = isSelected ? -5 : 0;
+        double arcWidth = 10;
+        double arcHeight = 10;
 
         // Draw the item box background
-        gc.setFill(Color.DARKGRAY);
-        gc.fillRect(x + offset, y + offset, size, size);
+        gc.setFill(Color.WHITESMOKE);
+        gc.fillRoundRect(x + offset, y + offset, size, size, arcWidth, arcHeight);
+
 
         // Apply glow effect
         if (isSelected) {

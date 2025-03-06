@@ -27,9 +27,6 @@ public class Main extends Application {
         
         primaryStage.getIcons().add(new Image("/images/PlayerCroissant1.png"));
         
-//        Image cursorImage = new Image("/images/Airi3.png"); // โหลดรูป
-//        ImageCursor customCursor = new ImageCursor(cursorImage, cursorImage.getWidth() / 2, cursorImage.getHeight() / 2); 
-//        primaryStage.getScene().setCursor(customCursor); // ใช้ Cursor กับ Scene
 
     }
 

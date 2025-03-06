@@ -339,7 +339,7 @@ public class ShopMenuController {
 	
 	@FXML
 	private void handleUpLevelWeapon() {
-		if(GameScene.playerMoney > 500 ) 
+		if(GameScene.playerMoney >= 500 ) 
 		{
 			GameScene.playerMoney -= 500;
 			renderMoney();

@@ -13,16 +13,16 @@ import javafx.util.Duration;
 public class BuffItem extends Item implements Cooldownable{
 	
 	private buff buffType;
-	final public int BUFFATF = 10;
-	final public int BUFFHEAL = 10;
-	final public int BUFFATKSPEED = 100;
-	final public double BUFFMOVESPEED = 10;
-	final public long COOLDOWN = 10000; // 10 second
-	final public long BUFFTIME = 6000; // 6 second
+	final private int BUFFATF = 10;
+	final private int BUFFHEAL = 10;
+	final private int BUFFATKSPEED = 100;
+	final private double BUFFMOVESPEED = 10;
+	final private long COOLDOWN = 10000; // 10 second
+	final private long BUFFTIME = 6000; // 6 second
 	public static boolean isBuffItemAvailable = true;
 
-	public BuffItem(String name, int price, String des, String itemIconStr,buff buff) {
-		super(name, price, des, itemIconStr);
+	public BuffItem(String name, int price, String itemIconStr,buff buff) {
+		super(name, price,itemIconStr);
 		setBuffType(buff);
 	}
 
@@ -49,6 +49,7 @@ public class BuffItem extends Item implements Cooldownable{
 	private void userBerserkPotion(Player player) 
 	{
 		UsePotionEffect.setIsbuffAvailable(true);
+		UsePotionEffect.setIsbuffBerserkAvailable(true);
 		System.out.println("USE BERSERK POTION!!!!");
 		
 	    player.setDamage(player.getDamage() + BUFFATF);
@@ -62,6 +63,7 @@ public class BuffItem extends Item implements Cooldownable{
 	            player.setSpeed(player.getSpeed() - BUFFMOVESPEED);
 	            
 	            UsePotionEffect.setIsbuffAvailable(false);
+	            UsePotionEffect.setIsbuffBerserkAvailable(false);
 	            System.out.println("BERSERK POTION WORN OFF!!!!");
 	        })
 	    );
@@ -94,6 +96,10 @@ public class BuffItem extends Item implements Cooldownable{
 	
 	private void userSpecialPotion(Player player) 
 	{
+		
+		UsePotionEffect.setIsbuffAvailable(true);
+		UsePotionEffect.setIsbuffSpecialAvailable(true);
+		
 		System.out.println("USE SPECIAL POTION!!!!");
 	    player.setDamage( ( player.getDamage() + BUFFATF ) * 3 );
 	    player.setAtkSpeed(player.getAtkSpeed() + BUFFATKSPEED);
@@ -105,6 +111,9 @@ public class BuffItem extends Item implements Cooldownable{
 	        	player.setDamage( ( player.getDamage() - BUFFATF ) / 3 );
 	            player.setAtkSpeed( player.getAtkSpeed() - BUFFATKSPEED );
 	            player.setUpgradeWeapon( 0 );
+	            System.out.println("SPECIAL POTION WORN OFF!!!!");
+	            UsePotionEffect.setIsbuffAvailable(false);
+	    		UsePotionEffect.setIsbuffSpecialAvailable(false);
 	        })
 	    );
 	    buffCooldown.setCycleCount(1);
@@ -133,7 +142,12 @@ public class BuffItem extends Item implements Cooldownable{
 		}
 		else
 		{
-			System.out.println("On Cooldowns");
+			if(getItemCount() == 0) {
+				System.out.println("You don't have this item pls buy");
+			}
+			else {
+				System.out.println("On Cooldowns");
+			}
 		}
 			
 	}

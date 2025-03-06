@@ -1,6 +1,7 @@
 package Weapon;
 
 import Entity.Monster;
+import Entity.MonsterBoss;
 import Entity.Player;
 import Scene.GameScene;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,7 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 public class Pizza extends Bullet {
 
 	public double bulletAngle;
-	private double rotateSpeed = 2;
+	private double rotateSpeed = 3;
 	static private long weaponCooldown = 400;
 	static private double speed = 3;
     static private int weaponDamage = 50;
@@ -23,7 +24,6 @@ public class Pizza extends Bullet {
 		super(x, y, targetX, targetY, Pizza.getSpeed() );
 		setImageStr("images/pizza.png");
 		bulletAngle = Math.toDegrees(this.angle);
-		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public void update() {
@@ -52,12 +52,15 @@ public class Pizza extends Bullet {
 		Pizza.setWeaponDamage(btoweaponDamage);
 		Pizza.setWeaponLevel(0);
 	}
-	
+	@Override
 	public boolean checkCollision(Monster enemy) {
-		if(Math.hypot(x - enemy.x, y - enemy.y) < 25) {
+		double hitRange;
+		double offset = 50;
+		if(enemy instanceof MonsterBoss) hitRange = 80;
+		else hitRange = 25;
+		if(Math.hypot(x - enemy.x, y - enemy.y) < hitRange) {
 			if(getWeaponLevel() + Player.upgradeWeapon == 1) {
 
-				double offset = 50; // Define the distance the new bullets will travel
 
 				// Printing the current position of the bullet for debugging
 				System.out.println("Initial position: " + x + ", " + y);
@@ -77,7 +80,6 @@ public class Pizza extends Bullet {
 
 			}
 			else if(getWeaponLevel() + Player.upgradeWeapon == 2) {
-				double offset = 50;
 				
 				GameScene.bullets.add(new SubPizza(x + offset,  y - offset, x + offset*2, y - offset*2, speed));
 
@@ -103,7 +105,7 @@ public class Pizza extends Bullet {
 				GameScene.bullets.add(new SubPizza(x, y - offset, x, y - offset*2, speed));
 			}
 		}
-        return isOutOfBounds() || Math.hypot(x - enemy.x, y - enemy.y) < 25;
+        return isOutOfBounds() || Math.hypot(x - enemy.x, y - enemy.y) < hitRange;
     }
 	
 	static public long getWeaponCooldown() {

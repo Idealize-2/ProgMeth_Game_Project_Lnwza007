@@ -8,16 +8,10 @@ import javafx.scene.paint.Color;
 
 public abstract class Bullet {
     public double x, y, dx, dy;
-//    static private double speed = 5;
-//    private int weaponDamage = 10;
     private boolean isHit = false;
     private String imageStr;
     private Image bulletImage; // ใส่ path ของไฟล์ PNG ที่ต้องการ
-    protected double angle;
-
-    
-    
-    
+    protected double angle; 
 
     public boolean isHit() {
 		return isHit;
@@ -42,8 +36,7 @@ public abstract class Bullet {
     }
 
     abstract public void render(GraphicsContext gc, double x, double y);
-//        gc.setFill(Color.ORANGE);
-//        gc.fillOval(x, y , 10, 10);  // Subtract offsets to render the bullet correctly
+    
     protected void setImageStr(String imgPath) 
     {
     	this.imageStr = imgPath;
@@ -71,29 +64,11 @@ public abstract class Bullet {
         return x < 0 || x > GameScene.mapWidth || y < 0 || y > GameScene.mapHeight;
     }
 
-//    public double getSpeed() {
-//		return speed;
-//	}
-//
-//	public void setSpeed(double speed) {
-//		this.speed = speed;
-//	}
-//
-//	public int getWeaponDamage() {
-//		return weaponDamage;
-//	}
-//
-//	public void setWeaponDamage(int weaponDamage) {
-//		this.weaponDamage = weaponDamage;
-//	}
-
 	public boolean checkCollision(Monster enemy) {
-		double enemyCenterX = enemy.x + enemy.getWidth() / 2.0;
-		double enemyCenterY = enemy.y + enemy.getHeight() / 2.0;
 		if(enemy instanceof MonsterBoss) {
-			return isOutOfBounds() || Math.hypot(x - enemyCenterX, y - enemyCenterY) < 80;
+			return isOutOfBounds() || Math.hypot(x - enemy.x, y - enemy.y) < 80;
         }
-        return isOutOfBounds() || Math.hypot(x - enemyCenterX, y - enemyCenterY) < 25;
+        return isOutOfBounds() || Math.hypot(x - enemy.x, y - enemy.y) < 25;
         
     }
 

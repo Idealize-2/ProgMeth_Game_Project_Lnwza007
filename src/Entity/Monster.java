@@ -3,6 +3,7 @@ import AnimationEffect.Animationable;
 import Weapon.Bullet;
 import Weapon.Croissant;
 import Weapon.Pizza;
+import Weapon.SubPizza;
 import Weapon.Chocolate;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -18,9 +19,6 @@ public class Monster extends BaseEntity implements Animationable{
     	//     x, y, speed,hp,damage,    imgPath
         super( x , y , 1 , 40 , 10 ,"images/Enemy1.png");
     }
-    public int monsterDMG() {
-    	return this.damage;
-    }
 
     public void update(Player player) {
         x += (player.x - x) > 0 ? speed : -speed;
@@ -28,7 +26,6 @@ public class Monster extends BaseEntity implements Animationable{
     }
     
     public boolean getHit(Bullet bullet) {
-    	
         return Math.hypot(x - bullet.x, y - bullet.y) < 25;
 
     }
@@ -38,9 +35,12 @@ public class Monster extends BaseEntity implements Animationable{
     	if(getHit( bullet ) && !bullet.isHit()) // check if bullet get close(attack) Monster
     	{
     		int bulletDamage;
+    		
     		if(bullet instanceof Chocolate)bulletDamage = Chocolate.getWeaponDamage();
     		else if(bullet instanceof Croissant)bulletDamage = Croissant.getWeaponDamage();
-    		else bulletDamage = Pizza.getWeaponDamage();
+    		else if(bullet instanceof Pizza)bulletDamage = Pizza.getWeaponDamage();
+    		else bulletDamage = Pizza.getWeaponDamage()/8;
+    		
     		bullet.setHit(true);
     		setHp( getHp() - ( bulletDamage + player.getDamage() ) ); // setHp
     		System.out.println( "Monster got hit damage = " + bulletDamage + " Hp: " + getHp() );

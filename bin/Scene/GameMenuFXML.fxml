@@ -20,7 +20,7 @@
          </image></ImageView>
        
        <!-- หน้าหลัก -->
-       <Pane fx:id="menuPane" prefHeight="600.0" prefWidth="800.0" visible="false">
+       <Pane fx:id="menuPane" prefHeight="600.0" prefWidth="800.0">
            <children>
          <Button fx:id="exitButton" alignment="CENTER" layoutX="567.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleExitButtonAction" onMouseEntered="#handleExitButtonEntered" onMouseExited="#handleExitButtonExited" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange; -fx-text-fill: black;" text="EXIT">
             <font>
@@ -41,7 +41,7 @@
        </Pane>
    
        <!-- หน้าตั้งค่าปรับเสียง -->
-       <Pane fx:id="optionPane" prefHeight="600.0" prefWidth="800.0">
+       <Pane fx:id="optionPane" prefHeight="600.0" prefWidth="800.0" visible="false">
            <children>
             <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#ffc656" height="358.0" layoutX="133.0" layoutY="115.0" stroke="BLACK" strokeType="INSIDE" width="535.0" />
             <Rectangle arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="147.0" layoutX="186.0" layoutY="264.0" stroke="BLACK" strokeType="INSIDE" width="429.0" />

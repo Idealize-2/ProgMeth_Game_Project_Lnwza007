@@ -1,6 +1,5 @@
 package Entity;
 
-import AnimationEffect.Animationable;
 import Weapon.Bullet;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -17,21 +16,12 @@ public class MonsterBoss extends Monster{
 		setDamage(40);
 		setImgPath("/images/Boss.png");
 	}
-	
-	public int monsterDMG() {
-    	return this.damage;
-    }
 
-    public void update(Player player) {
-        x += (player.x - x) > 0 ? speed : -speed;
-        y += (player.y - y) > 0 ? speed : -speed;
-    }
-    
 
     @Override
     public boolean getHit(Bullet bullet) {
     	
-        return Math.hypot(x - bullet.x, y - bullet.y) < 80;
+    	return Math.hypot(x - bullet.x, y - bullet.y) < 65;
 
     }
     private final Image[] frames = {

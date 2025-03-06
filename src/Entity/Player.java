@@ -15,14 +15,12 @@ import AnimationEffect.Cooldownable;
 import Scene.GameScene;
 
 public class Player extends BaseEntity implements Cooldownable,Animationable{
-    private long lastShotTime = 1000;
+	
     private long atkSpeed = 200;
-    static private boolean canShoot = true;
     static public int upgradeWeapon = 0;
-
-    //private Image playerImage;
-    
     private final int HIT_DELAY = 1000;
+    
+    static private boolean canShoot = true;
     private boolean canBeHit = true;
     
     public Player(double x, double y) {
@@ -42,15 +40,15 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
     
     
     public boolean getHit( Monster enemy ) {
-    	return Math.hypot(x - enemy.x, y - enemy.y) < 25 ;
+    	return Math.hypot(x - enemy.x, y - enemy.y) < 35 ;
     }
     
     
     public boolean checkCollision(Monster enemy) {
     	if( getHit( enemy ) && canBeHit ) // check if monster get close(attack) player
     	{
-    		setHp( getHp() - enemy.monsterDMG() ); // setHp
-    		System.out.println( "got hit damage = " + enemy.monsterDMG() + " Hp: " + getHp() );
+    		setHp( getHp() - enemy.getDamage() ); // setHp
+    		System.out.println( "got hit damage = " + enemy.getDamage() + " Hp: " + getHp() );
     		
     		canBeHit = false; // player get hit so will wait cooldown to get hit again
     		// set cooldown
@@ -64,20 +62,6 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
     	}
         return getHp() <= 0;
     }
-
-//    public boolean canShoot() {
-//        return System.currentTimeMillis() - lastShotTime >= SHOOT_DELAY;
-//    }
-//
-//    public void setShootCooldown() {
-//        lastShotTime = System.currentTimeMillis();
-//    }
-
-//	@Override
-//	public void runAnimation() {
-//		// TODO Auto-generated method stub
-//		
-//	}
 
 	public long getAtkSpeed() {
 		return atkSpeed;
@@ -98,12 +82,12 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
 	@Override
 	public void runCooldown(long cooldown) {
 			setCanShoot(false);
-			Timeline buffCooldown = new Timeline(
+			Timeline CanShootTime = new Timeline(
 				    new KeyFrame(Duration.millis(cooldown), e -> setCanShoot(true))
 			);
 		    
-			buffCooldown.setCycleCount(1);
-			buffCooldown.play();
+			CanShootTime.setCycleCount(1);
+			CanShootTime.play();
 
 	}
 

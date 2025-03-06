@@ -425,7 +425,7 @@ public class GameScene implements Cooldownable{
 
 
     public void togglePauseForMenu() {
-    	
+    	if(s5Clear)return;
     	if(!shopMenuFXML.isVisible())paused = !paused;
     	
     	if (pauseMenuFXML.isVisible() && shopMenuFXML.isVisible()) pauseMenuFXML.setVisible(false);
@@ -686,112 +686,119 @@ public class GameScene implements Cooldownable{
         if(!s1Clear) {
         	if(canSpawn)monsterIndex++;
         	if(monsterIndex >= stage1.size())monsterIndex = stage1.size();
-        	System.out.println("Can spawn: " + canSpawn);
-        	System.out.println("enemies left"+ enemies.size());
-        	//System.out.println("debugging");
-        	//System.out.println(!s1Clear);
-        	//System.out.println(monsterIndex == stage1.size());
-        	//System.out.println(enemies.isEmpty());
-        	//System.out.println("Monster index"+monsterIndex+"size is"+stage1.size());
+        	//System.out.println("Can spawn: " + canSpawn);
+        	//System.out.println("enemies left"+ enemies.size());
+        	
+        	if (canSpawn && monsterIndex < stage1.size() ) {
+    	    	runCooldown(500);
+    	    	spawnMonster(stage1.get(monsterIndex));
+    	    	System.out.println("Stage 1 SpawnMonster!!!");
+    	     }
+    	    if(monsterIndex == stage1.size() && enemies.isEmpty() ) {
+    	    	s1Clear = true;
+    	    	monsterIndex = -1;
+    	    	System.out.println("Stage 1 Clear!!!");
+    	    	controllerGame.setStageNo(2);
+    	    }
 
         }
 
-	    if (!s1Clear && canSpawn && monsterIndex < stage1.size() ) {
-	    	runCooldown(500);
-	    	spawnMonster(stage1.get(monsterIndex));
-	    	System.out.println("Stage 1 SpawnMonster!!!");
-	     }
-	    if(!s1Clear && monsterIndex == stage1.size() && enemies.isEmpty() ) {
-	    	s1Clear = true;
-	    	monsterIndex = -1;
-	    	System.out.println("Stage 1 Clear!!!");
-	    	controllerGame.setStageNo(2);
-	    }
+	    
 	    
 	    //stage 2
         if(s1Clear && !s2Clear) {
         	
         	if(canSpawn)monsterIndex++;
         	if(monsterIndex >= stage2.size() )monsterIndex = stage2.size();
-        	System.out.println("Can spawn: " + canSpawn);
+        	//System.out.println("Can spawn: " + canSpawn);
+        	
+        	if (canSpawn && monsterIndex < stage2.size() ) {
+    	    	runCooldown(500);
+    	    	spawnMonster(stage2.get(monsterIndex));
+    	    	System.out.println("Stage 2 SpawnMonster!!!");
+    	     }
+    	    if(monsterIndex == stage2.size() && enemies.isEmpty() ) {
+    	    	s2Clear = true;
+    	    	monsterIndex = -1;
+    	    	System.out.println("Stage 2 Clear!!!");
+    	    	controllerGame.setStageNo(3);
+    	    }
 
         }
 
-	    if (s1Clear && !s2Clear && canSpawn && monsterIndex < stage2.size() ) {
-	    	runCooldown(500);
-	    	spawnMonster(stage2.get(monsterIndex));
-	    	System.out.println("Stage 2 SpawnMonster!!!");
-	     }
-	    if(s1Clear && !s2Clear && monsterIndex == stage2.size() && enemies.isEmpty() ) {
-	    	s2Clear = true;
-	    	monsterIndex = -1;
-	    	System.out.println("Stage 2 Clear!!!");
-	    	controllerGame.setStageNo(3);
-	    }
+	    
 	    //// stage 3
-	    if(s1Clear && s2Clear && !s3Clear) {
+	    if(s2Clear && !s3Clear) {
         	
         	if(canSpawn)monsterIndex++;
         	if(monsterIndex >= stage3.size() )monsterIndex = stage3.size();
-        	System.out.println("Can spawn: " + canSpawn);
+        	//System.out.println("Can spawn: " + canSpawn);
+        	
+        	if (canSpawn && monsterIndex < stage3.size() ) {
+    	    	runCooldown(500);
+    	    	spawnMonster(stage3.get(monsterIndex));
+    	    	System.out.println("Stage 3 SpawnMonster!!!");
+    	    }
+    	    if(monsterIndex == stage3.size() && enemies.isEmpty() ) {
+    	    	s3Clear = true;
+    	    	monsterIndex = -1;
+    	    	System.out.println("Stage 3 Clear!!!");
+    	    	controllerGame.setStageNo(4);
+    	    }
 
         }
 
-	    if (s1Clear && s2Clear && !s3Clear && canSpawn && monsterIndex < stage3.size() ) {
-	    	runCooldown(500);
-	    	spawnMonster(stage3.get(monsterIndex));
-	    	System.out.println("Stage 3 SpawnMonster!!!");
-	    }
-	    if(s1Clear && s2Clear && !s3Clear && monsterIndex == stage3.size() && enemies.isEmpty() ) {
-	    	s3Clear = true;
-	    	monsterIndex = -1;
-	    	System.out.println("Stage 3 Clear!!!");
-	    	controllerGame.setStageNo(4);
-	    }
+	    
 	    
 	    	//// stage 4
-		    if(s1Clear && s2Clear && s3Clear && !s4Clear) {
+		    if(s3Clear && !s4Clear) {
 	        	
 	        	if(canSpawn)monsterIndex++;
 	        	if(monsterIndex >= stage4.size() )monsterIndex = stage4.size();
-	        	System.out.println("Can spawn: " + canSpawn);
-
+	        	//System.out.println("Can spawn: " + canSpawn);
+	        	
+	        	if (canSpawn && monsterIndex < stage4.size() ) {
+			    	runCooldown(100);
+			    	spawnMonster(stage4.get(monsterIndex));
+			    	System.out.println("Stage 4 SpawnMonster!!!");
+			    }
+			    if(monsterIndex == stage4.size() && enemies.isEmpty() ) {
+			    	s4Clear = true;
+			    	monsterIndex = -1;
+			    	System.out.println("Stage 4 Clear!!!");
+			    	controllerGame.setStageNo(5);
+			    }
 	        }
 
-		    if (s1Clear && s2Clear && s3Clear && !s4Clear && canSpawn && monsterIndex < stage4.size() ) {
-		    	runCooldown(100);
-		    	spawnMonster(stage4.get(monsterIndex));
-		    	System.out.println("Stage 4 SpawnMonster!!!");
-		    }
-		    if(s1Clear && s2Clear && s3Clear && !s4Clear && monsterIndex == stage4.size() && enemies.isEmpty() ) {
-		    	s4Clear = true;
-		    	monsterIndex = -1;
-		    	System.out.println("Stage 4 Clear!!!");
-		    	controllerGame.setStageNo(5);
-		    }
+		    
 		//// stage 5
-		    if(s1Clear && s2Clear && s3Clear && s4Clear && !s5Clear) {
+		    if(s4Clear && !s5Clear) {
 	        	
 	        	if(canSpawn)monsterIndex++;
 	        	if(monsterIndex >= stage5.size() )monsterIndex = stage5.size();
 	        	System.out.println("Can spawn: " + canSpawn);
+	        	if (canSpawn && monsterIndex < stage5.size() ) {
+			    	runCooldown(100);
+			    	spawnMonster(stage5.get(monsterIndex));
+			    	System.out.println("Stage 5 SpawnMonster!!!");
+			    }
+			    if(monsterIndex == stage5.size() && enemies.isEmpty() ) {
+			    	s5Clear = true;
+			    	monsterIndex = -1;
+			    	System.out.println("Stage 5 Clear!!!");
+			    }
 
 	        }
 
-		    if (s1Clear && s2Clear && s3Clear && s4Clear && !s5Clear && canSpawn && monsterIndex < stage5.size() ) {
-		    	runCooldown(100);
-		    	spawnMonster(stage5.get(monsterIndex));
-		    	System.out.println("Stage 5 SpawnMonster!!!");
-		    }
-		    if(s1Clear && s2Clear && s3Clear && s4Clear && !s5Clear && monsterIndex == stage5.size() && enemies.isEmpty() ) {
-		    	s5Clear = true;
-		    	monsterIndex = -1;
-		    	System.out.println("Stage 5 Clear!!!");
-		    }
+		    
 		    
 		    if(s1Clear && s2Clear && s3Clear && s4Clear && s5Clear)
 		    {
+		    	running = false;
 		    	System.out.println("yeah u win");
+		    	pauseMenuFXML.setVisible(true);
+                controllerPause.showWinScene();
+		    	
 		    }
 		    
 		    //Show Stage Logo zone

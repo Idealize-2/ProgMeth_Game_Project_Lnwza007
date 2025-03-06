@@ -55,7 +55,6 @@
             </Label>
          </children>
       </Pane>
-      <Pane fx:id="gameWinPane" prefHeight="200.0" prefWidth="200.0" visible="false" />
       <Pane fx:id="gameOverPane" prefHeight="200.0" prefWidth="200.0" visible="false">
          <children>
             <Rectangle fx:id="fadeBackground" arcHeight="5.0" arcWidth="5.0" height="600.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="800.0" />
@@ -76,5 +75,25 @@
             </Button>
          </children>
       </Pane>
+      <Pane fx:id="gameWinPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+         <children>
+            <Rectangle fx:id="yellowBackgroundWin" arcHeight="5.0" arcWidth="5.0" fill="#ffe990" height="607.0" layoutY="-3.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="800.0" />
+            <ImageView fx:id="gameClearImage" fitHeight="300.0" fitWidth="400.0" layoutX="195.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="gameClearIcon" fitHeight="143.0" fitWidth="439.0" layoutX="175.0" layoutY="-3.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../Downloads/gameClearIcon.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="backToMenuAfterWin" alignment="CENTER" layoutX="294.0" layoutY="456.0" mnemonicParsing="false" onAction="#handleExitButtonAction" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="backToMenuAfterWinPic" fitHeight="100.0" fitWidth="200.0" layoutX="300.0" layoutY="456.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../res/images/backToMenuIconEnd.png" />
+               </image>
+            </ImageView>
+         </children></Pane>
    </children>
 </StackPane>

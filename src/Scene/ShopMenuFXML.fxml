@@ -15,7 +15,7 @@
 
 <StackPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenuController.ShopMenuController">
    <children>
-      <Pane fx:id="shopPotion" prefHeight="600.0" prefWidth="800.0">
+      <Pane fx:id="shopPotion" prefHeight="600.0" prefWidth="800.0" visible="false">
          <children>
             <Rectangle fx:id="dimBackground1" arcHeight="5.0" arcWidth="5.0" height="600.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="800.0" />
             <Label layoutX="490.0" layoutY="14.0" prefHeight="47.0" prefWidth="264.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Welcome to the Shop!" />
@@ -130,10 +130,15 @@
                   <Font name="System Bold" size="19.0" />
                </font>
             </Text>
+            <Text fx:id="statusTextPotion" layoutX="248.0" layoutY="458.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STATUS TEXT APPEAR HERE" textAlignment="CENTER" wrappingWidth="237.7705078125">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
        <!-- Shop Menu Pane -->
-       <Pane fx:id="shopWeapon" prefHeight="600.0" prefWidth="800.0" visible="false">
+       <Pane fx:id="shopWeapon" prefHeight="600.0" prefWidth="800.0">
            <children>
             <Rectangle fx:id="dimBackground" arcHeight="5.0" arcWidth="5.0" height="600.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="800.0" />
 
@@ -143,7 +148,10 @@
                        <Font name="System Bold" size="25.0" />
                    </font>
                </Button>
-            <ImageView fx:id="WeaponMenuBackground" fitHeight="542.0" fitWidth="231.0" layoutX="15.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="WeaponMenuBackground" fitHeight="542.0" fitWidth="231.0" layoutX="15.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../res/images/weaponMenu.png" />
+               </image></ImageView>
             <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#ffcb2e" height="500.0" layoutX="487.0" layoutY="61.0" stroke="BLACK" strokeType="INSIDE" width="270.0" />
             <Button fx:id="weaponButtonWShop" alignment="CENTER" layoutX="487.0" layoutY="61.0" mnemonicParsing="false" onMouseEntered="#handleWeaponEntered" onMouseExited="#handleWeaponExited" prefHeight="47.0" prefWidth="135.0" style="-fx-border-color: white; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: #5cff87;" text="WEAPON">
                <font>
@@ -218,6 +226,11 @@
             <Text fx:id="moneyLeft2" layoutX="274.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MONEY : " textAlignment="CENTER" wrappingWidth="185.42578125">
                <font>
                   <Font name="System Bold" size="19.0" />
+               </font>
+            </Text>
+            <Text fx:id="statusTextWeapon" layoutX="248.0" layoutY="458.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STATUS TEXT APPEAR HERE" textAlignment="CENTER" wrappingWidth="237.7705078125">
+               <font>
+                  <Font name="System Bold" size="18.0" />
                </font>
             </Text>
            </children>

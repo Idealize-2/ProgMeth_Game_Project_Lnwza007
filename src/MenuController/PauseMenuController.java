@@ -3,6 +3,7 @@ package MenuController;
 import Application.Main; 
 import Scene.GameScene;
 import javafx.animation.FadeTransition;
+import javafx.animation.SequentialTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -25,6 +26,8 @@ public class PauseMenuController {
     @FXML private Pane pausePane;
     @FXML private Pane optionPane;
     @FXML private Pane gameOverPane;
+    @FXML private Pane gameWinPane;
+    
     @FXML
     private Slider volumeSlider;
     private MediaPlayer gameBgmPlayer;
@@ -39,6 +42,14 @@ public class PauseMenuController {
     @FXML private Button backToMenuButton;
     @FXML private ImageView gameOverIcon;
     
+    @FXML private Rectangle yellowBackgroundWin;
+    @FXML private ImageView gameClearIcon;
+    @FXML private ImageView gameClearImage;
+    @FXML private ImageView backToMenuAfterWinPic;
+    @FXML private Button backToMenuAfterWin;
+    
+    
+    
     private GameScene gameScene;
     
     public void setMain(Main main) {
@@ -46,13 +57,21 @@ public class PauseMenuController {
     }
 
     public void initialize() {
-    	
     	setupVolumeControl();
-    	gameOverIcon.setImage(new Image("/images/gameOverIcon.png"));
-    	
+    	setUpImages();
     	
     }
-    public void setGameScene(GameScene gameScene) {
+    
+    private void setUpImages() {
+    	gameOverIcon.setImage(new Image("/images/gameOverIcon.png"));
+    	gameClearIcon.setImage(new Image("/images/gameClearIcon.png"));
+    	gameClearImage.setImage(new Image("/images/gameClearImage.png"));
+    	backToMenuAfterWinPic.setImage(new Image("/images/backToMenuIconEnd.png"));
+    	backToMenuAfterWinPic.setMouseTransparent(true);
+		
+	}
+
+	public void setGameScene(GameScene gameScene) {
     	this.gameScene = gameScene;
     }
     
@@ -76,6 +95,8 @@ public class PauseMenuController {
     private void handleExitButtonAction(ActionEvent event) {
     	
             System.out.println("Exiting to menu...");
+            gameOverPane.setVisible(false);
+            gameWinPane.setVisible(false);
             main.backToMenu();
             gameScene.setRunning(false);
             stopGameBackgroundMusic();
@@ -149,6 +170,42 @@ public class PauseMenuController {
     	pausePane.setVisible(false);
     	optionPane.setVisible(false);
     	gameOverPane.setVisible(true);
+    	
+    }
+    public void showWinScene() {
+    	pausePane.setVisible(false);
+    	optionPane.setVisible(false);
+    	gameOverPane.setVisible(false);
+    	gameWinPane.setVisible(true);
+    	
+    	yellowBackgroundWin.setOpacity(0);
+        gameClearIcon.setOpacity(0);
+        gameClearImage.setOpacity(0);
+        backToMenuAfterWinPic.setOpacity(0);
+
+        // Fade in yellowBackgroundWin
+        FadeTransition fadeYellow = new FadeTransition(Duration.seconds(1), yellowBackgroundWin);
+        fadeYellow.setFromValue(0);
+        fadeYellow.setToValue(1);
+
+        // Fade in gameClearIcon
+        FadeTransition fadeIcon = new FadeTransition(Duration.seconds(0.5), gameClearIcon);
+        fadeIcon.setFromValue(0);
+        fadeIcon.setToValue(1);
+
+        // Fade in gameClearImage
+        FadeTransition fadeImage = new FadeTransition(Duration.seconds(0.5), gameClearImage);
+        fadeImage.setFromValue(0);
+        fadeImage.setToValue(1);
+
+        // Fade in backToMenuAfterWinPic
+        FadeTransition fadeMenuPic = new FadeTransition(Duration.seconds(0.5), backToMenuAfterWinPic);
+        fadeMenuPic.setFromValue(0);
+        fadeMenuPic.setToValue(1);
+
+        // Run transitions sequentially
+        SequentialTransition sequence = new SequentialTransition(fadeYellow, fadeIcon, fadeImage, fadeMenuPic);
+        sequence.play();
     	
     }
     

@@ -533,6 +533,7 @@ public class GameScene implements Cooldownable{
 			break;
     	}	
     }
+    static public boolean playerSide = false;
     
 
     private void update() {
@@ -542,8 +543,14 @@ public class GameScene implements Cooldownable{
 
         if (keysPressed.contains(KeyCode.W)) dy -= player.getSpeed();
         if (keysPressed.contains(KeyCode.S)) dy += player.getSpeed();
-        if (keysPressed.contains(KeyCode.A)) dx -= player.getSpeed();
-        if (keysPressed.contains(KeyCode.D)) dx += player.getSpeed();
+        if (keysPressed.contains(KeyCode.A)) {
+        	dx -= player.getSpeed();
+        	playerSide = false;
+        }
+        if (keysPressed.contains(KeyCode.D)) {
+        	dx += player.getSpeed();
+        	playerSide = true;
+        }
 
         player.setX(clamp(player.x + dx, 0, mapWidth - 40));
         player.setY(clamp(player.y + dy, 0, mapHeight - 40));

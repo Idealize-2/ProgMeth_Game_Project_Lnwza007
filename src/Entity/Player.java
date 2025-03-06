@@ -140,7 +140,15 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
 		         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
 		         lastUpdate = now;
 		     }
-		     gc.drawImage(framesChocolate[currentFrameIndex], x-15, y-40, 80, 83);
+			 if(GameScene.playerSide) {
+				 gc.save(); // Save the current transform
+			     gc.scale(-1, 1); // Flip horizontally
+			     gc.drawImage(framesChocolate[currentFrameIndex], -(x + 80 - 15), y - 40, 80, 83);
+			     gc.restore(); // Restore to avoid affecting other drawings
+			 }
+			 else {
+				 gc.drawImage(framesChocolate[currentFrameIndex], x-15, y-40, 80, 83);
+			 }
 			
 		}
 		if(GameScene.weaponSelect == 1) {
@@ -148,7 +156,16 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
 		         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
 		         lastUpdate = now;
 		     }
-		     gc.drawImage(framesCroissant[currentFrameIndex], x-15, y-40, 80, 83);
+			 if(GameScene.playerSide) {
+				 gc.save(); // Save the current transform
+			     gc.scale(-1, 1); // Flip horizontally
+			     gc.drawImage(framesCroissant[currentFrameIndex], -(x + 80 - 15), y - 40, 80, 83);
+			     gc.restore(); // Restore to avoid affecting other drawings
+			 }
+			 else {
+				 gc.drawImage(framesCroissant[currentFrameIndex], x-15, y-40, 80, 83);
+			 }
+		     
 			
 		}
 		if(GameScene.weaponSelect == 2) {
@@ -156,7 +173,16 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
 		         currentFrameIndex = (currentFrameIndex + 1) % frameCount; // Loop animation
 		         lastUpdate = now;
 		     }
-		     gc.drawImage(framesPizza[currentFrameIndex], x-15, y-40, 80, 83);
+			if(GameScene.playerSide) {
+				 gc.save(); // Save the current transform
+			     gc.scale(-1, 1); // Flip horizontally
+			     gc.drawImage(framesPizza[currentFrameIndex], -(x + 80 - 15), y - 40, 80, 83);
+			     gc.restore(); // Restore to avoid affecting other drawings
+			 }
+			else {
+				gc.drawImage(framesPizza[currentFrameIndex], x-15, y-40, 80, 83);
+			}
+		     
 			
 		}
 	    

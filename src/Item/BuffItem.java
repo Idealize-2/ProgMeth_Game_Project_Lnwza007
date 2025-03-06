@@ -16,7 +16,7 @@ public class BuffItem extends Item implements Cooldownable{
 	final private int BUFFATF = 10;
 	final private int BUFFHEAL = 10;
 	final private int BUFFATKSPEED = 100;
-	final private double BUFFMOVESPEED = 10;
+	final private double BUFFMOVESPEED = 3;
 	final private long COOLDOWN = 10000; // 10 second
 	final private long BUFFTIME = 6000; // 6 second
 	public static boolean isBuffItemAvailable = true;

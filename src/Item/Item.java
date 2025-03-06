@@ -2,7 +2,7 @@ package Item;
 
 import javafx.scene.image.Image;
 
-public class Item {
+abstract public class Item {
         private String name;
         private String iconStr;
         private int price;

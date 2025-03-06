@@ -17,7 +17,7 @@ public class MonsterWeakness extends Monster {
 		setSpeed(1.5);
 		setHp(100);
 		setDamage(20);
-		setImgPath("/images/witchcroissant1.png");
+		setImgPath("images/witchcroissant1.png");
 	}
 	
     public boolean checkCollision(Bullet bullet,Player player) 
@@ -41,9 +41,9 @@ public class MonsterWeakness extends Monster {
     }
     
     private final Image[] frames = {
-	        new Image("images/witchcroissant1.png"),
-	        new Image("images/witchcroissant2.png")
-	    };
+    	    new Image(getClass().getClassLoader().getResource("images/witchcroissant1.png").toString()),
+    	    new Image(getClass().getClassLoader().getResource("images/witchcroissant2.png").toString())
+    	};
 	
 	private final long frameDelay = 500_000_000;
 	private int currentFrameIndex = 0;

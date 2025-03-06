@@ -20,6 +20,7 @@ public class GameMenuController {
 
     @FXML private Pane menuPane; // เมนูหลัก
     @FXML private Pane optionPane; // เมนูปรับเสียง
+    @FXML private Pane creditsPane;
     @FXML private Button startButton;
     @FXML private Button optionButton;
     @FXML private Button backButton;
@@ -27,6 +28,7 @@ public class GameMenuController {
     @FXML private Slider volumeSlider;
     @FXML private ImageView backgroundImage;
     @FXML private CheckBox cheatActivated;
+    @FXML private Button creditsbutton;
     
     private MediaPlayer mediaPlayer;
     private MediaPlayer bgmPlayer;
@@ -50,34 +52,25 @@ public class GameMenuController {
     }
 
     private void setBackgroundImage() {
-    	backgroundImage.setImage(new Image("/images/backgroundMain.png"));
-		
-	}
-
-//    private void playBackgroundVideo() {
-//        String videoPath = "res/video/demobackgroundvideo.mp4";
-//        mediaPlayer = new MediaPlayer(new javafx.scene.media.Media(new java.io.File(videoPath).toURI().toString()));
-//        mediaView.setMediaPlayer(mediaPlayer);
-//        mediaView.setFitHeight(600);
-//        mediaView.setFitWidth(800);
-//        mediaView.setPreserveRatio(false);
-//        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //คลิปวนลูป
-//        mediaPlayer.setMute(true); //ไม่เอาเสียงวิดีโอ
-//        mediaPlayer.play();
-//        
-//    }
+        try {
+            backgroundImage.setImage(new Image(getClass().getClassLoader().getResource("images/backgroundMain.png").toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     private void playBackgroundMusic() {
-        // ถ้ามี MediaPlayer เก่าที่ยังเล่นอยู่ ให้หยุดมันก่อน
         if (bgmPlayer != null) {
-            bgmPlayer.stop();  // หยุดการเล่นเพลงเก่า
+            bgmPlayer.stop(); 
         }
 
-        // สร้าง MediaPlayer ใหม่และเล่นเพลง
-        String musicPath = "res/music/menugame3.mp3";
-        bgmPlayer = new MediaPlayer(new Media(new java.io.File(musicPath).toURI().toString()));
-        bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  // เล่นซ้ำ
-        bgmPlayer.setVolume(main.getCurrentVolume());  // ตั้งค่าเริ่มต้น
+     
+        String musicPath = getClass().getClassLoader().getResource("music/menugame3.mp3").toExternalForm();
+        
+       
+        bgmPlayer = new MediaPlayer(new Media(musicPath));
+        bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE); 
+        bgmPlayer.setVolume(Main.getCurrentVolume()); 
         bgmPlayer.play();
     }
     
@@ -110,6 +103,7 @@ public class GameMenuController {
     private void handleBackButtonAction(ActionEvent event) {
         optionPane.setVisible(false);
         menuPane.setVisible(true);
+        creditsPane.setVisible(false);
     }
 
     @FXML
@@ -179,6 +173,13 @@ public class GameMenuController {
     	    	GameScene.setCheat(false);
     	    }
     	});
+    }
+    
+    @FXML
+    private void handleCreditsButtonAction() {
+    	creditsPane.setVisible(true);
+    	menuPane.setVisible(false);
+    	
     }
     
     

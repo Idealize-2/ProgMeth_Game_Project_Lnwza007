@@ -33,14 +33,18 @@ public class GameSceneController {
 	
 	
 	public void initialize() {
-		stage1.setImage(new Image("/images/stage1.png"));
-		stage2.setImage(new Image("/images/stage2.png"));
-		stage3.setImage(new Image("/images/stage3.png"));
-		stage4.setImage(new Image("/images/stage4.png"));
-		stage5.setImage(new Image("/images/stage5.png"));
+		setAllImage();
 		
 		
 
+		
+	}
+	private void setAllImage() {
+		stage1.setImage(new Image(getClass().getClassLoader().getResource("images/stage1.png").toString()));
+		stage2.setImage(new Image(getClass().getClassLoader().getResource("images/stage2.png").toString()));
+		stage3.setImage(new Image(getClass().getClassLoader().getResource("images/stage3.png").toString()));
+		stage4.setImage(new Image(getClass().getClassLoader().getResource("images/stage4.png").toString()));
+		stage5.setImage(new Image(getClass().getClassLoader().getResource("images/stage5.png").toString()));
 		
 	}
 	public void setMain(Main main) {

@@ -14,7 +14,7 @@ public class MonsterBoss extends Monster{
 		setSpeed(0.75);
 		setHp(200);
 		setDamage(40);
-		setImgPath("/images/Boss.png");
+		setImgPath("images/boss.png");
 	}
 
 
@@ -25,9 +25,9 @@ public class MonsterBoss extends Monster{
 
     }
     private final Image[] frames = {
-	        new Image("images/boss1.png"),
-	        new Image("images/boss2.png")
-	    };
+    	    new Image(getClass().getClassLoader().getResource("images/boss1.png").toString()),
+    	    new Image(getClass().getClassLoader().getResource("images/boss2.png").toString())
+    	};
 	
 	private final long frameDelay = 500_000_000;
 	private int currentFrameIndex = 0;

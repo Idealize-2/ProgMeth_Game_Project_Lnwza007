@@ -63,10 +63,10 @@ public class PauseMenuController {
     }
     
     private void setUpImages() {
-    	gameOverIcon.setImage(new Image("/images/gameOverIcon.png"));
-    	gameClearIcon.setImage(new Image("/images/gameClearIcon.png"));
-    	gameClearImage.setImage(new Image("/images/gameClearImage.png"));
-    	backToMenuAfterWinPic.setImage(new Image("/images/backToMenuIconEnd.png"));
+    	gameOverIcon.setImage(new Image(getClass().getClassLoader().getResource("images/gameOverIcon.png").toString()));
+    	gameClearIcon.setImage(new Image(getClass().getClassLoader().getResource("images/gameClearIcon.png").toString()));
+    	gameClearImage.setImage(new Image(getClass().getClassLoader().getResource("images/gameClearImage.png").toString()));
+    	backToMenuAfterWinPic.setImage(new Image(getClass().getClassLoader().getResource("images/backToMenuIconEnd.png").toString()));
     	backToMenuAfterWinPic.setMouseTransparent(true);
 		
 	}
@@ -84,7 +84,7 @@ public class PauseMenuController {
     
     @FXML
     private void handleOptionButtonAction(ActionEvent event) {
-    	volumeSlider.setValue(main.getCurrentVolume());
+    	volumeSlider.setValue(Main.getCurrentVolume());
     	optionPane.setVisible(true);
     	pausePane.setVisible(false);
     	
@@ -105,13 +105,13 @@ public class PauseMenuController {
         
     }
     public void playGameBackgroundMusic() {
-
-        String musicPath = "res/music/gameBGM.mp3"; 
-        Media media = new Media(new java.io.File(musicPath).toURI().toString());
+        String musicPath = getClass().getClassLoader().getResource("music/gameBGM.mp3").toString();
+        
+        Media media = new Media(musicPath);
         gameBgmPlayer = new MediaPlayer(media);
 
         gameBgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);  
-        gameBgmPlayer.setVolume(main.getCurrentVolume());  
+        gameBgmPlayer.setVolume(Main.getCurrentVolume());  
         gameBgmPlayer.play();
     }
 

@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private GameMenu gameMenu;
     private GameScene gameScene;
-    private double currentVolume = 0.1;
+    private static double currentVolume = 0.1;
 
     
 
@@ -25,7 +25,7 @@ public class Main extends Application {
         primaryStage.show(); // แสดง Stage หลังเซ็ต Scene
         
         
-        primaryStage.getIcons().add(new Image("/images/PlayerCroissant1.png"));
+        primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("images/playerCroissant1.png").toString()));
         
 
     }
@@ -42,7 +42,7 @@ public class Main extends Application {
         launch(args);
     }
     
-    public double getCurrentVolume() {
+    public static double getCurrentVolume() {
         return currentVolume;
     }
 

@@ -3,6 +3,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -12,6 +14,7 @@ import java.io.IOException;
 
 import AnimationEffect.Animationable;
 import AnimationEffect.Cooldownable;
+import Application.Main;
 import Scene.GameScene;
 
 public class Player extends BaseEntity implements Cooldownable,Animationable{
@@ -48,6 +51,7 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
     	if( getHit( enemy ) && canBeHit ) // check if monster get close(attack) player
     	{
     		setHp( getHp() - enemy.getDamage() ); // setHp
+    		playDamageSound();
     		System.out.println( "got hit damage = " + enemy.getDamage() + " Hp: " + getHp() );
     		
     		canBeHit = false; // player get hit so will wait cooldown to get hit again
@@ -61,6 +65,16 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
     		
     	}
         return getHp() <= 0;
+    }
+    
+    private void playDamageSound() {
+        String soundPath = getClass().getResource("/music/SFX/ouch.mp3").toExternalForm();
+
+        
+        Media sound = new Media(soundPath);
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setVolume(Main.getCurrentVolume());
+        mediaPlayer.play(); // เล่นเสียง
     }
 
 	public long getAtkSpeed() {
@@ -100,19 +114,19 @@ public class Player extends BaseEntity implements Cooldownable,Animationable{
 	}
 	
 	private final Image[] framesChocolate = {
-	        new Image("images/playerChocolate1.png"),
-	        new Image("images/playerChocolate2.png")
-	    };
+		    new Image(getClass().getClassLoader().getResource("images/playerChocolate1.png").toString()),
+		    new Image(getClass().getClassLoader().getResource("images/playerChocolate2.png").toString())
+		};
 
-	private final Image[] framesCroissant = {
-	        new Image("images/playerCroissant1.png"),
-	        new Image("images/playerCroissant2.png"),
-	    };
-	
-	private final Image[] framesPizza = {
-	        new Image("images/playerPizza1.png"),
-	        new Image("images/playerPizza2.png")
-	    };
+		private final Image[] framesCroissant = {
+		    new Image(getClass().getClassLoader().getResource("images/playerCroissant1.png").toString()),
+		    new Image(getClass().getClassLoader().getResource("images/playerCroissant2.png").toString())
+		};
+
+		private final Image[] framesPizza = {
+		    new Image(getClass().getClassLoader().getResource("images/playerPizza1.png").toString()),
+		    new Image(getClass().getClassLoader().getResource("images/playerPizza2.png").toString())
+		};
 	
 	private final int frameCount = 2;
 	private final long frameDelay = 300_000_000 * 3; // Convert to nanoseconds (50ms * 3)

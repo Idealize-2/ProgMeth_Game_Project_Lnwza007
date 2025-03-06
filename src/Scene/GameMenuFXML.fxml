@@ -37,6 +37,11 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </Button>
+            <Button fx:id="creditsbutton" alignment="CENTER" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleCreditsButtonAction" prefHeight="42.0" prefWidth="126.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: orange; -fx-text-fill: black;" text="Credits">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Button>
            </children>
        </Pane>
    
@@ -70,5 +75,42 @@
             <CheckBox fx:id="cheatActivated" layoutX="486.0" layoutY="352.0" mnemonicParsing="false" />
            </children>
        </Pane>
+      <Pane fx:id="creditsPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+         <children>
+            <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#ffc656" height="358.0" layoutX="133.0" layoutY="115.0" stroke="BLACK" strokeType="INSIDE" width="535.0" />
+            <Rectangle arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="72.0" layoutX="180.0" layoutY="124.0" stroke="BLACK" strokeType="INSIDE" width="440.0" />
+            <Button fx:id="backButtonCredit" alignment="CENTER" layoutX="302.0" layoutY="464.0" mnemonicParsing="false" onAction="#handleBackButtonAction" prefHeight="96.0" prefWidth="209.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white;" text="BACK">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Button>
+            <Rectangle arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="227.0" layoutX="186.0" layoutY="222.0" stroke="BLACK" strokeType="INSIDE" width="440.0" />
+            <Label alignment="CENTER" layoutX="330.0" layoutY="131.0" prefHeight="59.0" prefWidth="153.0" text="CREDITS" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="29.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="184.0" layoutY="246.0" prefHeight="27.0" prefWidth="446.0" text="6733041021 Chanawee Jantaraksa" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="183.0" layoutY="278.0" prefHeight="27.0" prefWidth="446.0" text="6733040421 Chanissorn Siwapitak" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="184.0" layoutY="310.0" prefHeight="27.0" prefWidth="446.0" text="6733041021 Ratchanon Tiratsorn" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="183.0" layoutY="342.0" prefHeight="27.0" prefWidth="446.0" text="6733093721 Tanapon Jantarat" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
    </children>
 </StackPane>

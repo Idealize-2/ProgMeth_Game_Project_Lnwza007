@@ -103,25 +103,26 @@ public class ShopMenuController {
     public void initialize() {
     	selectedButtonCorrecting();
     	potionLeftCorrecting();
-    	WeaponMenuBackground.setImage(new Image("/images/weaponMenu.png"));
-    	PotionMenuBackground.setImage(new Image("/images/potionMenu.png"));
-    	chocolatePic.setImage(new Image("/images/chocolate.png"));
-    	croissantPic.setImage(new Image("/images/croissant.png"));
-    	pizzaPic.setImage(new Image("/images/pizza.png"));
-    	PotionBackground.setImage(new Image("/images/potion3.png"));
-    	MPotionIcon.setImage(new Image("/images/potion1.png"));
-    	BPotionIcon.setImage(new Image("/images/potion2.png"));
-    	BerserkPotionIcon.setImage(new Image("/images/potion3.png"));
-    	SpecialPotionIcon.setImage(new Image("/images/potion4.png"));
+    	setAllImg();
     	
+    }
+    private void setAllImg() {
+    	WeaponMenuBackground.setImage(new Image(getClass().getClassLoader().getResource("images/weaponMenu.png").toString()));
+    	PotionMenuBackground.setImage(new Image(getClass().getClassLoader().getResource("images/potionMenu.png").toString()));
+    	chocolatePic.setImage(new Image(getClass().getClassLoader().getResource("images/chocolate.png").toString()));
+    	croissantPic.setImage(new Image(getClass().getClassLoader().getResource("images/croissant.png").toString()));
+    	pizzaPic.setImage(new Image(getClass().getClassLoader().getResource("images/pizza.png").toString()));
+    	PotionBackground.setImage(new Image(getClass().getClassLoader().getResource("images/potion3.png").toString()));
+    	MPotionIcon.setImage(new Image(getClass().getClassLoader().getResource("images/potion1.png").toString()));
+    	BPotionIcon.setImage(new Image(getClass().getClassLoader().getResource("images/potion2.png").toString()));
+    	BerserkPotionIcon.setImage(new Image(getClass().getClassLoader().getResource("images/potion3.png").toString()));
+    	SpecialPotionIcon.setImage(new Image(getClass().getClassLoader().getResource("images/potion4.png").toString()));
     	chocolatePic.setMouseTransparent(true);
     	croissantPic.setMouseTransparent(true);
     	pizzaPic.setMouseTransparent(true);
-
-    	
-
-    }
-    public void setGameScene(GameScene gameScene) {
+		
+	}
+	public void setGameScene(GameScene gameScene) {
     	this.gameScene = gameScene;
     }
     
@@ -260,7 +261,7 @@ public class ShopMenuController {
 			case 1: {
 				Croissant.setSpeed( Croissant.getSpeed() + 0.5 );
 				System.out.println("Croissant speed upgrade : " + Croissant.getSpeed());
-				showStatusText("Chocolate Speed increased to "+Croissant.getSpeed(),"green");
+				showStatusText("Croissant Speed increased to "+Croissant.getSpeed(),"green");
 				break;
 			}
 			case 2: {

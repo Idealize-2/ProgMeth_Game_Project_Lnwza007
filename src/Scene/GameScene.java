@@ -15,6 +15,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Button;
@@ -162,7 +164,6 @@ public class GameScene implements Cooldownable{
     private final double npcY = 600;
     private final double interactionRange = 100;
     private boolean nearNpc = false;
-    //private Image npcImage = new Image("images/shopkeeper.jpg");
     private final Image[] npcframes = {
 	        new Image("images/shopkeeper1.png"),
 	        new Image("images/shopkeeper2.png")
@@ -201,10 +202,10 @@ public class GameScene implements Cooldownable{
         gameScene = new Scene(root);
         
         ///test inventory
-        playerInventory.add(new HealItem("MediumPotion", 30, "/images/potion1.png", 50 ) );
-        playerInventory.add(new HealItem("BigPotion", 50, "/images/potion2.png", 100 ) );
-        playerInventory.add(new BuffItem("BerserkPotion", 100, "/images/potion3.png", buff.BERSERK) );
-        playerInventory.add(new BuffItem("SpecialPotion", 150,"/images/potion4.png", buff.SPECIAL) );
+        playerInventory.add(new HealItem("MediumPotion", 30, "images/potion1.png", 50 ) );
+        playerInventory.add(new HealItem("BigPotion", 50, "images/potion2.png", 100 ) );
+        playerInventory.add(new BuffItem("BerserkPotion", 100, "images/potion3.png", buff.BERSERK) );
+        playerInventory.add(new BuffItem("SpecialPotion", 150,"images/potion4.png", buff.SPECIAL) );
 
         //Set Up พวก scene เสริม
         setupGameController();
@@ -270,6 +271,7 @@ public class GameScene implements Cooldownable{
                 //bullets.add(new Bullet(player.x, player.y, e.getX() + offsetX, e.getY() + offsetY));
             	
             	if (e.getButton() == MouseButton.PRIMARY) { // Left Click
+            		playSoundShoot();
                     if (weaponSelect == 0) 
                     {
                     	if(Chocolate.getWeaponLevel() + player.getUpgradeWeapon() == 0) 
@@ -339,6 +341,14 @@ public class GameScene implements Cooldownable{
                 }
             }
         };
+    }
+    
+    private void playSoundShoot() {
+        String soundPath = getClass().getResource("/music/SFX/throwFood.wav").toExternalForm();
+        Media sound = new Media(soundPath);
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setVolume(Main.getCurrentVolume());
+        mediaPlayer.play();
     }
     
     private void setupPauseMenu() {

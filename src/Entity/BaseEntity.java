@@ -35,15 +35,15 @@ public abstract class BaseEntity {
 
 
 		public void setImgPath(String imgPath) {
-			this.imgPath = imgPath;
-			try {
-	    		
-	    		setEntityImage(new Image(imgPath));
-	    		
-	    	} catch (Exception e) {
-	            e.printStackTrace();
-	        }
-		}
+            this.imgPath = imgPath;
+            try {
+                String path = getClass().getClassLoader().getResource(imgPath).toString();
+                
+                setEntityImage(new Image(path));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
 		public int getWidth() {
 			return width;

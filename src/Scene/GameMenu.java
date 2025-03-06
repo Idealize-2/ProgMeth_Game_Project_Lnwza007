@@ -23,7 +23,7 @@ public class GameMenu {
     private void createMenu() {
         try {
             // โหลด FXML และกำหนด controller ด้วยมือ
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("GameMenuFXML.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene/GameMenuFXML.fxml"));
             gameMenuController = new GameMenuController();
             gameMenuController.setMain(main);  // ส่ง Main ไปยัง controller
             loader.setController(gameMenuController);  // กำหนด controller ด้วยมือ
@@ -38,7 +38,7 @@ public class GameMenu {
     public void show() {
         stage.setScene(menuScene);
         if (gameMenuController != null) {
-            gameMenuController.resetMainMenu(); // ✅ เรียกใช้ฟังก์ชัน reset
+            gameMenuController.resetMainMenu(); //เรียกใช้ฟังก์ชัน reset
         }
     }
 }

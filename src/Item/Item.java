@@ -19,14 +19,15 @@ public class Item {
         
 		
 
-		private void setIconStr(String iconStr) {
-			this.iconStr = iconStr;
-			try {
-				 setItemIcon( new Image( getIconStr() ) );
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+        private void setIconStr(String iconStr) {
+            this.iconStr = iconStr;
+            try {
+                // ใช้ getClass().getClassLoader().getResource() เพื่อโหลดไฟล์จาก classpath
+                setItemIcon(new Image(getClass().getClassLoader().getResource(iconStr).toString()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 		
 		
 		public String getIconStr() {

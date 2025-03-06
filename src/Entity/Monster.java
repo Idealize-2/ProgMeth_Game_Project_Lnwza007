@@ -15,10 +15,10 @@ import javafx.util.Duration;
 public class Monster extends BaseEntity implements Animationable{
 	public int reward = 10;
 	
-    public Monster(double x, double y) {
-    	//     x, y, speed,hp,damage,    imgPath
-        super( x , y , 1 , 40 , 10 ,"images/Enemy1.png");
-    }
+	    public Monster(double x, double y) {
+	    	//     x, y, speed,hp,damage,    imgPath
+	        super( x , y , 1 , 40 , 10 ,"images/Enemy1.png");
+	    }
 
     public void update(Player player) {
         x += (player.x - x) > 0 ? speed : -speed;
@@ -66,9 +66,9 @@ public class Monster extends BaseEntity implements Animationable{
         gc.drawImage(getEntityImage() , x , y , 60 , 60);
     }
 	private final Image[] frames = {
-	        new Image("images/Enemy1.png"),
-	        new Image("images/Enemy2.png")
-	    };
+		    new Image(getClass().getClassLoader().getResource("images/Enemy1.png").toString()),
+		    new Image(getClass().getClassLoader().getResource("images/Enemy2.png").toString())
+		};
 	
 	private final long frameDelay = 500_000_000;
 	private int currentFrameIndex = 0;
